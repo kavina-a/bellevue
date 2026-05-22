@@ -1230,7 +1230,7 @@ function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="relative bg-bellevue-forest py-24 md:py-32 lg:py-40 pb-28 md:pb-36 lg:pb-44" id="faq">
+    <section className="relative bg-bellevue-warm py-24 md:py-32 lg:py-40 pb-28 md:pb-36 lg:pb-44" id="faq">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
           <motion.div
@@ -1240,8 +1240,8 @@ function FAQSection() {
             viewport={{ once: true }}
             className="lg:col-span-5"
           >
-            <span className="font-sans text-xs tracking-[0.4em] uppercase text-white/60">FAQ</span>
-            <h2 className="mt-6 font-serif text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1]">
+            <span className="font-sans text-xs tracking-[0.4em] uppercase text-bellevue-taupe">FAQ</span>
+            <h2 className="mt-6 font-serif text-4xl md:text-5xl lg:text-6xl text-bellevue-forest leading-[1.1]">
               Answers to<br />your questions
             </h2>
           </motion.div>
@@ -1256,18 +1256,18 @@ function FAQSection() {
             {faqItems.map((item, index) => {
               const isOpen = openIndex === index
               return (
-                <div key={item.question} className="border-t border-white/30 last:border-b">
+                <div key={item.question} className="border-t border-bellevue-forest/20 last:border-b">
                   <button
                     type="button"
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     className="w-full flex items-center justify-between gap-6 py-6 text-left group"
                     aria-expanded={isOpen}
                   >
-                    <span className="font-sans text-base md:text-lg text-white group-hover:text-bellevue-gold transition-colors">
+                    <span className="font-sans text-base md:text-lg text-bellevue-black group-hover:text-bellevue-gold transition-colors">
                       {item.question}
                     </span>
                     <Plus
-                      className={`w-5 h-5 text-white shrink-0 transition-transform duration-300 ${
+                      className={`w-5 h-5 text-bellevue-forest shrink-0 transition-transform duration-300 ${
                         isOpen ? "rotate-45" : ""
                       }`}
                       strokeWidth={1.5}
@@ -1282,7 +1282,7 @@ function FAQSection() {
                         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                         className="overflow-hidden"
                       >
-                        <p className="pb-6 font-sans text-sm md:text-base text-white/70 leading-relaxed max-w-2xl">
+                        <p className="pb-6 font-sans text-sm md:text-base text-bellevue-black/65 leading-relaxed max-w-2xl">
                           {item.answer}
                         </p>
                       </motion.div>
@@ -1298,7 +1298,7 @@ function FAQSection() {
   )
 }
 
-// Footer — wavy gradient card with floating shadow (reference layout)
+// Footer — olive wave overlapping the warm FAQ section
 function Footer() {
   const footerLinks = [
     {
@@ -1331,36 +1331,44 @@ function Footer() {
 
   return (
     <footer className="relative -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 z-10">
-      {/* Wavy gradient overlaps the section above */}
       <div className="relative">
+        {/* Shadow layer — sits behind the wave on the warm FAQ section */}
         <svg
           viewBox="0 0 1440 160"
           preserveAspectRatio="none"
-          className="block w-full h-[96px] sm:h-[112px] md:h-[128px] lg:h-[144px]"
+          className="absolute inset-x-0 top-3 sm:top-4 md:top-5 block w-full h-[96px] sm:h-[112px] md:h-[128px] lg:h-[144px] pointer-events-none"
+          aria-hidden
+        >
+          <path
+            fill="#1a1a1a"
+            fillOpacity="0.12"
+            d="M0,72
+               C200,126 420,54 640,100
+               C860,146 1080,60 1300,104
+               C1360,116 1400,76 1440,68
+               L1440,160 L0,160 Z"
+          />
+        </svg>
+
+        <svg
+          viewBox="0 0 1440 160"
+          preserveAspectRatio="none"
+          className="relative block w-full h-[96px] sm:h-[112px] md:h-[128px] lg:h-[144px] drop-shadow-[0_-8px_24px_rgba(26,26,26,0.18)]"
           aria-hidden
         >
           <defs>
-            <linearGradient id="footerWaveGradient" x1="0" y1="0" x2="1440" y2="0" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#93b0f5" />
-              <stop offset="50%" stopColor="#7b84e8" />
-              <stop offset="100%" stopColor="#6168cd" />
+            <linearGradient id="footerWaveGradient" x1="0" y1="0" x2="1440" y2="160" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#2c3e2d" />
+              <stop offset="100%" stopColor="#1e2a1f" />
             </linearGradient>
+            <filter id="footerWaveShadow" x="-10%" y="-30%" width="120%" height="160%">
+              <feDropShadow dx="0" dy="-6" stdDeviation="10" floodColor="#1a1a1a" floodOpacity="0.22" />
+            </filter>
           </defs>
 
-          {/* Soft crest — sits over the green section */}
-          <path
-            fill="#b8c4f7"
-            fillOpacity="0.92"
-            d="M0,0 L0,48
-               C220,88 440,24 660,58
-               C880,92 1100,32 1320,62
-               C1380,72 1410,44 1440,38
-               L1440,0 Z"
-          />
-
-          {/* Main wave body */}
           <path
             fill="url(#footerWaveGradient)"
+            filter="url(#footerWaveShadow)"
             d="M0,64
                C200,118 420,46 640,92
                C860,138 1080,52 1300,96
@@ -1369,15 +1377,15 @@ function Footer() {
           />
         </svg>
 
-        <div className="bg-gradient-to-r from-[#93b0f5] via-[#7b84e8] to-[#6168cd] -mt-px">
+        <div className="bg-bellevue-dark-forest -mt-px">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-12 pb-12 md:pb-14 pt-4 md:pt-6">
             <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 xl:gap-16">
               {/* Logo */}
               <div className="shrink-0">
                 <Link href="/" className="inline-flex items-center gap-3">
                   <div className="relative w-10 h-10">
-                    <span className="absolute inset-0 rounded-full bg-[#8ec5fc]/70 translate-x-1" />
-                    <span className="absolute inset-0 rounded-full bg-[#9b8fd4]/75 -translate-x-1" />
+                    <span className="absolute inset-0 rounded-full bg-bellevue-gold/50 translate-x-1" />
+                    <span className="absolute inset-0 rounded-full bg-bellevue-forest/80 -translate-x-1" />
                   </div>
                   <span className="font-sans text-2xl font-light tracking-wide text-white lowercase">
                     bellevue
@@ -1397,7 +1405,7 @@ function Footer() {
                         <li key={link.name}>
                           <Link
                             href={link.href}
-                            className="font-sans text-sm text-white/85 hover:text-white transition-colors"
+                            className="font-sans text-sm text-white/80 hover:text-bellevue-gold transition-colors"
                           >
                             {link.name}
                           </Link>
@@ -1413,19 +1421,19 @@ function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="bg-white border-t border-black/[0.04]">
+      <div className="bg-bellevue-cream border-t border-bellevue-forest/10">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-sans text-xs text-[#888888]">
+          <p className="font-sans text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} Bellevue Chalets by Pushella. All Rights Reserved.
           </p>
           <div className="flex items-center gap-4">
-            <a href="#" aria-label="Facebook" className="text-[#888888] hover:text-[#6168cd] transition-colors">
+            <a href="#" aria-label="Facebook" className="text-muted-foreground hover:text-bellevue-forest transition-colors">
               <Facebook className="w-4 h-4" strokeWidth={1.5} />
             </a>
-            <a href="#" aria-label="Instagram" className="text-[#888888] hover:text-[#6168cd] transition-colors">
+            <a href="#" aria-label="Instagram" className="text-muted-foreground hover:text-bellevue-forest transition-colors">
               <Instagram className="w-4 h-4" strokeWidth={1.5} />
             </a>
-            <a href="#" aria-label="LinkedIn" className="text-[#888888] hover:text-[#6168cd] transition-colors">
+            <a href="#" aria-label="LinkedIn" className="text-muted-foreground hover:text-bellevue-forest transition-colors">
               <Linkedin className="w-4 h-4" strokeWidth={1.5} />
             </a>
           </div>

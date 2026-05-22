@@ -38,6 +38,7 @@
   --bellevue-black: #1a1a1a;
   --bellevue-dark-forest: #1e2a1f;
   --bellevue-taupe: #9b8d77;
+  --bellevue-warm: #e8dcc8;
 }
 
 .dark {
@@ -102,6 +103,7 @@
   --color-bellevue-black: var(--bellevue-black);
   --color-bellevue-dark-forest: var(--bellevue-dark-forest);
   --color-bellevue-taupe: var(--bellevue-taupe);
+  --color-bellevue-warm: var(--bellevue-warm);
 }
 
 @layer base {
