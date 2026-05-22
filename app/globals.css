@@ -37,6 +37,7 @@
   --bellevue-gold: #b8956e;
   --bellevue-black: #1a1a1a;
   --bellevue-dark-forest: #1e2a1f;
+  --bellevue-taupe: #9b8d77;
 }
 
 .dark {
@@ -100,6 +101,7 @@
   --color-bellevue-gold: var(--bellevue-gold);
   --color-bellevue-black: var(--bellevue-black);
   --color-bellevue-dark-forest: var(--bellevue-dark-forest);
+  --color-bellevue-taupe: var(--bellevue-taupe);
 }
 
 @layer base {
@@ -111,7 +113,47 @@
   }
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
   }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+/* Luxury easing — Prada-adjacent, slow and deliberate */
+:root {
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-slow: 1.1s;
+  --duration-medium: 0.75s;
+}
+
+@keyframes luxuryLineGrow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes luxuryFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.luxury-line {
+  transform-origin: left center;
+  animation: luxuryLineGrow var(--duration-slow) var(--ease-luxury) forwards;
 }
 
 /* Custom animations */

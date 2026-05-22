@@ -1230,7 +1230,7 @@ function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="bg-bellevue-forest py-24 md:py-32 lg:py-40" id="faq">
+    <section className="relative bg-bellevue-forest py-24 md:py-32 lg:py-40 pb-28 md:pb-36 lg:pb-44" id="faq">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
           <motion.div
@@ -1330,111 +1330,104 @@ function Footer() {
   ]
 
   return (
-    <footer className="bg-[#7b81ff] py-16 md:py-24 px-5 md:px-8">
-      {/* Shadow lives on outer wrapper so it isn't clipped */}
-      <div className="max-w-[920px] mx-auto rounded-[10px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.38)]">
-        <div className="rounded-[10px] overflow-hidden bg-white">
-          {/* White top + wavy gradient transition */}
-          <div className="relative bg-white">
-            {/*
-              Single SVG: white shows through above the curves (transparent areas).
-              Back wave = lighter lavender layer in the upper zone.
-              Front wave = main gradient fill below the wobbly edge.
-            */}
-            <svg
-              viewBox="0 0 1440 140"
-              preserveAspectRatio="none"
-              className="block w-full h-[88px] sm:h-[104px] md:h-[120px]"
-              aria-hidden
-            >
-              <defs>
-                <linearGradient id="footerWaveGradient" x1="0" y1="0" x2="1440" y2="0" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#93b0f5" />
-                  <stop offset="50%" stopColor="#7b84e8" />
-                  <stop offset="100%" stopColor="#6168cd" />
-                </linearGradient>
-              </defs>
+    <footer className="relative -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 z-10">
+      {/* Wavy gradient overlaps the section above */}
+      <div className="relative">
+        <svg
+          viewBox="0 0 1440 160"
+          preserveAspectRatio="none"
+          className="block w-full h-[96px] sm:h-[112px] md:h-[128px] lg:h-[144px]"
+          aria-hidden
+        >
+          <defs>
+            <linearGradient id="footerWaveGradient" x1="0" y1="0" x2="1440" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#93b0f5" />
+              <stop offset="50%" stopColor="#7b84e8" />
+              <stop offset="100%" stopColor="#6168cd" />
+            </linearGradient>
+          </defs>
 
-              {/* Back wave — lighter layer peeking in upper-left / upper-right */}
-              <path
-                fill="#b8c4f7"
-                fillOpacity="0.85"
-                d="M0,0 L0,42
-                   C200,72 420,18 640,52
-                   C860,86 1080,28 1280,58
-                   C1360,70 1400,38 1440,32
-                   L1440,0 Z"
-              />
+          {/* Soft crest — sits over the green section */}
+          <path
+            fill="#b8c4f7"
+            fillOpacity="0.92"
+            d="M0,0 L0,48
+               C220,88 440,24 660,58
+               C880,92 1100,32 1320,62
+               C1380,72 1410,44 1440,38
+               L1440,0 Z"
+          />
 
-              {/* Main wobbly wave + gradient body */}
-              <path
-                fill="url(#footerWaveGradient)"
-                d="M0,58
-                   C180,108 400,38 620,82
-                   C840,126 1060,44 1280,88
-                   C1360,104 1400,62 1440,54
-                   L1440,140 L0,140 Z"
-              />
-            </svg>
+          {/* Main wave body */}
+          <path
+            fill="url(#footerWaveGradient)"
+            d="M0,64
+               C200,118 420,46 640,92
+               C860,138 1080,52 1300,96
+               C1360,108 1400,68 1440,60
+               L1440,160 L0,160 Z"
+          />
+        </svg>
 
-            {/* Gradient content — seamless continuation below the wave */}
-            <div className="bg-gradient-to-r from-[#93b0f5] via-[#7b84e8] to-[#6168cd] px-8 md:px-12 lg:px-14 pb-12 md:pb-14 pt-4 md:pt-6 -mt-px">
-              <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 xl:gap-16">
-                {/* Logo */}
-                <div className="shrink-0">
-                  <Link href="/" className="inline-flex items-center gap-3">
-                    <div className="relative w-10 h-10">
-                      <span className="absolute inset-0 rounded-full bg-[#8ec5fc]/70 translate-x-1" />
-                      <span className="absolute inset-0 rounded-full bg-[#9b8fd4]/75 -translate-x-1" />
-                    </div>
-                    <span className="font-sans text-2xl font-light tracking-wide text-white lowercase">
-                      bellevue
-                    </span>
-                  </Link>
-                </div>
+        <div className="bg-gradient-to-r from-[#93b0f5] via-[#7b84e8] to-[#6168cd] -mt-px">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-12 pb-12 md:pb-14 pt-4 md:pt-6">
+            <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 xl:gap-16">
+              {/* Logo */}
+              <div className="shrink-0">
+                <Link href="/" className="inline-flex items-center gap-3">
+                  <div className="relative w-10 h-10">
+                    <span className="absolute inset-0 rounded-full bg-[#8ec5fc]/70 translate-x-1" />
+                    <span className="absolute inset-0 rounded-full bg-[#9b8fd4]/75 -translate-x-1" />
+                  </div>
+                  <span className="font-sans text-2xl font-light tracking-wide text-white lowercase">
+                    bellevue
+                  </span>
+                </Link>
+              </div>
 
-                {/* Link columns */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 lg:gap-8 flex-1">
-                  {footerLinks.map((col) => (
-                    <div key={col.title}>
-                      <p className="font-sans text-[15px] font-semibold text-white mb-4">
-                        {col.title}
-                      </p>
-                      <ul className="space-y-2.5">
-                        {col.links.map((link) => (
-                          <li key={link.name}>
-                            <Link
-                              href={link.href}
-                              className="font-sans text-sm text-white/85 hover:text-white transition-colors"
-                            >
-                              {link.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
+              {/* Link columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 lg:gap-8 flex-1">
+                {footerLinks.map((col) => (
+                  <div key={col.title}>
+                    <p className="font-sans text-[15px] font-semibold text-white mb-4">
+                      {col.title}
+                    </p>
+                    <ul className="space-y-2.5">
+                      {col.links.map((link) => (
+                        <li key={link.name}>
+                          <Link
+                            href={link.href}
+                            className="font-sans text-sm text-white/85 hover:text-white transition-colors"
+                          >
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Bottom white bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-8 md:px-12 lg:px-14 py-5 bg-white border-t border-black/[0.04]">
-            <p className="font-sans text-xs text-[#888888]">
-              &copy; {new Date().getFullYear()} Bellevue Chalets by Pushella. All Rights Reserved.
-            </p>
-            <div className="flex items-center gap-4">
-              <a href="#" aria-label="Facebook" className="text-[#888888] hover:text-[#6168cd] transition-colors">
-                <Facebook className="w-4 h-4" strokeWidth={1.5} />
-              </a>
-              <a href="#" aria-label="Instagram" className="text-[#888888] hover:text-[#6168cd] transition-colors">
-                <Instagram className="w-4 h-4" strokeWidth={1.5} />
-              </a>
-              <a href="#" aria-label="LinkedIn" className="text-[#888888] hover:text-[#6168cd] transition-colors">
-                <Linkedin className="w-4 h-4" strokeWidth={1.5} />
-              </a>
-            </div>
+      {/* Bottom bar */}
+      <div className="bg-white border-t border-black/[0.04]">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="font-sans text-xs text-[#888888]">
+            &copy; {new Date().getFullYear()} Bellevue Chalets by Pushella. All Rights Reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <a href="#" aria-label="Facebook" className="text-[#888888] hover:text-[#6168cd] transition-colors">
+              <Facebook className="w-4 h-4" strokeWidth={1.5} />
+            </a>
+            <a href="#" aria-label="Instagram" className="text-[#888888] hover:text-[#6168cd] transition-colors">
+              <Instagram className="w-4 h-4" strokeWidth={1.5} />
+            </a>
+            <a href="#" aria-label="LinkedIn" className="text-[#888888] hover:text-[#6168cd] transition-colors">
+              <Linkedin className="w-4 h-4" strokeWidth={1.5} />
+            </a>
           </div>
         </div>
       </div>
