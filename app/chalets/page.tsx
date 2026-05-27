@@ -15,6 +15,8 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
+import { getChaletHero, getChaletImages, type ChaletPhoto } from "@/lib/chalet-photos"
+import { SiteFooter } from "@/components/site-footer"
 
 type KeyFeature = {
   icon: "home" | "area" | "bed" | "view" | "guests" | "layout"
@@ -121,7 +123,7 @@ type Chalet = {
   extendedDescription?: string
   keyFeatures: KeyFeature[]
   amenities: string[]
-  images: string[]
+  images: ChaletPhoto[]
   theme: ChaletTheme
 }
 
@@ -130,7 +132,7 @@ const chaletData: Chalet[] = [
     id: "cove",
     name: "Chalet Cove",
     tagline: "Intimate Retreat",
-    heroImage: "/cove-1.jpg",
+    heroImage: getChaletHero("cove").src,
     description:
       "A cozy and intimate retreat designed for couples seeking a peaceful escape. This private chalet features a plush Queen-size bed, a comfortable mini dining area, and a dedicated private entrance for complete seclusion. Wake up to breathtaking views of Ambewela's rolling green hills and lush forests right from your bed.",
     keyFeatures: [
@@ -156,14 +158,14 @@ const chaletData: Chalet[] = [
       "Heaters (on request)",
       "View & soothing sound of a natural water stream",
     ],
-    images: ["/cove-1.jpg", "/DJI_20250113073722_0909_D-Edit.jpg"],
+    images: getChaletImages("cove"),
     theme: chaletThemes.cove,
   },
   {
     id: "mirador",
     name: "Chalet Mirador",
     tagline: "Beautiful View",
-    heroImage: "/mirador.jpg",
+    heroImage: getChaletHero("mirador").src,
     description:
       "A private two-storey wooden retreat with breathtaking views of the surrounding forestry. Spacious and crafted for comfort and serenity, Mirador is perfect for couples seeking a romantic escape or families of up to four adults. Built entirely from wood, the chalet radiates warmth and rustic charm.",
     extendedDescription:
@@ -195,14 +197,14 @@ const chaletData: Chalet[] = [
       "Heaters (on request)",
       "View & soothing sound of a natural water stream",
     ],
-    images: ["/mirador.jpg", "/DJI_20250113073722_0909_D-Edit.jpg"],
+    images: getChaletImages("mirador"),
     theme: chaletThemes.mirador,
   },
   {
     id: "grandeur",
     name: "Chalet Grandeur",
     tagline: "Spacious Luxury",
-    heroImage: "/granduer.jpg",
+    heroImage: getChaletHero("grandeur").src,
     description:
       "A spacious and elegant two-storey retreat, Grandeur is perfect for two couples, families, or a group of friends seeking a luxurious escape. This expansive chalet features two well-appointed double bedrooms and a cozy attic, offering plenty of space for relaxation.",
     extendedDescription:
@@ -238,7 +240,7 @@ const chaletData: Chalet[] = [
       "Heaters (on request)",
       "View & soothing sound of a natural water stream",
     ],
-    images: ["/granduer.jpg", "/DJI_20250113073722_0909_D-Edit.jpg"],
+    images: getChaletImages("grandeur"),
     theme: chaletThemes.grandeur,
   },
 ]
@@ -261,7 +263,7 @@ function FeatureIcon({ icon }: { icon: KeyFeature["icon"] }) {
   }
 }
 
-function ImageCarousel({ images, name, theme }: { images: string[]; name: string; theme: ChaletTheme }) {
+function ImageCarousel({ images, theme }: { images: ChaletPhoto[]; theme: ChaletTheme }) {
   const [activeIndex, setActiveIndex] = useState(0)
 
   const goTo = (index: number) => {
@@ -279,7 +281,7 @@ function ImageCarousel({ images, name, theme }: { images: string[]; name: string
           transition={{ duration: 0.5 }}
           className="absolute inset-0"
         >
-          <Image src={images[activeIndex]} alt={`${name} - ${activeIndex + 1}`} fill className="object-cover" />
+          <Image src={images[activeIndex].src} alt={images[activeIndex].alt} fill className="object-cover" />
           <div className={`absolute inset-0 bg-gradient-to-t ${theme.imageTint} pointer-events-none`} />
         </motion.div>
       </AnimatePresence>
@@ -447,7 +449,7 @@ function ChaletBlock({ chalet }: { chalet: Chalet }) {
         }`}
       >
         <KeyFeaturesSidebar features={chalet.keyFeatures} theme={theme} />
-        <ImageCarousel images={chalet.images} name={chalet.name} theme={theme} />
+        <ImageCarousel images={chalet.images} theme={theme} />
       </div>
 
       {/* Amenities */}
@@ -468,39 +470,6 @@ function ChaletBlock({ chalet }: { chalet: Chalet }) {
   )
 }
 
-function Footer() {
-  return (
-    <footer className="bg-bellevue-black border-t border-white/10 py-12">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1-removebg-preview-NZqkBBzgK3GYDWKDbmtxFChTf61bf2.png"
-            alt="Bellevue Chalets by Pushella"
-            width={200}
-            height={60}
-            className="h-14 w-auto brightness-0 invert"
-          />
-          <div className="flex items-center gap-8">
-            <Link href="/#" className="text-sm text-white/60 hover:text-white transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/#" className="text-sm text-white/60 hover:text-white transition-colors">
-              Terms
-            </Link>
-            <Link href="/#contact" className="text-sm text-white/60 hover:text-white transition-colors">
-              Contact
-            </Link>
-          </div>
-        </div>
-        <div className="mt-12 pt-8 border-t border-white/10 text-center">
-          <p className="text-sm text-white/40">
-            &copy; {new Date().getFullYear()} Bellevue Chalets by Pushella. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
-  )
-}
 
 export default function ChaletsPage() {
   useEffect(() => {
@@ -519,7 +488,7 @@ export default function ChaletsPage() {
       {chaletData.map((chalet) => (
         <ChaletBlock key={chalet.id} chalet={chalet} />
       ))}
-      <Footer />
+      <SiteFooter />
     </main>
   )
 }

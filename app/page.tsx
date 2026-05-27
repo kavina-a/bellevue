@@ -6,7 +6,11 @@ import { easeOutCubic, type GoogleReviewsData } from "@/lib/review-count"
 import Image from "next/image"
 import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
-import { Play, Pause, Volume2, VolumeX, ArrowRight, ArrowLeft, Quote, Plus, ArrowUp, Facebook, Instagram, Mail, Phone, MapPin, Star, Linkedin } from "lucide-react"
+import { getChaletImages, getChaletHero } from "@/lib/chalet-photos"
+import { ChaletImageCarousel } from "@/components/chalet-image-carousel"
+import { NearbyExperiencesSection } from "@/components/experiences/nearby-experiences-section"
+import { SiteFooter } from "@/components/site-footer"
+import { Play, Pause, Volume2, VolumeX, ArrowRight, ArrowLeft, Quote, Plus, ArrowUp, Mail, Phone, MapPin, Star } from "lucide-react"
 
 const GOOGLE_REVIEWS_URL = "https://www.google.com/travel/search?g2lb=4965990,72471280,72560029,72573224,72647020,72686036,72803964,72882230,73064764,121529349,121608705&hl=en-LK&gl=lk&cs=1&ssta=1&q=bellevue+chalets+by+pushella&ts=CAEaRwopEicyJTB4M2FlMzg3ZTE4ZGYzN2I4MzoweDQxNzk4OWFkZDdkZThlMTMSGhIUCgcI6g8QBhgMEgcI6g8QBhgNGAEyAhAA&qs=CAEyE0Nnb0lrNXo2dnQyMTRyeEJFQUU4AkIJCROO3tetiXlBQgkJE47e162JeUE&ap=ugEHcmV2aWV3cw&ictx=111"
 
@@ -373,36 +377,59 @@ function PillarsStrip() {
 const chaletDetails = [
   {
     name: "Chalet Cove",
-    slug: "cove",
+    slug: "cove" as const,
     tagline: "Intimate Retreat",
     description: "A cozy and intimate retreat designed for couples seeking a peaceful escape. This private chalet features a plush Queen-size bed and breathtaking views of Ambewela's rolling green hills.",
-    image: "/cove-1.jpg",
     guests: "2 Adults",
   },
   {
     name: "Chalet Mirador",
-    slug: "mirador",
+    slug: "mirador" as const,
     tagline: "Beautiful View",
     description: "A private two-storey wooden retreat with breathtaking views of the surrounding forestry. Spacious and crafted for comfort, perfect for couples or families of up to four adults.",
-    image: "/mirador.jpg",
     guests: "2-4 Adults",
   },
   {
     name: "Chalet Grandeur",
-    slug: "grandeur",
+    slug: "grandeur" as const,
     tagline: "Spacious Luxury",
     description: "A spacious and elegant two-storey retreat perfect for two couples, families, or a group of friends. Features two well-appointed bedrooms, a cozy attic, and an expansive outdoor deck.",
-    image: "/granduer.jpg",
     guests: "Up to 5 Adults",
   },
-]
+].map((chalet) => ({
+  ...chalet,
+  images: getChaletImages(chalet.slug),
+}))
 
 function ChaletsSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const imagePanelRef = useRef<HTMLDivElement>(null)
+  const userInteractedRef = useRef(false)
   const [activeChalet, setActiveChalet] = useState(0)
   const [direction, setDirection] = useState(1)
   const luxuryEase = [0.22, 1, 0.36, 1] as const
 
+  const isSectionInView = useInView(sectionRef, { amount: 0.25 })
+  const isPanelInView = useInView(imagePanelRef, { amount: 0.4 })
+
+  useEffect(() => {
+    if (!isSectionInView) return
+
+    const id = window.setInterval(() => {
+      if (userInteractedRef.current) return
+      setDirection(1)
+      setActiveChalet((prev) => (prev + 1) % chaletDetails.length)
+    }, 14000)
+
+    return () => window.clearInterval(id)
+  }, [isSectionInView])
+
   const selectChalet = (index: number) => {
+    userInteractedRef.current = true
+    window.setTimeout(() => {
+      userInteractedRef.current = false
+    }, 20000)
+
     if (index === activeChalet) return
     setDirection(index > activeChalet ? 1 : -1)
     setActiveChalet(index)
@@ -411,7 +438,11 @@ function ChaletsSection() {
   const active = chaletDetails[activeChalet]
 
   return (
-    <section className="bg-bellevue-black py-24 md:py-32 lg:py-40 overflow-hidden" id="chalets">
+    <section
+      ref={sectionRef}
+      className="bg-bellevue-black py-24 md:py-32 lg:py-40 overflow-hidden"
+      id="chalets"
+    >
       <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
         {/* Section Header */}
         <motion.div
@@ -552,34 +583,32 @@ function ChaletsSection() {
 
           {/* Right — Layered image panel */}
           <div className="lg:col-span-8 relative">
-            <div className="relative aspect-[4/3] lg:aspect-[16/10] overflow-hidden bg-bellevue-dark-forest">
-              {/* Stacked images — crossfade without unmounting */}
+            <div
+              ref={imagePanelRef}
+              className="relative aspect-[4/3] lg:aspect-[16/10] overflow-hidden bg-bellevue-dark-forest"
+            >
               {chaletDetails.map((chalet, index) => {
                 const isActive = activeChalet === index
                 return (
                   <motion.div
                     key={chalet.slug}
-                    className="absolute inset-0"
+                    className={`absolute inset-0 ${isActive ? "" : "pointer-events-none"}`}
                     initial={false}
                     animate={{
                       opacity: isActive ? 1 : 0,
-                      scale: isActive ? 1 : 1.06,
                       zIndex: isActive ? 2 : 1,
                     }}
                     transition={{
                       opacity: { duration: 0.9, ease: luxuryEase },
-                      scale: { duration: 1.35, ease: luxuryEase },
                       zIndex: { delay: isActive ? 0 : 0.85 },
                     }}
+                    aria-hidden={!isActive}
                   >
-                    <Image
-                      src={chalet.image}
-                      alt={chalet.name}
-                      fill
-                      className="object-cover"
+                    <ChaletImageCarousel
+                      images={chalet.images}
+                      isActive={isActive && isPanelInView}
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/25" />
                   </motion.div>
                 )
               })}
@@ -677,65 +706,152 @@ function ChaletsSection() {
   )
 }
 
-// Experiences Section
-function ExperiencesSection() {
-  return (
-    <section className="relative py-24 md:py-32 overflow-hidden" id="offers">
-      <div className="absolute inset-0">
-        <Image
-          src="https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2000&auto=format&fit=crop"
-          alt="Mountain landscape"
-          fill
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black/60" />
-      </div>
+// Offers Section — editorial invitation, not promotional
+function OffersSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"])
+  const textY = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"])
 
-      <div className="relative max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <span className="font-sans text-xs tracking-[0.3em] uppercase text-bellevue-gold">Curated Experiences</span>
-            <h2 className="mt-4 font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">
-              Beyond the Ordinary
-            </h2>
-            <p className="mt-8 font-sans text-lg text-white/80 leading-relaxed">
-              From scenic tea trail walks and farm visits to private dining experiences with locally sourced ingredients, 
-              we curate moments that transform your stay into unforgettable memories in the heart of Sri Lankan highlands.
-            </p>
-            <Link
-              href="/offers"
-              className="inline-block mt-10 px-8 py-3 border border-white/50 text-white font-sans text-sm tracking-widest uppercase hover:bg-white hover:text-bellevue-black transition-all duration-300"
+  const stayTypes = [
+    "Weekend retreat",
+    "Honeymoon sojourn",
+    "Extended highland stays",
+  ]
+
+  return (
+    <section ref={sectionRef} className="relative bg-bellevue-cream overflow-hidden" id="offers">
+      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 py-28 md:py-36 lg:py-44">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-20 items-center">
+          <motion.div style={{ y: textY }} className="lg:col-span-5 lg:order-1 order-2">
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="block font-sans text-xs tracking-[0.4em] uppercase text-bellevue-gold"
             >
-              View Special Offers
-            </Link>
+              Curated Stays
+            </motion.span>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="mt-6 font-serif text-4xl md:text-5xl lg:text-[3.25rem] text-bellevue-black leading-[1.12]"
+            >
+              An invitation
+              <br />
+              <span className="italic text-bellevue-forest">to linger</span>
+            </motion.h2>
+
+            <motion.div
+              initial={{ opacity: 0, scaleX: 0 }}
+              whileInView={{ opacity: 1, scaleX: 1 }}
+              transition={{ duration: 1, delay: 0.25 }}
+              viewport={{ once: true }}
+              className="mt-10 h-px bg-bellevue-gold/40 w-20 origin-left"
+            />
+
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              viewport={{ once: true }}
+              className="mt-10 font-sans text-lg text-bellevue-black/70 leading-[1.85]"
+            >
+              For those who wish to stay a little longer, we compose unhurried packages —
+              private dining, forest mornings, and the quiet luxury of time well spent among
+              the highlands.
+            </motion.p>
+
+            <motion.ul
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.45 }}
+              viewport={{ once: true }}
+              className="mt-10 space-y-4 border-t border-bellevue-black/8 pt-10"
+              aria-label="Curated stay types"
+            >
+              {stayTypes.map((stay, index) => (
+                <motion.li
+                  key={stay}
+                  initial={{ opacity: 0, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 + index * 0.08 }}
+                  viewport={{ once: true }}
+                  className="flex items-center gap-5 font-sans text-sm tracking-[0.12em] uppercase text-bellevue-black/55"
+                >
+                  <span className="w-8 h-px bg-bellevue-gold/50 shrink-0" aria-hidden />
+                  {stay}
+                </motion.li>
+              ))}
+            </motion.ul>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.65 }}
+              viewport={{ once: true }}
+              className="mt-12"
+            >
+              <Link
+                href="/offers"
+                className="inline-flex items-center gap-3 group font-sans text-sm tracking-[0.2em] uppercase text-bellevue-black hover:text-bellevue-gold transition-colors duration-500"
+              >
+                <span>Explore our packages</span>
+                <span className="w-12 h-px bg-bellevue-black group-hover:bg-bellevue-gold group-hover:w-16 transition-all duration-500" />
+              </Link>
+            </motion.div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-2 gap-4"
+            style={{ y: imageY }}
+            className="lg:col-span-7 lg:order-2 order-1 relative"
           >
-            {[
-              { title: "Tea Trails", desc: "Highland walks" },
-              { title: "Farm Dining", desc: "Local ingredients" },
-              { title: "Nature Walks", desc: "Forest exploration" },
-              { title: "Private Dining", desc: "In-chalet experience" },
-            ].map((exp) => (
-              <div
-                key={exp.title}
-                className="p-6 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+            <motion.div
+              initial={{ opacity: 0, scale: 1.04 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, margin: "-80px" }}
+              className="relative aspect-[4/3] lg:aspect-[16/11] overflow-hidden"
+            >
+              <Image
+                src={getChaletHero("grandeur").src}
+                alt="Chalet Grandeur living room with panoramic forest views, Ambewela"
+                fill
+                sizes="(max-width: 1024px) 100vw, 58vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-bellevue-black/25 via-transparent to-transparent pointer-events-none" />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              viewport={{ once: true }}
+              className="absolute -bottom-6 -left-4 md:-left-8 bg-bellevue-cream px-6 py-5 hidden sm:block shadow-[0_12px_40px_-16px_rgba(26,26,26,0.2)]"
+            >
+              <p className="font-sans text-[10px] tracking-[0.35em] uppercase text-bellevue-gold">
+                Chalet Grandeur
+              </p>
+              <p className="mt-1.5 font-serif text-lg text-bellevue-black italic">
+                Where the forest meets the room
+              </p>
+            </motion.div>
+
+            <div className="absolute -right-3 top-1/4 hidden xl:block" aria-hidden>
+              <span
+                className="font-sans text-[10px] tracking-[0.5em] uppercase text-bellevue-black/30"
+                style={{ writingMode: "vertical-rl" }}
               >
-                <h3 className="font-serif text-xl text-white">{exp.title}</h3>
-                <p className="mt-2 text-sm text-white/60">{exp.desc}</p>
-              </div>
-            ))}
+                Composed stays
+              </span>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -1126,7 +1242,7 @@ function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="relative bg-bellevue-warm py-24 md:py-32 lg:py-40 pb-28 md:pb-36 lg:pb-44" id="faq">
+    <section className="relative bg-white py-24 md:py-32 lg:py-40" id="faq">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
           <motion.div
@@ -1194,150 +1310,6 @@ function FAQSection() {
   )
 }
 
-// Footer — olive wave overlapping the warm FAQ section
-function Footer() {
-  const footerLinks = [
-    {
-      title: "Book Your Stay",
-      links: [
-        { name: "Our Chalets", href: "/chalets" },
-        { name: "About Us", href: "/about" },
-        { name: "Special Offers", href: "/offers" },
-        { name: "Contact", href: "/#contact" },
-      ],
-    },
-    {
-      title: "Resources",
-      links: [
-        { name: "Gallery", href: "/gallery" },
-        { name: "FAQ", href: "#faq" },
-        { name: "Testimonials", href: "/#testimonials" },
-        { name: "Ambewela", href: "/about" },
-      ],
-    },
-    {
-      title: "Support",
-      links: [
-        { name: "Contact Us", href: "/#contact" },
-        { name: "Terms of Use", href: "#" },
-        { name: "Privacy Policy", href: "#" },
-      ],
-    },
-  ]
-
-  return (
-    <footer className="relative -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-28 z-10">
-      <div className="relative">
-        {/* Shadow layer — sits behind the wave on the warm FAQ section */}
-        <svg
-          viewBox="0 0 1440 160"
-          preserveAspectRatio="none"
-          className="absolute inset-x-0 top-3 sm:top-4 md:top-5 block w-full h-[96px] sm:h-[112px] md:h-[128px] lg:h-[144px] pointer-events-none"
-          aria-hidden
-        >
-          <path
-            fill="#1a1a1a"
-            fillOpacity="0.12"
-            d="M0,72
-               C200,126 420,54 640,100
-               C860,146 1080,60 1300,104
-               C1360,116 1400,76 1440,68
-               L1440,160 L0,160 Z"
-          />
-        </svg>
-
-        <svg
-          viewBox="0 0 1440 160"
-          preserveAspectRatio="none"
-          className="relative block w-full h-[96px] sm:h-[112px] md:h-[128px] lg:h-[144px] drop-shadow-[0_-8px_24px_rgba(26,26,26,0.18)]"
-          aria-hidden
-        >
-          <defs>
-            <linearGradient id="footerWaveGradient" x1="0" y1="0" x2="1440" y2="160" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#2c3e2d" />
-              <stop offset="100%" stopColor="#1e2a1f" />
-            </linearGradient>
-            <filter id="footerWaveShadow" x="-10%" y="-30%" width="120%" height="160%">
-              <feDropShadow dx="0" dy="-6" stdDeviation="10" floodColor="#1a1a1a" floodOpacity="0.22" />
-            </filter>
-          </defs>
-
-          <path
-            fill="url(#footerWaveGradient)"
-            filter="url(#footerWaveShadow)"
-            d="M0,64
-               C200,118 420,46 640,92
-               C860,138 1080,52 1300,96
-               C1360,108 1400,68 1440,60
-               L1440,160 L0,160 Z"
-          />
-        </svg>
-
-        <div className="bg-bellevue-dark-forest -mt-px">
-          <div className="max-w-[1400px] mx-auto px-6 lg:px-12 pb-12 md:pb-14 pt-4 md:pt-6">
-            <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 xl:gap-16">
-              {/* Logo */}
-              <div className="shrink-0">
-                <Link href="/" className="inline-flex items-center gap-3">
-                  <div className="relative w-10 h-10">
-                    <span className="absolute inset-0 rounded-full bg-bellevue-gold/50 translate-x-1" />
-                    <span className="absolute inset-0 rounded-full bg-bellevue-forest/80 -translate-x-1" />
-                  </div>
-                  <span className="font-sans text-2xl font-light tracking-wide text-white lowercase">
-                    bellevue
-                  </span>
-                </Link>
-              </div>
-
-              {/* Link columns */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 lg:gap-8 flex-1">
-                {footerLinks.map((col) => (
-                  <div key={col.title}>
-                    <p className="font-sans text-[15px] font-semibold text-white mb-4">
-                      {col.title}
-                    </p>
-                    <ul className="space-y-2.5">
-                      {col.links.map((link) => (
-                        <li key={link.name}>
-                          <Link
-                            href={link.href}
-                            className="font-sans text-sm text-white/80 hover:text-bellevue-gold transition-colors"
-                          >
-                            {link.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom bar */}
-      <div className="bg-bellevue-cream border-t border-bellevue-forest/10">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-sans text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Bellevue Chalets by Pushella. All Rights Reserved.
-          </p>
-          <div className="flex items-center gap-4">
-            <a href="#" aria-label="Facebook" className="text-muted-foreground hover:text-bellevue-forest transition-colors">
-              <Facebook className="w-4 h-4" strokeWidth={1.5} />
-            </a>
-            <a href="#" aria-label="Instagram" className="text-muted-foreground hover:text-bellevue-forest transition-colors">
-              <Instagram className="w-4 h-4" strokeWidth={1.5} />
-            </a>
-            <a href="#" aria-label="LinkedIn" className="text-muted-foreground hover:text-bellevue-forest transition-colors">
-              <Linkedin className="w-4 h-4" strokeWidth={1.5} />
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  )
-}
 
 // Main Page Component
 export default function BellevueChaletsPage() {
@@ -1349,11 +1321,12 @@ export default function BellevueChaletsPage() {
       {/* <PillarsStrip /> */}
       <ChaletsSection />
       <QuoteDivider />
-      <ExperiencesSection />
+      <OffersSection />
+      <NearbyExperiencesSection />
       <TestimonialsSection />
       <ContactSection />
       <FAQSection />
-      <Footer />
+      <SiteFooter />
     </main>
   )
 }

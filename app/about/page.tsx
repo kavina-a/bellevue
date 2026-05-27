@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
+import { SiteFooter } from "@/components/site-footer"
 import { ArrowRight, Quote } from "lucide-react"
 
 export default function AboutPage() {
@@ -206,14 +207,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-bellevue-black/30" />
       </section>
 
-      {/* Footer */}
-      <footer className="bg-bellevue-black py-8">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 text-center">
-          <p className="font-sans text-xs tracking-[0.3em] uppercase text-white/40">
-            &copy; {new Date().getFullYear()} Bellevue Chalets by Pushella
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   )
 }

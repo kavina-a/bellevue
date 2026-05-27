@@ -30,6 +30,7 @@ function useNavLinks() {
     { name: "About Us", href: isHome ? "#about" : "/about" },
     { name: "Chalets", href: isHome ? "#chalets" : "/chalets" },
     { name: "Offers", href: isHome ? "#offers" : "/offers" },
+    { name: "Experiences", href: isHome ? "#experiences" : "/experiences" },
     { name: "Gallery", href: "/gallery" },
     { name: "FAQ", href: isHome ? "#faq" : "/#faq" },
   ]
@@ -49,7 +50,8 @@ export function SiteNavigation({ variant = "hero" }: SiteNavigationProps) {
   const [isScrolled, setIsScrolled] = useState(isSolid)
   const [isChaletDropdownOpen, setIsChaletDropdownOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const chaletDropdownRef = useRef<HTMLDivElement>(null)
+  const chaletTriggerRef = useRef<HTMLDivElement>(null)
+  const chaletPanelRef = useRef<HTMLDivElement>(null)
   const { scrolledNavLinks, fullMenuLinks, bookHref } = useNavLinks()
 
   const showScrolledNav = isSolid || isScrolled
@@ -77,12 +79,16 @@ export function SiteNavigation({ variant = "hero" }: SiteNavigationProps) {
   }, [isMenuOpen])
 
   useEffect(() => {
+    if (showScrolledNav) setIsChaletDropdownOpen(false)
+  }, [showScrolledNav])
+
+  useEffect(() => {
     if (!isChaletDropdownOpen) return
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (chaletDropdownRef.current && !chaletDropdownRef.current.contains(event.target as Node)) {
-        setIsChaletDropdownOpen(false)
-      }
+      const target = event.target as Node
+      if (chaletTriggerRef.current?.contains(target) || chaletPanelRef.current?.contains(target)) return
+      setIsChaletDropdownOpen(false)
     }
 
     const handleEscape = (event: KeyboardEvent) => {
@@ -138,7 +144,7 @@ export function SiteNavigation({ variant = "hero" }: SiteNavigationProps) {
                 </Link>
 
                 <div className="flex items-center gap-6">
-                  <div ref={chaletDropdownRef} className="relative hidden md:block">
+                  <div ref={chaletTriggerRef} className="relative hidden md:block">
                     <button
                       onClick={() => setIsChaletDropdownOpen((open) => !open)}
                       aria-expanded={isChaletDropdownOpen}
@@ -156,37 +162,34 @@ export function SiteNavigation({ variant = "hero" }: SiteNavigationProps) {
                     <AnimatePresence>
                       {isChaletDropdownOpen && (
                         <motion.div
-                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          ref={chaletPanelRef}
+                          initial={{ opacity: 0, y: -6, scale: 0.98 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                          transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
-                          className="absolute top-[calc(100%+0.75rem)] right-0 z-[60] w-[min(18rem,calc(100vw-3rem))] origin-top-right overflow-hidden rounded-2xl border border-white/20 bg-black/20 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(0,0,0,0.35)]"
+                          exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                          transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
+                          className="absolute right-0 top-full mt-2 w-52 rounded-lg border border-white/15 bg-black/85 backdrop-blur-xl shadow-lg overflow-hidden"
                         >
-                          <div className="p-2">
+                          <ul className="py-1">
                             {chalets.map((chalet) => (
-                              <Link
-                                key={chalet.slug}
-                                href={`/chalets#${chalet.slug}`}
-                                onClick={() => setIsChaletDropdownOpen(false)}
-                                className="group block rounded-xl px-4 py-3.5 transition-colors hover:bg-white/10"
-                              >
-                                <span className="font-serif text-[17px] text-white transition-colors group-hover:text-bellevue-gold">
+                              <li key={chalet.slug}>
+                                <Link
+                                  href={`/chalets#${chalet.slug}`}
+                                  onClick={() => setIsChaletDropdownOpen(false)}
+                                  className="block px-4 py-2.5 font-sans text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                                >
                                   {chalet.name}
-                                </span>
-                                <span className="mt-0.5 block text-[10px] font-sans tracking-[0.18em] uppercase text-white/50">
-                                  {chalet.tagline}
-                                </span>
-                              </Link>
+                                </Link>
+                              </li>
                             ))}
-                          </div>
-                          <div className="border-t border-white/15 px-2 py-2">
+                          </ul>
+                          <div className="border-t border-white/10 px-4 py-2.5">
                             <Link
                               href="/chalets"
                               onClick={() => setIsChaletDropdownOpen(false)}
-                              className="group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-sans tracking-wide text-bellevue-gold transition-colors hover:bg-white/10"
+                              className="group inline-flex items-center gap-1.5 text-xs font-sans tracking-wide text-bellevue-gold transition-colors hover:text-white"
                             >
-                              View All Chalets
-                              <ArrowRight className="h-3.5 w-3.5 opacity-70 transition-transform group-hover:translate-x-0.5" />
+                              View all
+                              <ArrowRight className="h-3 w-3 opacity-70 transition-transform group-hover:translate-x-0.5" />
                             </Link>
                           </div>
                         </motion.div>

@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SpecialOffersSection } from "@/components/offers/special-offers-section"
+import { SiteFooter } from "@/components/site-footer"
 
 export default function OffersPage() {
   return (
@@ -80,13 +81,7 @@ export default function OffersPage() {
         </div>
       </section>
 
-      <footer className="bg-bellevue-black py-8">
-        <div className="mx-auto max-w-[1400px] px-6 text-center lg:px-12">
-          <p className="font-sans text-xs tracking-[0.3em] uppercase text-white/40">
-            &copy; {new Date().getFullYear()} Bellevue Chalets by Pushella
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   )
 }
