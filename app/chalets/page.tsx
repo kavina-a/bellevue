@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Menu,
@@ -280,6 +280,35 @@ function FeatureIcon({ icon }: { icon: KeyFeature["icon"] }) {
 function Navigation() {
   const [isChaletDropdownOpen, setIsChaletDropdownOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const chaletDropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : ""
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isMenuOpen])
+
+  useEffect(() => {
+    if (!isChaletDropdownOpen) return
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (chaletDropdownRef.current && !chaletDropdownRef.current.contains(event.target as Node)) {
+        setIsChaletDropdownOpen(false)
+      }
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsChaletDropdownOpen(false)
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [isChaletDropdownOpen])
 
   return (
     <>
@@ -308,38 +337,46 @@ function Navigation() {
                 </Link>
               ))}
 
-              <div className="relative">
+              <div ref={chaletDropdownRef} className="relative">
                 <button
-                  onClick={() => setIsChaletDropdownOpen(!isChaletDropdownOpen)}
-                  className="flex items-center gap-1.5 text-[11px] tracking-[0.2em] uppercase font-sans text-bellevue-taupe hover:text-bellevue-black transition-colors"
+                  onClick={() => setIsChaletDropdownOpen((open) => !open)}
+                  aria-expanded={isChaletDropdownOpen}
+                  aria-haspopup="true"
+                  className={`flex items-center gap-1.5 text-[11px] tracking-[0.2em] uppercase font-sans transition-colors ${
+                    isChaletDropdownOpen ? "text-bellevue-black" : "text-bellevue-taupe hover:text-bellevue-black"
+                  }`}
                 >
                   More
                   <ChevronDown
-                    className={`w-3.5 h-3.5 transition-transform ${isChaletDropdownOpen ? "rotate-180" : ""}`}
+                    className={`w-3.5 h-3.5 transition-transform duration-300 ${isChaletDropdownOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 <AnimatePresence>
                   {isChaletDropdownOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full right-0 mt-3 w-56 bg-white border border-border shadow-lg py-2"
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
+                      className="absolute top-[calc(100%+0.75rem)] right-0 z-[60] w-[min(18rem,calc(100vw-3rem))] origin-top-right overflow-hidden rounded-2xl border border-bellevue-black/8 bg-white/70 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(26,26,26,0.15)]"
                     >
-                      {chaletData.map((chalet) => (
-                        <Link
-                          key={chalet.id}
-                          href={`#${chalet.id}`}
-                          onClick={() => setIsChaletDropdownOpen(false)}
-                          className={`block px-5 py-3 transition-colors ${chalet.theme.sectionBg} hover:opacity-90`}
-                        >
-                          <span className={`font-serif text-base ${chalet.theme.heading}`}>{chalet.name}</span>
-                          <span className={`block text-[10px] tracking-[0.15em] uppercase mt-0.5 ${chalet.theme.accent}`}>
-                            {chalet.tagline}
-                          </span>
-                        </Link>
-                      ))}
+                      <div className="p-2">
+                        {chaletData.map((chalet) => (
+                          <Link
+                            key={chalet.id}
+                            href={`#${chalet.id}`}
+                            onClick={() => setIsChaletDropdownOpen(false)}
+                            className="group block rounded-xl px-4 py-3.5 transition-colors hover:bg-bellevue-black/[0.04]"
+                          >
+                            <span className={`font-serif text-[17px] ${chalet.theme.heading} transition-opacity group-hover:opacity-80`}>
+                              {chalet.name}
+                            </span>
+                            <span className={`mt-0.5 block text-[10px] tracking-[0.18em] uppercase ${chalet.theme.accent}`}>
+                              {chalet.tagline}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -366,63 +403,101 @@ function Navigation() {
 
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100]"
-          >
+          <>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-bellevue-black/95 backdrop-blur-lg"
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-[100] bg-bellevue-black/40 backdrop-blur-[2px]"
               onClick={() => setIsMenuOpen(false)}
+              aria-hidden
             />
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 40 }}
-              className="relative h-full flex flex-col items-center justify-center"
+            <motion.aside
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+              className="fixed top-0 left-0 bottom-0 z-[101] w-[min(340px,88vw)] bg-bellevue-cream border-r border-bellevue-black/10 shadow-[4px_0_32px_-8px_rgba(26,26,26,0.18)] flex flex-col"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site menu"
             >
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="absolute top-6 right-6 p-2 text-white/80 hover:text-white transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="w-8 h-8" />
-              </button>
-              <nav className="flex flex-col items-center gap-6">
-                {[...navLinks, ...chaletData.map((c) => ({ name: c.name, href: `#${c.id}`, accent: c.theme.accent }))].map(
-                  (link, index) => (
-                    <motion.div
+              <div className="flex items-center justify-between px-6 py-7 border-b border-bellevue-black/8">
+                <Link href="/" onClick={() => setIsMenuOpen(false)}>
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1-removebg-preview-NZqkBBzgK3GYDWKDbmtxFChTf61bf2.png"
+                    alt="Bellevue Chalets by Pushella"
+                    width={280}
+                    height={84}
+                    className="h-32 sm:h-40 w-auto"
+                  />
+                </Link>
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 text-bellevue-black/60 hover:text-bellevue-black transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <nav className="flex-1 overflow-y-auto px-6 py-8">
+                <ul className="flex flex-col gap-1">
+                  {navLinks.map((link, index) => (
+                    <motion.li
                       key={link.name}
-                      initial={{ opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 + index * 0.04 }}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.05 + index * 0.04 }}
                     >
                       <Link
                         href={link.href}
                         onClick={() => setIsMenuOpen(false)}
-                        className={`font-serif text-3xl transition-colors ${
-                          "accent" in link ? `${link.accent} hover:text-white` : "text-white hover:text-bellevue-gold"
-                        }`}
+                        className="block py-3 font-serif text-2xl text-bellevue-black hover:text-bellevue-gold transition-colors duration-300"
                       >
                         {link.name}
                       </Link>
-                    </motion.div>
-                  )
-                )}
+                    </motion.li>
+                  ))}
+                </ul>
+
+                {/* <div className="mt-8 pt-8 border-t border-bellevue-black/8">
+                  <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-bellevue-black/45 mb-3">
+                    Chalets
+                  </p>
+                  <ul className="flex flex-col gap-1">
+                    {chaletData.map((chalet) => (
+                      <li key={chalet.id}>
+                        <Link
+                          href={`#${chalet.id}`}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="block py-2.5 group"
+                        >
+                          <span className={`font-serif text-lg ${chalet.theme.heading} group-hover:opacity-80 transition-opacity`}>
+                            {chalet.name}
+                          </span>
+                          <span className={`block text-[10px] tracking-[0.15em] uppercase mt-0.5 ${chalet.theme.accent}`}>
+                            {chalet.tagline}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div> */}
               </nav>
-              <Link
-                href="/#book"
-                onClick={() => setIsMenuOpen(false)}
-                className="mt-10 px-10 py-4 border border-white/50 text-white text-sm tracking-[0.2em] uppercase hover:bg-white hover:text-bellevue-black transition-all"
-              >
-                Book Now
-              </Link>
-            </motion.div>
-          </motion.div>
+
+              <div className="px-6 py-6 border-t border-bellevue-black/8">
+                <Link
+                  href="/#book"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block w-full text-center px-6 py-3.5 bg-bellevue-black text-white font-sans text-xs tracking-[0.2em] uppercase hover:bg-bellevue-gold transition-all duration-300"
+                >
+                  Book Now
+                </Link>
+              </div>
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
     </>

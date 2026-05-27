@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion"
+import { easeOutCubic, type GoogleReviewsData } from "@/lib/review-count"
 import Image from "next/image"
 import Link from "next/link"
 import { Menu, X, ChevronDown, Play, Pause, Volume2, VolumeX, ArrowRight, ArrowLeft, Quote, Plus, ArrowUp, Facebook, Instagram, Mail, Phone, MapPin, Star, Linkedin } from "lucide-react"
@@ -20,6 +21,7 @@ function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isChaletDropdownOpen, setIsChaletDropdownOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const chaletDropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +35,34 @@ function Navigation() {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : ""
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isMenuOpen])
+
+  useEffect(() => {
+    if (!isChaletDropdownOpen) return
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (chaletDropdownRef.current && !chaletDropdownRef.current.contains(event.target as Node)) {
+        setIsChaletDropdownOpen(false)
+      }
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsChaletDropdownOpen(false)
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [isChaletDropdownOpen])
 
   const scrolledNavLinks = [
     { name: "Home", href: "/" },
@@ -99,42 +129,55 @@ function Navigation() {
                 {/* Right side - Chalets Dropdown & Book Now */}
                 <div className="flex items-center gap-6">
                   {/* Chalet Dropdown */}
-                  <div className="relative hidden md:block">
+                  <div ref={chaletDropdownRef} className="relative hidden md:block">
                     <button
-                      onClick={() => setIsChaletDropdownOpen(!isChaletDropdownOpen)}
-                      className="flex items-center gap-2 text-white/90 hover:text-white transition-colors font-sans text-sm tracking-wide"
+                      onClick={() => setIsChaletDropdownOpen((open) => !open)}
+                      aria-expanded={isChaletDropdownOpen}
+                      aria-haspopup="true"
+                      className={`flex items-center gap-2 font-sans text-sm tracking-wide transition-colors ${
+                        isChaletDropdownOpen ? "text-white" : "text-white/90 hover:text-white"
+                      }`}
                     >
                       <span>Chalets</span>
-                      <ChevronDown className={`w-4 h-4 transition-transform ${isChaletDropdownOpen ? "rotate-180" : ""}`} />
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-300 ${isChaletDropdownOpen ? "rotate-180" : ""}`}
+                      />
                     </button>
-                    
+
                     <AnimatePresence>
                       {isChaletDropdownOpen && (
                         <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute top-full right-0 mt-4 w-64 bg-black/80 backdrop-blur-xl border border-white/10 p-4"
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                          transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
+                          className="absolute top-[calc(100%+0.75rem)] right-0 z-[60] w-[min(18rem,calc(100vw-3rem))] origin-top-right overflow-hidden rounded-2xl border border-white/20 bg-black/20 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(0,0,0,0.35)]"
                         >
-                          {chalets.map((chalet) => (
-                            <Link
-                              key={chalet.slug}
-                              href={`/chalets#${chalet.slug}`}
-                              onClick={() => setIsChaletDropdownOpen(false)}
-                              className="block py-3 px-4 text-white/80 hover:text-white hover:bg-white/10 transition-all"
-                            >
-                              <span className="font-serif text-lg">{chalet.name}</span>
-                              <span className="block text-xs text-white/50 mt-0.5 tracking-wider uppercase">{chalet.tagline}</span>
-                            </Link>
-                          ))}
-                          <div className="border-t border-white/10 mt-2 pt-2">
+                          <div className="p-2">
+                            {chalets.map((chalet) => (
+                              <Link
+                                key={chalet.slug}
+                                href={`/chalets#${chalet.slug}`}
+                                onClick={() => setIsChaletDropdownOpen(false)}
+                                className="group block rounded-xl px-4 py-3.5 transition-colors hover:bg-white/10"
+                              >
+                                <span className="font-serif text-[17px] text-white transition-colors group-hover:text-bellevue-gold">
+                                  {chalet.name}
+                                </span>
+                                <span className="mt-0.5 block text-[10px] font-sans tracking-[0.18em] uppercase text-white/50">
+                                  {chalet.tagline}
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                          <div className="border-t border-white/15 px-2 py-2">
                             <Link
                               href="/chalets"
                               onClick={() => setIsChaletDropdownOpen(false)}
-                              className="block py-3 px-4 text-bellevue-gold hover:bg-white/10 transition-all text-sm tracking-wide"
+                              className="group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-sans tracking-wide text-bellevue-gold transition-colors hover:bg-white/10"
                             >
                               View All Chalets
+                              <ArrowRight className="h-3.5 w-3.5 opacity-70 transition-transform group-hover:translate-x-0.5" />
                             </Link>
                           </div>
                         </motion.div>
@@ -203,95 +246,104 @@ function Navigation() {
         </nav>
       </header>
 
-      {/* Fullscreen Menu Overlay */}
+      {/* Menu Sidebar */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-[100]"
-          >
-            {/* Background */}
+          <>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-bellevue-black/95 backdrop-blur-lg"
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-[100] bg-bellevue-black/40 backdrop-blur-[2px]"
               onClick={() => setIsMenuOpen(false)}
+              aria-hidden
             />
-
-            {/* Menu Content */}
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="relative h-full flex flex-col items-center justify-center"
+            <motion.aside
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+              className="fixed top-0 left-0 bottom-0 z-[101] w-[min(340px,88vw)] bg-bellevue-cream border-r border-bellevue-black/10 shadow-[4px_0_32px_-8px_rgba(26,26,26,0.18)] flex flex-col"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site menu"
             >
-              {/* Close Button */}
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="absolute top-6 right-6 lg:top-8 lg:right-12 p-2 text-white/80 hover:text-white transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="w-8 h-8" />
-              </button>
+              <div className="flex items-center justify-between px-6 py-7 border-b border-bellevue-black/8">
+                <Link href="/" onClick={() => setIsMenuOpen(false)}>
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1-removebg-preview-NZqkBBzgK3GYDWKDbmtxFChTf61bf2.png"
+                    alt="Bellevue Chalets by Pushella"
+                    width={280}
+                    height={84}
+                    className="h-16 sm:h-20 w-auto"
+                  />
+                </Link>
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 text-bellevue-black/60 hover:text-bellevue-black transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
 
-              {/* Logo */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="mb-16"
-              >
-                <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1-removebg-preview-NZqkBBzgK3GYDWKDbmtxFChTf61bf2.png"
-                  alt="Bellevue Chalets by Pushella"
-                  width={480}
-                  height={144}
-                  className="h-28 sm:h-32 lg:h-44 w-auto brightness-0 invert"
-                />
-              </motion.div>
-
-              {/* Menu Links */}
-              <nav className="flex flex-col items-center gap-6">
-                {fullMenuLinks.map((link, index) => (
-                  <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + index * 0.05 }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="font-serif text-4xl lg:text-5xl text-white hover:text-bellevue-gold transition-colors duration-300"
+              <nav className="flex-1 overflow-y-auto px-6 py-8">
+                <ul className="flex flex-col gap-1">
+                  {fullMenuLinks.map((link, index) => (
+                    <motion.li
+                      key={link.name}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.05 + index * 0.04 }}
                     >
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="block py-3 font-serif text-2xl text-bellevue-black hover:text-bellevue-gold transition-colors duration-300"
+                      >
+                        {link.name}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+
+                {/* <div className="mt-8 pt-8 border-t border-bellevue-black/8">
+                  <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-bellevue-black/45 mb-3">
+                    Chalets
+                  </p>
+                  <ul className="flex flex-col gap-1">
+                    {chalets.map((chalet) => (
+                      <li key={chalet.slug}>
+                        <Link
+                          href={`/chalets#${chalet.slug}`}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="block py-2.5 group"
+                        >
+                          <span className="font-serif text-lg text-bellevue-black group-hover:text-bellevue-gold transition-colors">
+                            {chalet.name}
+                          </span>
+                          <span className="block text-[10px] tracking-[0.15em] uppercase text-bellevue-black/45 mt-0.5">
+                            {chalet.tagline}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div> */}
               </nav>
 
-              {/* Book Now Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="mt-12"
-              >
+              <div className="px-6 py-6 border-t border-bellevue-black/8">
                 <Link
                   href="#book"
                   onClick={() => setIsMenuOpen(false)}
-                  className="px-10 py-4 border border-white/50 text-white font-sans text-sm tracking-widest uppercase hover:bg-white hover:text-bellevue-black transition-all duration-300"
+                  className="block w-full text-center px-6 py-3.5 bg-bellevue-black text-white font-sans text-xs tracking-[0.2em] uppercase hover:bg-bellevue-gold transition-all duration-300"
                 >
                   Book Now
                 </Link>
-              </motion.div>
-            </motion.div>
-          </motion.div>
+              </div>
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
     </>
@@ -372,7 +424,7 @@ function VideoHeroSection() {
       </div>
 
       {/* Hero Content */}
-      <div className="relative h-full flex flex-col justify-center items-end text-right px-6 lg:px-12 max-w-[1400px] mx-auto">
+      <div className="relative h-full flex flex-col justify-end items-end text-right px-6 lg:px-12 pb-14 md:pb-24 lg:pb-32 max-w-[1400px] mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -680,164 +732,275 @@ const chaletDetails = [
 
 function ChaletsSection() {
   const [activeChalet, setActiveChalet] = useState(0)
+  const [direction, setDirection] = useState(1)
+  const luxuryEase = [0.22, 1, 0.36, 1] as const
+
+  const selectChalet = (index: number) => {
+    if (index === activeChalet) return
+    setDirection(index > activeChalet ? 1 : -1)
+    setActiveChalet(index)
+  }
+
+  const active = chaletDetails[activeChalet]
 
   return (
     <section className="bg-bellevue-black py-24 md:py-32 lg:py-40 overflow-hidden" id="chalets">
       <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-20"
+          transition={{ duration: 1, ease: luxuryEase }}
+          viewport={{ once: true, margin: "-80px" }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-20 lg:mb-24"
         >
           <div>
             <span className="font-sans text-xs tracking-[0.4em] uppercase text-bellevue-gold">— Our Chalets</span>
             <h2 className="mt-6 font-serif text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1]">
-              Three sanctuaries.<br />
+              Three sanctuaries.
+              <br />
               <span className="italic text-white/70">One unforgettable retreat.</span>
             </h2>
           </div>
-          <p className="max-w-md font-sans text-white/50 leading-relaxed">
+          <p className="max-w-md font-sans text-white/50 leading-relaxed font-light">
             Each residence is its own world — distinctly composed for couples, families, or
             those seeking solitude in the highlands.
           </p>
         </motion.div>
 
-        {/* Luxury Chalet Display */}
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-0">
-          {/* Left - Chalet Selector */}
-          <div className="lg:col-span-4 flex flex-col justify-center lg:pr-12">
-            {chaletDetails.map((chalet, index) => (
-              <motion.button
-                key={chalet.slug}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                onClick={() => setActiveChalet(index)}
-                className={`group text-left py-8 border-b border-white/10 transition-all duration-500 ${
-                  activeChalet === index ? "border-bellevue-gold" : ""
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className={`font-sans text-xs tracking-[0.2em] uppercase transition-colors duration-300 ${
-                      activeChalet === index ? "text-bellevue-gold" : "text-white/40"
-                    }`}>
-                      {chalet.tagline}
-                    </span>
-                    <h3 className={`mt-2 font-serif text-2xl md:text-3xl transition-colors duration-300 ${
-                      activeChalet === index ? "text-white" : "text-white/50 group-hover:text-white/80"
-                    }`}>
-                      {chalet.name}
-                    </h3>
-                  </div>
-                  <ArrowRight className={`w-6 h-6 transition-all duration-300 ${
-                    activeChalet === index 
-                      ? "text-bellevue-gold translate-x-0 opacity-100" 
-                      : "text-white/30 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"
-                  }`} />
-                </div>
-                
-                <motion.div
-                  initial={false}
-                  animate={{
-                    height: activeChalet === index ? "auto" : 0,
-                    opacity: activeChalet === index ? 1 : 0,
-                  }}
-                  transition={{ duration: 0.4 }}
-                  className="overflow-hidden"
-                >
-                  <p className="mt-4 font-sans text-sm text-white/60 leading-relaxed">
-                    {chalet.description}
-                  </p>
-                  <div className="mt-4 flex items-center gap-6 text-xs text-white/40">
-                    <span className="uppercase tracking-wider">{chalet.guests}</span>
-                  </div>
-                </motion.div>
-              </motion.button>
-            ))}
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-0">
+          {/* Left — Chalet Selector */}
+          <div className="lg:col-span-4 flex flex-col justify-center lg:pr-14">
+            <div className="relative">
+              {chaletDetails.map((chalet, index) => {
+                const isActive = activeChalet === index
+                return (
+                  <motion.button
+                    key={chalet.slug}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: index * 0.08, ease: luxuryEase }}
+                    viewport={{ once: true }}
+                    onClick={() => selectChalet(index)}
+                    className="group relative w-full text-left py-7 md:py-8 border-b border-white/[0.08]"
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="chaletActiveLine"
+                        className="absolute left-0 top-6 bottom-6 w-px bg-bellevue-gold"
+                        transition={{ type: "spring", stiffness: 420, damping: 38 }}
+                      />
+                    )}
 
-            {/* View All Link */}
+                    <div className="pl-5 flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <motion.span
+                          animate={{
+                            color: isActive ? "rgba(184, 149, 110, 1)" : "rgba(255, 255, 255, 0.35)",
+                          }}
+                          transition={{ duration: 0.5, ease: luxuryEase }}
+                          className="font-sans text-[10px] tracking-[0.25em] uppercase block"
+                        >
+                          {String(index + 1).padStart(2, "0")} — {chalet.tagline}
+                        </motion.span>
+
+                        <motion.h3
+                          animate={{
+                            color: isActive ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.45)",
+                          }}
+                          transition={{ duration: 0.5, ease: luxuryEase }}
+                          className="mt-2 font-serif text-2xl md:text-[1.75rem] leading-tight"
+                        >
+                          {chalet.name}
+                        </motion.h3>
+
+                        <AnimatePresence initial={false}>
+                          {isActive && (
+                            <motion.div
+                              key={`detail-${chalet.slug}`}
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{
+                                opacity: { duration: 0.45, ease: luxuryEase },
+                                height: { duration: 0.55, ease: luxuryEase },
+                              }}
+                              className="overflow-hidden"
+                            >
+                              <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -6 }}
+                                transition={{ duration: 0.5, delay: 0.08, ease: luxuryEase }}
+                                className="mt-4 font-sans text-sm text-white/55 leading-relaxed font-light"
+                              >
+                                {chalet.description}
+                              </motion.p>
+                              <motion.div
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.45, delay: 0.14, ease: luxuryEase }}
+                                className="mt-4 font-sans text-[10px] tracking-[0.2em] uppercase text-white/35"
+                              >
+                                {chalet.guests}
+                              </motion.div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+
+                      <motion.div
+                        animate={{
+                          opacity: isActive ? 1 : 0,
+                          x: isActive ? 0 : -8,
+                        }}
+                        transition={{ duration: 0.45, ease: luxuryEase }}
+                        className="pt-1 shrink-0"
+                      >
+                        <ArrowRight className="w-5 h-5 text-bellevue-gold" strokeWidth={1.25} />
+                      </motion.div>
+                    </div>
+                  </motion.button>
+                )
+              })}
+            </div>
+
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.35, ease: luxuryEase }}
               viewport={{ once: true }}
-              className="mt-10"
+              className="mt-10 pl-5"
             >
               <Link
                 href="/chalets"
-                className="inline-flex items-center gap-3 font-sans text-sm tracking-widest uppercase text-bellevue-gold hover:text-white transition-colors duration-300"
+                className="inline-flex items-center gap-3 font-sans text-[11px] tracking-[0.25em] uppercase text-bellevue-gold hover:text-white transition-colors duration-500"
               >
                 <span>Explore All Chalets</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4" strokeWidth={1.25} />
               </Link>
             </motion.div>
           </div>
 
-          {/* Right - Featured Image */}
+          {/* Right — Layered image panel */}
           <div className="lg:col-span-8 relative">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeChalet}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.7 }}
-                className="relative aspect-[4/3] lg:aspect-[16/10] overflow-hidden"
-              >
-                <Image
-                  src={chaletDetails[activeChalet].image}
-                  alt={chaletDetails[activeChalet].name}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                {/* Elegant overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-                
-                {/* Chalet name overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+            <div className="relative aspect-[4/3] lg:aspect-[16/10] overflow-hidden bg-bellevue-dark-forest">
+              {/* Stacked images — crossfade without unmounting */}
+              {chaletDetails.map((chalet, index) => {
+                const isActive = activeChalet === index
+                return (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
+                    key={chalet.slug}
+                    className="absolute inset-0"
+                    initial={false}
+                    animate={{
+                      opacity: isActive ? 1 : 0,
+                      scale: isActive ? 1 : 1.06,
+                      zIndex: isActive ? 2 : 1,
+                    }}
+                    transition={{
+                      opacity: { duration: 0.9, ease: luxuryEase },
+                      scale: { duration: 1.35, ease: luxuryEase },
+                      zIndex: { delay: isActive ? 0 : 0.85 },
+                    }}
                   >
-                    <span className="font-sans text-xs tracking-[0.3em] uppercase text-bellevue-gold">
-                      {chaletDetails[activeChalet].tagline}
+                    <Image
+                      src={chalet.image}
+                      alt={chalet.name}
+                      fill
+                      className="object-cover"
+                      priority={index === 0}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/25" />
+                  </motion.div>
+                )
+              })}
+
+              {/* Overlay content — direction-aware text swap */}
+              <div className="absolute inset-0 z-10 flex flex-col justify-end p-8 md:p-12 pointer-events-none">
+                <AnimatePresence mode="wait" custom={direction}>
+                  <motion.div
+                    key={active.slug}
+                    custom={direction}
+                    variants={{
+                      enter: (d: number) => ({
+                        opacity: 0,
+                        y: d > 0 ? 28 : -28,
+                        filter: "blur(6px)",
+                      }),
+                      center: { opacity: 1, y: 0, filter: "blur(0px)" },
+                      exit: (d: number) => ({
+                        opacity: 0,
+                        y: d > 0 ? -20 : 20,
+                        filter: "blur(4px)",
+                      }),
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.65, ease: luxuryEase }}
+                  >
+                    <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-bellevue-gold">
+                      {active.tagline}
                     </span>
-                    <h3 className="mt-2 font-serif text-3xl md:text-4xl lg:text-5xl text-white">
-                      {chaletDetails[activeChalet].name}
+                    <h3 className="mt-2 font-serif text-3xl md:text-4xl lg:text-[2.75rem] text-white leading-[1.05]">
+                      {active.name}
                     </h3>
                   </motion.div>
-                </div>
+                </AnimatePresence>
+              </div>
 
-                {/* Book Now overlay button */}
-                <div className="absolute top-8 right-8">
-                  <Link
-                    href={`/chalets#${chaletDetails[activeChalet].slug}`}
-                    className="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/30 text-white font-sans text-sm tracking-wide hover:bg-white hover:text-bellevue-black transition-all duration-300"
+              {/* View Details — fades with content */}
+              <div className="absolute top-6 right-6 md:top-8 md:right-8 z-10">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active.slug}
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.45, ease: luxuryEase }}
                   >
-                    View Details
-                  </Link>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                    <Link
+                      href={`/chalets#${active.slug}`}
+                      className="inline-block px-6 py-3 bg-white/[0.08] backdrop-blur-md border border-white/25 text-white font-sans text-[11px] tracking-[0.15em] uppercase hover:bg-white hover:text-bellevue-black transition-colors duration-500"
+                    >
+                      View Details
+                    </Link>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
 
-            {/* Image indicators */}
-            <div className="absolute -bottom-12 left-0 right-0 flex justify-center gap-3">
-              {chaletDetails.map((_, index) => (
+            {/* Progress indicators */}
+            <div className="mt-8 flex items-center justify-center gap-4">
+              {chaletDetails.map((chalet, index) => (
                 <button
-                  key={index}
-                  onClick={() => setActiveChalet(index)}
-                  className={`h-0.5 transition-all duration-500 ${
-                    activeChalet === index ? "w-12 bg-bellevue-gold" : "w-6 bg-white/30 hover:bg-white/50"
-                  }`}
-                  aria-label={`View chalet ${index + 1}`}
-                />
+                  key={chalet.slug}
+                  onClick={() => selectChalet(index)}
+                  className="group flex flex-col items-center gap-2 py-1"
+                  aria-label={`View ${chalet.name}`}
+                >
+                  <motion.div
+                    className="h-px bg-white/20 overflow-hidden"
+                    animate={{ width: activeChalet === index ? 56 : 28 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 32 }}
+                  >
+                    <motion.div
+                      className="h-full bg-bellevue-gold"
+                      animate={{ scaleX: activeChalet === index ? 1 : 0 }}
+                      transition={{ duration: 0.55, ease: luxuryEase }}
+                      style={{ originX: 0 }}
+                    />
+                  </motion.div>
+                  <span
+                    className={`font-sans text-[9px] tracking-[0.2em] uppercase transition-colors duration-500 ${
+                      activeChalet === index ? "text-bellevue-gold" : "text-white/25 group-hover:text-white/45"
+                    }`}
+                  >
+                    {chalet.name.replace("Chalet ", "")}
+                  </span>
+                </button>
               ))}
             </div>
           </div>
@@ -1053,6 +1216,86 @@ function MarqueeRow({
   )
 }
 
+// Animated Google rating pill — fetches live count and counts up on scroll
+function GoogleRatingPill() {
+  const pillRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(pillRef, { once: true, margin: "-80px" })
+  const [reviews, setReviews] = useState<GoogleReviewsData>({ rating: 4.9, reviewCount: 190 })
+  const [displayCount, setDisplayCount] = useState(0)
+  const [hasFetched, setHasFetched] = useState(false)
+
+  const reviewCount = reviews.reviewCount
+
+  useEffect(() => {
+    fetch("/api/google-reviews")
+      .then((res) => res.json())
+      .then((data: GoogleReviewsData) => {
+        setReviews(data)
+        setHasFetched(true)
+      })
+      .catch(() => setHasFetched(true))
+  }, [])
+
+  useEffect(() => {
+    if (!isInView) return
+
+    setDisplayCount(0)
+    const duration = 1800
+    const start = performance.now()
+    let frameId: number
+
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1)
+      setDisplayCount(Math.round(easeOutCubic(progress) * reviewCount))
+      if (progress < 1) {
+        frameId = requestAnimationFrame(tick)
+      }
+    }
+
+    frameId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frameId)
+  }, [isInView, reviewCount])
+
+  return (
+    <div
+      ref={pillRef}
+      className="inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 bg-bellevue-black px-6 py-3.5 md:px-7 md:py-4 rounded-full shadow-[0_8px_32px_-12px_rgba(26,26,26,0.45)] ring-1 ring-white/10"
+    >
+      <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-0.5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              className="w-3.5 h-3.5 md:w-4 md:h-4 fill-[#FBBC05] text-[#FBBC05]"
+              strokeWidth={0}
+            />
+          ))}
+        </div>
+        <span className="font-sans text-sm md:text-base font-medium text-white tabular-nums">
+          {reviews.rating.toFixed(1)}
+        </span>
+      </div>
+
+      <span className="hidden sm:block w-px h-5 bg-white/20" aria-hidden />
+
+      <div className="flex items-baseline gap-1.5">
+        <motion.span
+          key={hasFetched ? "live" : "loading"}
+          initial={{ scale: 0.92, opacity: 0.6 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="font-sans text-2xl md:text-3xl font-semibold text-bellevue-gold tabular-nums tracking-tight drop-shadow-[0_0_12px_rgba(184,149,110,0.35)]"
+        >
+          {displayCount}
+        </motion.span>
+        <span className="font-sans text-xs md:text-sm text-white/55 uppercase tracking-[0.15em]">
+          reviews
+        </span>
+      </div>
+    </div>
+  )
+}
+
 // Testimonials Section
 function TestimonialsSection() {
   // Split testimonials across two rows. Offset bottom row so the two strips don't mirror each other.
@@ -1071,21 +1314,7 @@ function TestimonialsSection() {
           viewport={{ once: true }}
           className="flex flex-col items-center text-center"
         >
-          {/* Rating pill — decorative only, not a link */}
-          <div className="inline-flex items-center gap-3 bg-bellevue-black px-5 py-2.5 rounded-full shadow-[0_8px_24px_-12px_rgba(26,26,26,0.35)]">
-            <div className="flex items-center gap-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-3.5 h-3.5 fill-[#FBBC05] text-[#FBBC05]"
-                  strokeWidth={0}
-                />
-              ))}
-            </div>
-            <span className="font-sans text-sm font-medium text-white">4.9</span>
-            <span className="text-white/30">·</span>
-            <span className="font-sans text-sm text-white/70">190 reviews</span>
-          </div>
+          <GoogleRatingPill />
 
           <span className="mt-8 font-sans text-xs tracking-[0.3em] uppercase text-bellevue-gold">
             Testimonials

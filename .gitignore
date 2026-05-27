@@ -8,6 +8,12 @@ __v0_jsx-dev-runtime.ts
 
 # Environment variables
 .env*.local
+.env
+
+# Large hero video — keep locally for dev; host in object storage (S3/R2/etc.) for production
+public/landing-page.MOV
+public/landing-page.mp4
+public/landing-page.*
 
 # Common ignores
 node_modules
