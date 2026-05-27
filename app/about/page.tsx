@@ -3,32 +3,13 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, Quote } from "lucide-react"
+import { SiteNavigation } from "@/components/site-navigation"
+import { ArrowRight, Quote } from "lucide-react"
 
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-bellevue-cream">
-      {/* Nav */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-bellevue-black/80 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-5 flex items-center justify-between">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-3 text-white/80 hover:text-white transition-colors group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" strokeWidth={1.5} />
-            <span className="font-sans text-xs tracking-[0.3em] uppercase">Home</span>
-          </Link>
-          <Link href="/" className="font-serif text-xl text-white tracking-wide">
-            Bellevue
-          </Link>
-          <Link
-            href="/#contact"
-            className="px-6 py-2.5 text-xs tracking-[0.2em] uppercase border border-white/40 text-white hover:bg-white hover:text-bellevue-black transition-all"
-          >
-            Reserve
-          </Link>
-        </div>
-      </div>
+      <SiteNavigation variant="solid" />
 
       {/* Page header */}
       <section className="pt-32 md:pt-40 pb-16 md:pb-20 px-6">
