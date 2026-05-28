@@ -7,6 +7,7 @@ export type GalleryPhoto = {
 }
 
 export type GallerySection = {
+  slug: string
   title: string
   images: GalleryPhoto[]
 }
@@ -20,6 +21,7 @@ const photo = (folder: string, filename: string, alt: string): GalleryPhoto => (
 
 export const gallerySections: GallerySection[] = [
   {
+    slug: "exterior-views",
     title: "Exterior & Views",
     images: [
       photo("Exterior and Views", "birdeyeshot.jpg", "Bird's-eye view of Bellevue Chalets"),
@@ -37,18 +39,22 @@ export const gallerySections: GallerySection[] = [
     ],
   },
   {
+    slug: "chalet-cove",
     title: "Chalet Cove",
     images: chaletPhotos.cove,
   },
   {
+    slug: "chalet-mirador",
     title: "Chalet Mirador",
     images: chaletPhotos.mirador,
   },
   {
+    slug: "chalet-grandeur",
     title: "Chalet Grandeur",
     images: chaletPhotos.grandeur,
   },
   {
+    slug: "outdoor-dining",
     title: "Outdoor Dining & Meals",
     images: [
       photo("Outdoor Dining & Meals", "gardenbf.jpg", "Garden breakfast"),
@@ -60,10 +66,12 @@ export const gallerySections: GallerySection[] = [
     ],
   },
   {
+    slug: "nearby-experiences",
     title: "Nearby & Experiences",
     images: nearbyAttractions.map((a) => ({ src: a.image, alt: a.title })),
   },
   {
+    slug: "property-highlights",
     title: "Property Highlights",
     images: [
       photo("", "DJI_20250113073722_0909_D-Edit.jpg", "Bellevue Chalets at dusk"),

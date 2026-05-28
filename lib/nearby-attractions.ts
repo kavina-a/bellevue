@@ -18,7 +18,7 @@ export const nearbyAttractions: NearbyAttraction[] = [
     category: "Local Life",
     featured: true,
     description:
-      "Ambewela is a hill station in the Nuwara Eliya District, often called \"Little New Zealand\" for its rolling pastures and cool climate. Ambewela Farm is a beloved destination known for scenic beauty and exceptional dairy products. Home to cows, goats, and pigs, the farm welcomes visitors to tour the grounds, learn about dairy production, and sample fresh milk, yogurt, and cheese.",
+      "Step into the \"Little New Zealand\" of Sri Lanka. Ambewela Farm offers a serene escape with its rolling green pastures, mist-covered hills, and pure mountain air. Witness the charm of dairy farming, interact with gentle cows, and enjoy fresh dairy products straight from the source. It\u2019s a perfect blend of nature and tranquility, ideal for families and nature lovers.",
   },
   {
     slug: "horton-plains",
@@ -27,7 +27,7 @@ export const nearbyAttractions: NearbyAttraction[] = [
     category: "Nature & Wildlife",
     featured: true,
     description:
-      "Horton Plains National Park is a protected area in Sri Lanka's central highlands, designated in 1988. At 2,100–2,300 m elevation, it encompasses montane grassland and cloud forest rich in endemic biodiversity. World\u2019s End cliff and Baker\u2019s Falls are among its most celebrated draws — a morning on the plateau is one of the great highland experiences.",
+      "A UNESCO World Heritage site, Horton Plains is a breathtaking highland plateau. Trek through windswept grasslands and dense cloud forests to reach the dramatic \"World\u2019s End\" cliff, offering a sheer drop and stunning panoramic views. Discover the enchanting Baker\u2019s Falls and the unique biodiversity that makes this park a must-visit for adventurers and photographers.",
   },
   {
     slug: "pattipola-railway-station",
@@ -36,7 +36,7 @@ export const nearbyAttractions: NearbyAttraction[] = [
     category: "Heritage & Culture",
     featured: true,
     description:
-      "Pattipola is the 62nd station on Sri Lanka\u2019s Main Line — and the highest railway station in the country at 1,897.5 m above sea level. Located in the Nuwara Eliya District, 224 km from Colombo, it sits amid mist and mountain scenery. Podi Menike and Udarata Menike express trains pause here, making it a memorable stop on one of the world\u2019s most scenic rail journeys.",
+      "Experience the charm of the highest railway station in Sri Lanka. Situated at an elevation of 1,897 meters, Pattipola is a gateway to the misty highlands. The station\u2019s colonial-style architecture and the scenic train journey through lush tea estates and tunnels provide a nostalgic and picturesque experience that captures the essence of Sri Lanka\u2019s hill country.",
   },
   {
     slug: "lake-gregory",
