@@ -11,29 +11,6 @@ type SpecialOffersSectionProps = {
   showIntro?: boolean
 }
 
-function OfferBackgroundDecor() {
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-      <svg
-        viewBox="0 0 900 900"
-        className="absolute left-1/2 top-[42%] h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2 text-bellevue-forest/10"
-        fill="none"
-      >
-        {[180, 260, 340, 420, 500].map((radius) => (
-          <circle
-            key={radius}
-            cx="450"
-            cy="450"
-            r={radius}
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-        ))}
-      </svg>
-    </div>
-  )
-}
-
 export function SpecialOffersSection({
   offers = hotelOffers,
   className,
@@ -42,18 +19,14 @@ export function SpecialOffersSection({
   const featured = offers.find((offer) => offer.isFeatured)
   const others = offers.filter((offer) => !offer.isFeatured)
   const displayOffers =
-    featured && others.length >= 2
-      ? [others[0], featured, others[1]]
-      : offers
+    featured && others.length >= 2 ? [others[0], featured, others[1]] : offers
 
   return (
     <section
-      className={cn("relative overflow-hidden bg-bellevue-cream px-6 py-20 md:py-28 lg:px-12", className)}
+      className={cn("relative bg-bellevue-cream px-6 py-20 md:py-28 lg:px-12", className)}
       aria-labelledby="special-offers-heading"
     >
-      <OfferBackgroundDecor />
-
-      <div className="relative mx-auto max-w-[1200px]">
+      <div className="relative mx-auto max-w-[1320px]">
         {showIntro && (
           <div className="mx-auto mb-16 max-w-3xl text-center md:mb-20">
             <motion.span
@@ -99,13 +72,9 @@ export function SpecialOffersSection({
           </div>
         )}
 
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:items-end md:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-7 lg:gap-9">
           {displayOffers.map((offer) => (
-            <OfferCard
-              key={offer.id}
-              offer={offer}
-              className={offer.isFeatured ? "md:-translate-y-8" : undefined}
-            />
+            <OfferCard key={offer.id} offer={offer} />
           ))}
         </div>
 

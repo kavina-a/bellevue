@@ -1,16 +1,10 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
-import { Check } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import {
-  formatOfferPrice,
-  splitOfferTitle,
-  type HotelOffer,
-} from "@/lib/hotel-offers"
+import { formatOfferPrice, type HotelOffer } from "@/lib/hotel-offers"
 import { cn } from "@/lib/utils"
 
 type OfferCardProps = {
@@ -19,112 +13,95 @@ type OfferCardProps = {
 }
 
 export function OfferCard({ offer, className }: OfferCardProps) {
-  const [titleLead, titleTail] = splitOfferTitle(offer.title)
   const featured = offer.isFeatured
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: featured ? -10 : -6 }}
-      className={cn("relative flex flex-col", featured && "md:pt-0", className)}
-    >
-      {featured && offer.featuredLabel && (
-        <Badge
-          className={cn(
-            "absolute -top-4 left-1/2 z-10 -translate-x-1/2 rounded-full border-0 px-5 py-1.5",
-            "bg-bellevue-black text-white font-sans text-[10px] tracking-[0.22em] uppercase shadow-md",
-          )}
-        >
-          {offer.featuredLabel}
-        </Badge>
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      className={cn(
+        "group flex h-full flex-col overflow-hidden bg-white",
+        "border border-bellevue-black/10 shadow-[0_12px_40px_-24px_rgba(26,26,26,0.18)]",
+        "transition-shadow duration-500 hover:shadow-[0_20px_56px_-20px_rgba(26,26,26,0.22)]",
+        featured && "ring-1 ring-bellevue-gold/50",
+        className,
       )}
+    >
+      {/* Offer imagery */}
+      <div className="relative aspect-[5/4] overflow-hidden">
+        <Image
+          src={offer.image}
+          alt={offer.imageAlt}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-bellevue-black/55 via-bellevue-black/10 to-transparent" />
 
-      <Card
-        className={cn(
-          "relative h-full gap-0 overflow-hidden rounded-[28px] border-0 py-0 shadow-[0_24px_48px_-20px_rgba(26,26,26,0.35)] transition-shadow duration-300 hover:shadow-[0_32px_64px_-24px_rgba(26,26,26,0.45)]",
-          featured
-            ? "min-h-[520px] bg-bellevue-forest text-white md:min-h-[560px]"
-            : "min-h-[480px] bg-bellevue-black text-white md:min-h-[500px]",
+        {featured && offer.featuredLabel && (
+          <span className="absolute left-5 top-5 border border-white/25 bg-bellevue-black/75 px-3 py-1.5 font-sans text-[9px] tracking-[0.28em] uppercase text-white backdrop-blur-sm">
+            {offer.featuredLabel}
+          </span>
         )}
-      >
-        <CardContent className="flex flex-1 flex-col px-8 pb-6 pt-10 md:px-9 md:pt-12">
-          <header>
-            <h2 className="font-serif text-3xl leading-tight md:text-[2rem]">
-              <span className="text-bellevue-gold">{titleLead}</span>
-              {titleTail ? (
-                <>
-                  {" "}
-                  <span className="text-white">{titleTail}</span>
-                </>
-              ) : null}
-            </h2>
-            <p
-              className={cn(
-                "mt-4 font-sans text-sm leading-relaxed md:text-[15px]",
-                featured ? "text-white/80" : "text-white/65",
-              )}
-            >
-              {offer.tagline}
-            </p>
-          </header>
 
-          <div className="mt-8">
-            <p className="font-sans text-[11px] tracking-[0.25em] uppercase text-white/50">
+        <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6">
+          <p className="font-sans text-[10px] tracking-[0.35em] uppercase text-white/70">
+            {offer.stayLabel}
+          </p>
+          <h2 className="mt-2 font-serif text-2xl leading-tight text-white md:text-[1.75rem]">
+            {offer.title}
+          </h2>
+        </div>
+      </div>
+
+      {/* Package details */}
+      <div className="flex flex-1 flex-col px-6 py-7 md:px-7 md:py-8">
+        <p className="font-sans text-sm leading-relaxed text-bellevue-black/65">{offer.tagline}</p>
+
+        <div className="mt-6 flex items-end justify-between gap-4 border-y border-bellevue-black/8 py-5">
+          <div>
+            <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-bellevue-black/45">
               From
             </p>
-            <p className="mt-1 font-serif text-4xl leading-none text-white md:text-5xl">
+            <p className="mt-1 font-serif text-3xl leading-none text-bellevue-forest md:text-4xl">
               {formatOfferPrice(offer.pricePerNight, offer.currency)}
             </p>
-            <p className="mt-2 font-sans text-xs tracking-wide text-white/50">per night</p>
           </div>
+          <p className="font-sans text-xs text-bellevue-black/45">per night</p>
+        </div>
 
-          <div
-            className={cn(
-              "my-8 h-px w-full",
-              featured ? "bg-white/20" : "bg-white/15",
-            )}
-            aria-hidden
-          />
+        <p className="mt-6 font-sans text-[10px] tracking-[0.3em] uppercase text-bellevue-gold">
+          Package includes
+        </p>
+        <ul className="mt-4 space-y-2.5" aria-label={`${offer.title} inclusions`}>
+          {offer.features.map((feature) => (
+            <li
+              key={feature}
+              className="flex gap-3 font-sans text-sm leading-relaxed text-bellevue-black/75"
+            >
+              <span className="mt-2 h-px w-3 shrink-0 bg-bellevue-gold" aria-hidden />
+              {feature}
+            </li>
+          ))}
+        </ul>
 
-          <ul className="space-y-4" aria-label={`${offer.title} inclusions`}>
-            {offer.features.map((feature) => (
-              <li key={feature} className="flex items-start gap-3">
-                <span
-                  className={cn(
-                    "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full",
-                    featured ? "bg-bellevue-gold text-bellevue-black" : "bg-bellevue-gold/90 text-bellevue-black",
-                  )}
-                  aria-hidden
-                >
-                  <Check className="size-3 stroke-[2.5]" />
-                </span>
-                <span className="font-sans text-sm leading-relaxed text-white/85">{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-
-        <CardFooter className="mt-auto px-8 pb-10 pt-0 md:px-9">
-          <Button
-            asChild
-            variant={featured ? "default" : "outline"}
-            size="lg"
-            className={cn(
-              "h-12 w-full rounded-full font-sans text-xs tracking-[0.22em] uppercase",
-              featured
-                ? "bg-bellevue-black text-white hover:bg-bellevue-black/90 border-0"
-                : "border-bellevue-gold bg-transparent text-bellevue-gold hover:bg-bellevue-gold hover:text-bellevue-black",
-            )}
-          >
-            <Link href={offer.ctaHref} aria-label={`${offer.ctaLabel} — ${offer.title}`}>
-              {offer.ctaLabel}
-            </Link>
-          </Button>
-        </CardFooter>
-      </Card>
+        <Link
+          href={offer.ctaHref}
+          aria-label={`${offer.ctaLabel} — ${offer.title}`}
+          className={cn(
+            "mt-8 inline-flex w-full items-center justify-center gap-2.5 px-6 py-3.5",
+            "font-sans text-[11px] tracking-[0.28em] uppercase transition-colors duration-300",
+            featured
+              ? "bg-bellevue-forest text-white hover:bg-bellevue-black"
+              : "border border-bellevue-black/20 text-bellevue-black hover:border-bellevue-forest hover:bg-bellevue-forest hover:text-white",
+          )}
+        >
+          {offer.ctaLabel}
+          <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.25} />
+        </Link>
+      </div>
     </motion.article>
   )
 }
