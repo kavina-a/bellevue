@@ -7,7 +7,7 @@ import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { getChaletHero } from "@/lib/chalet-photos"
-import { ArrowRight, Mail, MapPin } from "lucide-react"
+import { ArrowRight, Mail, MapPin, Star } from "lucide-react"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -24,8 +24,8 @@ function Hero() {
       {/* Parallax image */}
       <motion.div style={{ y: imgY }} className="absolute inset-0 scale-110">
         <Image
-          src="/Photos/Exterior and Views/DJI_20250113074154_0924_D-Edit.jpg"
-          alt="Bellevue Chalets at dusk, Ambewela highlands"
+          src="/Photos/DSC06062-Edit.jpg"
+          alt="Bellevue Chalets, Ambewela highlands"
           fill
           sizes="100vw"
           priority
@@ -41,23 +41,14 @@ function Hero() {
         style={{ y: titleY, opacity }}
         className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
       >
-        <motion.span
-          initial={{ opacity: 0, letterSpacing: "0.6em" }}
-          animate={{ opacity: 1, letterSpacing: "0.45em" }}
-          transition={{ duration: 1.2, ease }}
-          className="font-sans text-[10px] uppercase text-bellevue-gold"
-        >
-          Ambewela · Sri Lanka
-        </motion.span>
-
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.15, ease }}
-          className="mt-6 font-serif text-[clamp(3.5rem,9vw,8rem)] leading-[0.95] text-white"
+          className="font-serif text-[clamp(2.25rem,6.5vw,5.5rem)] leading-[1.05] text-white max-w-4xl"
         >
-          About<br />
-          <span className="italic text-bellevue-warm">Bellevue</span>
+          Welcome to<br />
+          <span className="italic text-bellevue-warm">Bellevue Chalets</span>
         </motion.h1>
 
         <motion.div
@@ -98,22 +89,36 @@ function Intro() {
             className="lg:col-span-5"
           >
             <span className="font-sans text-[10px] tracking-[0.4em] uppercase text-bellevue-gold">
-              Our Story
+              Established 2025
             </span>
             <h2 className="mt-6 font-serif text-4xl leading-[1.05] text-bellevue-black md:text-5xl lg:text-[3.25rem]">
-              A retreat born<br />
-              <span className="italic text-bellevue-forest">from the mist</span>
+              Ambewela&apos;s<br />
+              <span className="italic text-bellevue-forest">Hidden Paradise</span>
             </h2>
 
             {/* Pull stat */}
-            <div className="mt-14 flex gap-14 border-t border-bellevue-black/8 pt-10">
+            <div className="mt-14 flex gap-10 border-t border-bellevue-black/8 pt-10 md:gap-14">
               {[
-                { n: "03", label: "Private Chalets" },
-                { n: "1,800m", label: "Above Sea Level" },
-                { n: "∞", label: "Peace of Mind" },
-              ].map(({ n, label }) => (
-                <div key={label}>
-                  <p className="font-serif text-3xl text-bellevue-black md:text-4xl">{n}</p>
+                {
+                  key: "reviews",
+                  node: (
+                    <div className="flex gap-0.5" aria-hidden>
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className="h-5 w-5 fill-bellevue-gold text-bellevue-gold md:h-6 md:w-6"
+                          strokeWidth={0}
+                        />
+                      ))}
+                    </div>
+                  ),
+                  label: "Guest Reviews",
+                },
+                { key: "elevation", node: <p className="font-serif text-3xl text-bellevue-black md:text-4xl">1,800m</p>, label: "Above Sea Level" },
+                { key: "peace", node: <p className="font-serif text-3xl text-bellevue-black md:text-4xl">∞</p>, label: "Peace of Mind" },
+              ].map(({ key, node, label }) => (
+                <div key={key}>
+                  {node}
                   <p className="mt-1 font-sans text-[9px] tracking-[0.3em] uppercase text-bellevue-black/40">{label}</p>
                 </div>
               ))}
@@ -128,22 +133,19 @@ function Intro() {
             className="lg:col-span-7 lg:pt-1"
           >
             <p className="font-serif text-xl leading-[1.75] text-bellevue-black md:text-2xl">
-              A private highland retreat where mist, mountain air, and unhurried hospitality
-              come together — crafted for guests who wish to truly arrive.
+              Welcome to Bellevue Chalets by Pushella, a peaceful retreat nestled in the misty
+              mountains of Ambewela.
             </p>
 
             <div className="mt-10 grid gap-8 border-t border-bellevue-black/8 pt-10 md:grid-cols-2 md:gap-12">
               <p className="font-sans text-[0.92rem] leading-[1.95] text-bellevue-black/65">
-                Founded by Belle and Pushella, Bellevue was born from a shared love of nature,
-                hospitality, and the simple joy of slowing down. What began as a dream to create
-                a private escape among the clouds has grown into a sanctuary for guests seeking
-                rest, connection, and mountain stillness.
+                Experience a one-of-a-kind luxury chalet stay with warm wooden accents,
+                surrounded by lush greenery and the soothing presence of flowing waters.
               </p>
               <p className="font-sans text-[0.92rem] leading-[1.95] text-bellevue-black/65">
-                Each of our three chalets is composed with warm timber, generous privacy, and
-                views that unfold with the light. From farm-to-table dining to the smallest
-                details of your stay, every moment is crafted to be remembered long after the
-                mist has cleared.
+                From farm-to-table meals prepared with fresh local ingredients to thoughtful
+                touches throughout your stay, every moment with us is crafted to be remembered
+                forever.
               </p>
             </div>
           </motion.div>
@@ -255,23 +257,12 @@ function Purpose() {
           Our Purpose
         </motion.span>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.9, delay: 0.08, ease }}
-          className="mt-8 font-serif text-3xl leading-[1.2] text-white md:text-4xl lg:text-[2.75rem]"
-        >
-          Peace, by{" "}
-          <span className="italic text-bellevue-gold">design</span>
-        </motion.h2>
-
         <motion.p
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.9, delay: 0.18, ease }}
-          className="mx-auto mt-10 max-w-2xl font-sans text-[0.95rem] leading-[1.95] text-white/60"
+          className="mx-auto mt-8 max-w-2xl font-sans text-[0.95rem] leading-[1.95] text-white/60"
         >
           At Bellevue Chalets, our purpose is to focus on every detail to provide the most
           peaceful environment for those living in today&apos;s fast-paced world. We are dedicated
@@ -286,7 +277,10 @@ function Purpose() {
           transition={{ duration: 0.9, delay: 0.3, ease }}
           className="mt-16 border-t border-white/10 pt-14"
         >
-          <blockquote className="font-serif text-2xl italic leading-[1.6] text-white/90 md:text-[1.75rem]">
+          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-bellevue-gold/80">
+            Message from the Managing Director
+          </p>
+          <blockquote className="mt-8 font-serif text-2xl italic leading-[1.6] text-white/90 md:text-[1.75rem]">
             &ldquo;I believe that true relaxation begins in cozy, private chalets<br className="hidden md:block" />
             surrounded by nature — and that is exactly what we strive to provide.&rdquo;
           </blockquote>
@@ -294,7 +288,7 @@ function Purpose() {
             <div className="h-px w-10 bg-bellevue-gold/40" />
             <p className="mt-4 font-serif text-xl text-bellevue-gold">Pushella</p>
             <p className="font-sans text-[9px] tracking-[0.35em] uppercase text-white/35">
-              Co-Founder, Bellevue Chalets
+              Managing Director, Bellevue Chalets
             </p>
           </div>
         </motion.div>
@@ -306,9 +300,9 @@ function Purpose() {
 // ─── Dining filmstrip ─────────────────────────────────────────────────────────
 function DiningStrip() {
   const photos = [
-    { src: "/Photos/Outdoor Dining & Meals/DSC05965-Edit.jpg", alt: "Al fresco dining in the highlands", offset: "md:translate-y-6" },
-    { src: "/Photos/Outdoor Dining & Meals/DSC06259-Edit.jpg", alt: "Outdoor meal at Bellevue", offset: "" },
-    { src: "/Photos/Exterior and Views/DSC06152-Edit.jpg",     alt: "Bellevue Chalets setting", offset: "md:-translate-y-6" },
+    { src: "/Photos/IMG_5363.jpg", alt: "Bellevue Chalets grounds", offset: "md:translate-y-6" },
+    { src: "/Photos/FullSizeRender.jpg", alt: "Bellevue Chalets retreat", offset: "" },
+    { src: "/Photos/DSC06167-Edit.jpg", alt: "Bellevue Chalets in the highlands", offset: "md:-translate-y-6" },
   ]
 
   return (
@@ -322,7 +316,7 @@ function DiningStrip() {
             transition={{ duration: 0.8, ease }}
             className="font-sans text-[10px] tracking-[0.45em] uppercase text-bellevue-gold"
           >
-            Life at Bellevue
+            Surrounded by Nature
           </motion.span>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -338,7 +332,7 @@ function DiningStrip() {
             transition={{ duration: 0.8, ease }}
             className="font-serif text-base italic text-bellevue-black/40"
           >
-            Ambewela, Sri Lanka
+            Bellevue Chalets by Pushella
           </motion.span>
         </div>
 
@@ -352,13 +346,13 @@ function DiningStrip() {
               transition={{ duration: 0.95, delay: i * 0.1, ease }}
               className={`relative overflow-hidden ${offset}`}
             >
-              <div className="relative aspect-[4/3]">
+              <div className="relative aspect-[3/4]">
                 <Image
                   src={src}
                   alt={alt}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-1000 hover:scale-[1.04]"
+                  className="object-cover object-center transition-transform duration-1000 hover:scale-[1.04]"
                 />
               </div>
             </motion.div>
@@ -456,12 +450,12 @@ function Discover() {
               Continue exploring
             </span>
             <h2 className="mt-4 font-serif text-3xl leading-[1.1] text-bellevue-black md:text-4xl">
-              Discover Bellevue
+              Discover More
             </h2>
           </div>
           <p className="max-w-sm font-sans text-sm leading-relaxed text-bellevue-black/55 md:text-right">
-            From your chalet to cloud forests and curated stays — everything you need
-            for an Ambewela escape.
+            From your chalet to cloud forests and curated experiences — everything you need
+            for a relaxing escape.
           </p>
         </motion.div>
 
@@ -509,11 +503,11 @@ function Discover() {
         >
           <div className="flex flex-wrap gap-x-10 gap-y-4">
             <a
-              href="mailto:reservations@bellevuechalets.com"
+              href="mailto:info.bellevuechalets@gmail.com"
               className="inline-flex items-center gap-3 font-sans text-sm text-bellevue-black/70 transition-colors hover:text-bellevue-gold"
             >
               <Mail className="h-4 w-4 shrink-0 text-bellevue-gold" strokeWidth={1.25} />
-              reservations@bellevuechalets.com
+              info.bellevuechalets@gmail.com
             </a>
             <span className="inline-flex items-center gap-3 font-sans text-sm text-bellevue-black/70">
               <MapPin className="h-4 w-4 shrink-0 text-bellevue-gold" strokeWidth={1.25} />
