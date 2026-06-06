@@ -18,9 +18,9 @@ const sitemapSections = [
     title: "Chalets",
     links: [
       { name: "All Chalets", href: "/chalets" },
-      { name: "Chalet Cove", href: "/chalets#cove" },
-      { name: "Chalet Mirador", href: "/chalets#mirador" },
-      { name: "Chalet Grandeur", href: "/chalets#grandeur" },
+      { name: "Chalet Cove", href: "/chalets/cove" },
+      { name: "Chalet Mirador", href: "/chalets/mirador" },
+      { name: "Chalet Grandeur", href: "/chalets/grandeur" },
     ],
   },
   {

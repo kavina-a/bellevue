@@ -6,74 +6,12 @@ import Image from "next/image"
 import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
+import { PageCover } from "@/components/page-cover"
 import { getChaletHero } from "@/lib/chalet-photos"
+import { belleza } from "@/lib/fonts"
 import { ArrowRight, Mail, MapPin, Star } from "lucide-react"
 
 const ease = [0.22, 1, 0.36, 1] as const
-
-// ─── Hero ────────────────────────────────────────────────────────────────────
-function Hero() {
-  const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
-  const imgY     = useTransform(scrollYProgress, [0, 1], ["0%", "22%"])
-  const titleY   = useTransform(scrollYProgress, [0, 1], ["0%", "14%"])
-  const opacity  = useTransform(scrollYProgress, [0, 0.8], [1, 0])
-
-  return (
-    <section ref={ref} className="relative h-screen min-h-[600px] overflow-hidden">
-      {/* Parallax image */}
-      <motion.div style={{ y: imgY }} className="absolute inset-0 scale-110">
-        <Image
-          src="/Photos/DSC06062-Edit.jpg"
-          alt="Bellevue Chalets, Ambewela highlands"
-          fill
-          sizes="100vw"
-          priority
-          className="object-cover"
-        />
-      </motion.div>
-
-      {/* Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-bellevue-black/40 via-bellevue-black/25 to-bellevue-black/60" />
-
-      {/* Title */}
-      <motion.div
-        style={{ y: titleY, opacity }}
-        className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
-      >
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.15, ease }}
-          className="font-serif text-[clamp(2.25rem,6.5vw,5.5rem)] leading-[1.05] text-white max-w-4xl"
-        >
-          Welcome to<br />
-          <span className="italic text-bellevue-warm">Bellevue Chalets</span>
-        </motion.h1>
-
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 1, delay: 0.5, ease }}
-          className="mt-10 h-px w-20 origin-left bg-bellevue-gold/60"
-        />
-      </motion.div>
-
-      {/* Scroll nudge */}
-      <motion.div
-        style={{ opacity }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
-      >
-        <span className="font-sans text-[9px] tracking-[0.4em] uppercase text-white/50">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="h-5 w-px bg-white/30"
-        />
-      </motion.div>
-    </section>
-  )
-}
 
 // ─── Intro ────────────────────────────────────────────────────────────────────
 function Intro() {
@@ -532,7 +470,21 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-[#eceae6]">
       <SiteNavigation variant="hero" />
-      <Hero />
+      <PageCover
+        src="/Photos/Exterior and Views/DSC06062-Edit.jpg"
+        alt="Bellevue Chalets, Ambewela highlands"
+        align="left"
+        titleBg="bg-[#eceae6]"
+        imageClassName="object-cover object-[40%_40%]"
+        titleClassName={`${belleza.className} font-normal text-[clamp(2rem,5.5vw,4.25rem)] leading-[1.05] text-bellevue-black`}
+        title={
+          <>
+            Welcome to
+            <br />
+            <span className="text-bellevue-forest">Bellevue Chalets by Pushella</span>
+          </>
+        }
+      />
       <Intro />
       {/* <Mosaic /> */}
       <Purpose />

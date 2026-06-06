@@ -1,21 +1,7 @@
 import type { Metadata, Viewport } from 'next'
-import { Cormorant_Garamond, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { cormorant, inter } from '@/lib/fonts'
 import './globals.css'
-
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-cormorant',
-  display: 'swap',
-})
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-inter',
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   title: 'Bellevue Chalets by Pushella | Luxury Alpine Retreats',

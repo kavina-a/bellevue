@@ -173,7 +173,7 @@ export function SiteNavigation({ variant = "hero" }: SiteNavigationProps) {
                             {chalets.map((chalet) => (
                               <li key={chalet.slug}>
                                 <Link
-                                  href={`/chalets#${chalet.slug}`}
+                                  href={`/chalets/${chalet.slug}`}
                                   onClick={() => setIsChaletDropdownOpen(false)}
                                   className="block px-4 py-2.5 font-sans text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
                                 >

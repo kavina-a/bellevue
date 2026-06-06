@@ -28,3 +28,16 @@ export function getChaletHero(slug: ChaletSlug): ChaletPhoto {
 export function getChaletImages(slug: ChaletSlug): ChaletPhoto[] {
   return chaletPhotos[slug]
 }
+
+/** Bedroom photo index per chalet for the shared IN-ROOM AMENITIES section. */
+const amenitiesImageIndex: Record<ChaletSlug, number> = {
+  cove: 0,
+  mirador: 1,
+  grandeur: 0,
+}
+
+export function getChaletAmenitiesImage(slug: ChaletSlug): ChaletPhoto {
+  const images = chaletPhotos[slug]
+  const index = amenitiesImageIndex[slug]
+  return images[index] ?? images[0]
+}

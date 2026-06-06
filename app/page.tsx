@@ -658,7 +658,7 @@ function ChaletsSection() {
                     transition={{ duration: 0.45, ease: luxuryEase }}
                   >
                     <Link
-                      href={`/chalets#${active.slug}`}
+                      href={`/chalets/${active.slug}`}
                       className="inline-block px-6 py-3 bg-white/[0.08] backdrop-blur-md border border-white/25 text-white font-sans text-[11px] tracking-[0.15em] uppercase hover:bg-white hover:text-bellevue-black transition-colors duration-500"
                     >
                       View Details

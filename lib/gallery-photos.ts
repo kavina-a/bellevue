@@ -88,3 +88,71 @@ export const gallerySections: GallerySection[] = [
 export function getAllGalleryPhotos(): GalleryPhoto[] {
   return gallerySections.flatMap((s) => s.images)
 }
+
+export type GalleryFilterSlug = "all" | "views" | "rooms" | "dining" | "spaces"
+
+export const galleryFilters: { slug: GalleryFilterSlug; title: string }[] = [
+  { slug: "all", title: "All" },
+  { slug: "views", title: "Views" },
+  { slug: "rooms", title: "Rooms" },
+  { slug: "dining", title: "Dining" },
+  { slug: "spaces", title: "Spaces" },
+]
+
+function sectionImages(slug: string): GalleryPhoto[] {
+  return gallerySections.find((s) => s.slug === slug)?.images ?? []
+}
+
+/** Curated hero picks for the All filter — one mosaic block per category. */
+function getCuratedAllPhotos(): GalleryPhoto[] {
+  const views = sectionImages("exterior-views")
+  const rooms = [
+    ...sectionImages("chalet-cove").slice(0, 3),
+    ...sectionImages("chalet-mirador").slice(0, 2),
+    ...sectionImages("chalet-grandeur").slice(0, 2),
+  ]
+  const dining = sectionImages("outdoor-dining")
+  const spaces = sectionImages("property-highlights")
+
+  return [
+    views[2],
+    views[0],
+    views[5],
+    rooms[0],
+    rooms[3],
+    dining[1],
+    spaces[1],
+    views[8],
+    rooms[1],
+    dining[3],
+    spaces[0],
+    rooms[5],
+    views[10],
+    dining[0],
+  ].filter((img): img is GalleryPhoto => Boolean(img))
+}
+
+export function getGalleryPhotosForFilter(filter: GalleryFilterSlug): GalleryPhoto[] {
+  switch (filter) {
+    case "all":
+      return getCuratedAllPhotos()
+    case "views":
+      return sectionImages("exterior-views")
+    case "rooms":
+      return [
+        ...sectionImages("chalet-cove"),
+        ...sectionImages("chalet-mirador"),
+        ...sectionImages("chalet-grandeur"),
+      ]
+    case "dining":
+      return sectionImages("outdoor-dining")
+    case "spaces":
+      return sectionImages("property-highlights")
+    default:
+      return getAllGalleryPhotos()
+  }
+}
+
+export function getGalleryFilterTitle(filter: GalleryFilterSlug): string {
+  return galleryFilters.find((f) => f.slug === filter)?.title ?? "Gallery"
+}

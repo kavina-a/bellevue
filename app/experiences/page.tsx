@@ -1,12 +1,12 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
+import { PageCover } from "@/components/page-cover"
 import {
   nearbyAttractions,
   getFeaturedAttractions,
@@ -20,63 +20,6 @@ const moreExperiences = nearbyAttractions.filter((a) => !a.featured)
 
 function scrollToExperience(slug: string) {
   document.getElementById(slug)?.scrollIntoView({ behavior: "smooth", block: "start" })
-}
-
-// ─── Hero ─────────────────────────────────────────────────────────────────────
-function Hero() {
-  const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.3])
-
-  return (
-    <section ref={ref} className="relative min-h-[85vh] overflow-hidden pt-28 md:pt-36">
-      <motion.div style={{ y: imgY }} className="absolute inset-0 scale-110">
-        <Image
-          src={featured[1].image}
-          alt="Horton Plains National Park"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-      </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-b from-bellevue-black/50 via-bellevue-black/35 to-bellevue-cream" />
-
-      <motion.div
-        style={{ opacity }}
-        className="relative mx-auto flex min-h-[60vh] max-w-4xl flex-col items-center justify-end px-6 pb-16 text-center lg:px-12 lg:pb-24"
-      >
-        <motion.span
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease }}
-          className="font-sans text-[10px] tracking-[0.45em] uppercase text-bellevue-gold"
-        >
-          Nearby Attractions
-        </motion.span>
-        <motion.h1
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.1, ease }}
-          className="mt-6 font-serif text-4xl leading-[1.1] text-white md:text-5xl lg:text-6xl"
-        >
-          The highlands,
-          <br />
-          <span className="italic text-bellevue-warm">yours to explore</span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, delay: 0.2, ease }}
-          className="mt-8 max-w-2xl font-sans text-base leading-[1.85] text-white/75 md:text-lg"
-        >
-          Cloud forests, dairy country, heritage railways, and sacred temples — each
-          experience paired with the landscapes that define Ambewela.
-        </motion.p>
-      </motion.div>
-    </section>
-  )
 }
 
 // ─── Visual index — all experiences at a glance ─────────────────────────────
@@ -228,8 +171,21 @@ function MoreExperienceCard({ attraction, index }: { attraction: NearbyAttractio
 export default function ExperiencesPage() {
   return (
     <main className="min-h-screen bg-bellevue-cream">
-      <SiteNavigation variant="solid" />
-      <Hero />
+      <SiteNavigation variant="hero" />
+      <PageCover
+        src={featured[1].image}
+        alt="Horton Plains National Park"
+        eyebrow="Nearby Attractions"
+        imageScale
+        title={
+          <>
+            The highlands,
+            <br />
+            <span className="italic text-bellevue-forest">yours to explore</span>
+          </>
+        }
+        description="Cloud forests, dairy country, heritage railways, and sacred temples — each experience paired with the landscapes that define Ambewela."
+      />
       <ExperienceIndex />
 
       {/* Signature trio — full image + content panels */}

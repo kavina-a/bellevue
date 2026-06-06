@@ -8,9 +8,9 @@ const navColumns = [
   {
     title: "Chalets",
     links: [
-      { name: "Chalet Cove", href: "/chalets#cove" },
-      { name: "Chalet Mirador", href: "/chalets#mirador" },
-      { name: "Chalet Grandeur", href: "/chalets#grandeur" },
+      { name: "Chalet Cove", href: "/chalets/cove" },
+      { name: "Chalet Mirador", href: "/chalets/mirador" },
+      { name: "Chalet Grandeur", href: "/chalets/grandeur" },
       { name: "View All Chalets", href: "/chalets" },
     ],
   },
