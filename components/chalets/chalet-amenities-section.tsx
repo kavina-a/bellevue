@@ -84,7 +84,7 @@ export function ChaletAmenitiesSection({
 
               <div className="flex-1 bg-[#e8efe5] px-8 py-10 md:px-10 md:py-12 lg:px-12 lg:py-14 xl:px-14 xl:py-16">
                 <h2 className="font-serif text-2xl tracking-[0.08em] text-bellevue-black md:text-3xl">
-                  IN-ROOM AMENITIES
+                  IN-CHALET AMENITIES
                 </h2>
                 <ul className="mt-8 space-y-3.5">
                   {amenities.map((item) => (

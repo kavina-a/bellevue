@@ -17,7 +17,7 @@ export default function ChaletsPage() {
 
       {/* Intro */}
       <section className="px-6 pt-32 pb-12 md:pt-40 md:pb-16 lg:px-12">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-6xl text-center">
           <motion.span
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -32,8 +32,9 @@ export default function ChaletsPage() {
             transition={{ duration: 0.85, delay: 0.1, ease }}
             className="mt-6 font-serif text-3xl leading-[1.2] text-bellevue-black md:text-[2.6rem]"
           >
-            Each of our three chalets was thoughtfully designed to showcase
-            far-reaching views of the Ambewela valley
+            Our chalets are individually positioned and thoughtfully crafted with
+            distinctive high-sloped architecture, offering spectacular views of
+            Ambewela&apos;s rolling hills and pristine natural surroundings.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -41,10 +42,11 @@ export default function ChaletsPage() {
             transition={{ duration: 0.85, delay: 0.2, ease }}
             className="mx-auto mt-7 max-w-2xl font-sans text-[15px] font-light leading-[1.85] text-bellevue-black/65"
           >
-            Chalets at Bellevue are all distinct in design and layout, yet equally
-            comfortable and luxurious. Each is crafted from warm timber and furnished
-            with private sitting areas, ensuite bathrooms, and balconies framing the
-            rolling hills, forests, and gentle streams of Ambewela.
+            Designed to blend luxury with nature, each chalet features warm wooden
+            interiors, complete privacy and uninterrupted views of the lush greenery
+            beyond. Guests can relax to the soothing sounds of flowing waters while
+            enjoying panoramic hill-country vistas from their bedroom, complemented by
+            en-suite bathrooms and modern comforts.
           </motion.p>
         </div>
       </section>

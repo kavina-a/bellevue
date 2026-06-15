@@ -4,24 +4,35 @@ import { Fragment } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { Bath, Mountain, Sofa, Trees, DoorOpen } from "lucide-react"
+import { Bath, House, MountainSnow, Trees, DoorOpen, Users, Mountain } from "lucide-react"
 import type { Chalet, ChaletFeatureIcon } from "@/lib/chalets"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
+function FeatureLabel({ line1, line2 }: { line1: string; line2: string }) {
+  return (
+    <span className="text-left font-sans text-[10px] uppercase leading-tight tracking-[0.12em] md:text-[11px]">
+      <span className="block whitespace-nowrap">{line1}</span>
+      <span className="block whitespace-nowrap">{line2}</span>
+    </span>
+  )
+}
+
 function FeatureIcon({ icon }: { icon: ChaletFeatureIcon }) {
   const props = { className: "h-5 w-5", strokeWidth: 1.25 }
   switch (icon) {
-    case "sitting":
-      return <Sofa {...props} />
+    case "chalet":
+      return <House {...props} />
     case "view":
       return <Mountain {...props} />
     case "bath":
       return <Bath {...props} />
     case "deck":
-      return <Trees {...props} />
+      return <Mountain {...props} />
     case "veranda":
       return <DoorOpen {...props} />
+    case "users":
+      return <Users {...props} />
   }
 }
 
@@ -59,7 +70,7 @@ export function ChaletCard({ chalet, priority = false }: ChaletCardProps) {
                 {chalet.name}
               </h3>
               <p className="mt-2 font-sans text-xs tracking-[0.1em] text-white/85">
-                Room Size:{" "}
+                Chalet Size:{" "}
                 <span className="font-semibold">{chalet.roomSizeSqm} sqm</span>
               </p>
             </div>
@@ -73,22 +84,20 @@ export function ChaletCard({ chalet, priority = false }: ChaletCardProps) {
       </div>
 
       {/* Features — green panel continues below the image */}
-      <div className="flex items-center bg-[#e8efe5] py-5">
+      <div className="flex items-center bg-[#e8efe5] px-6 py-5 md:px-8">
         {chalet.cardFeatures.map((feature, i) => (
-          <Fragment key={feature.label}>
+          <Fragment key={`${feature.labelLine1}-${feature.labelLine2}`}>
             {i > 0 && (
               <span
                 aria-hidden
                 className="h-5 w-px shrink-0 bg-bellevue-forest/25"
               />
             )}
-            <div className="flex flex-1 items-center justify-center gap-2.5 px-3 text-bellevue-forest/75">
+            <div className="flex flex-1 items-center justify-start gap-2.5 px-3 first:pl-0 text-bellevue-forest/75">
               <span className="text-bellevue-forest/55">
                 <FeatureIcon icon={feature.icon} />
               </span>
-              <span className="font-sans text-[10px] uppercase tracking-[0.12em] md:text-[11px]">
-                {feature.label}
-              </span>
+              <FeatureLabel line1={feature.labelLine1} line2={feature.labelLine2} />
             </div>
           </Fragment>
         ))}

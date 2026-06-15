@@ -195,18 +195,23 @@ function Purpose() {
           Our Purpose
         </motion.span>
 
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.9, delay: 0.18, ease }}
-          className="mx-auto mt-8 max-w-2xl font-sans text-[0.95rem] leading-[1.95] text-white/60"
+          className="mx-auto mt-8 max-w-2xl space-y-6 font-sans text-[0.95rem] leading-[1.95] text-white/60"
         >
-          At Bellevue Chalets, our purpose is to focus on every detail to provide the most
-          peaceful environment for those living in today&apos;s fast-paced world. We are dedicated
-          to offering the peace of mind often overlooked in busy lifestyles — a place where time
-          slows, nature speaks, and genuine rest becomes possible again.
-        </motion.p>
+          <p>
+            At Bellevue Chalets, our purpose is to provide private chalet experiences defined by
+            comfort, luxury, and relaxation. Each stay is enriched with personalised hospitality
+            and the natural surroundings of Ambewela.
+          </p>
+          <p>
+            Our focus is on thoughtful details, warm service, and creating a comfortable base for
+            guests to enjoy the highlands in privacy and ease.
+          </p>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -218,15 +223,29 @@ function Purpose() {
           <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-bellevue-gold/80">
             Message from the Managing Director
           </p>
-          <blockquote className="mt-8 font-serif text-2xl italic leading-[1.6] text-white/90 md:text-[1.75rem]">
-            &ldquo;I believe that true relaxation begins in cozy, private chalets<br className="hidden md:block" />
-            surrounded by nature — and that is exactly what we strive to provide.&rdquo;
-          </blockquote>
+          <div className="mt-8 space-y-6 font-serif text-xl leading-[1.75] text-white/90 md:text-2xl">
+            <p>
+              I believe modern life has become increasingly fast-paced, leaving little time for
+              rest and true disconnection — something that is deeply important, yet often
+              overlooked. Bellevue Chalets was created as a response to this — a quiet mountain
+              retreat where guests can step away from routine and experience true calm.
+            </p>
+            <p>
+              That intention continues to guide everything we do at Bellevue Chalets.
+            </p>
+          </div>
           <div className="mt-10 flex flex-col items-center gap-2">
             <div className="h-px w-10 bg-bellevue-gold/40" />
-            <p className="mt-4 font-serif text-xl text-bellevue-gold">Pushella</p>
-            <p className="font-sans text-[9px] tracking-[0.35em] uppercase text-white/35">
-              Managing Director, Bellevue Chalets
+            <div className="relative mt-6 h-16 w-44 md:h-[4.5rem] md:w-52">
+              <Image
+                src="/signature/managing-director.png"
+                alt=""
+                fill
+                className="object-contain object-center"
+              />
+            </div>
+            <p className="mt-4 font-sans text-[9px] tracking-[0.35em] uppercase text-white/35">
+              Managing Director
             </p>
           </div>
         </motion.div>

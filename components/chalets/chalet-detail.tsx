@@ -66,7 +66,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
 
   const highlights = [
     { icon: Maximize2, value: `${chalet.roomSizeSqm} SQM`, label: "Room Size" },
-    { icon: Users, value: `${chalet.maxGuests} GUESTS`, label: "Max Occupancy" },
+    { icon: Users, value: `${chalet.maxGuests} ADULTS`, label: "Max Occupancy" },
     { icon: BedDouble, value: chalet.bedType, label: "Bed Type" },
   ]
 
@@ -250,7 +250,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
         <div className="mx-auto max-w-[1400px]">
           <FadeIn className="text-center">
             <h2 className="font-serif text-3xl tracking-[0.1em] text-bellevue-black md:text-4xl">
-              MORE ROOMS
+              MORE CHALETS
             </h2>
             <Link
               href="/chalets"
