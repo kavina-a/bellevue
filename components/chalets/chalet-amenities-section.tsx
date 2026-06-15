@@ -68,7 +68,7 @@ export function ChaletAmenitiesSection({
                 className="object-cover object-[38%_center]"
               />
               <div
-                className="absolute bottom-0 right-0 top-16 flex w-[42%] flex-col justify-center bg-bellevue-black/70 px-5 md:top-20 md:px-6 lg:hidden"
+                className="absolute bottom-0 right-0 top-16 flex w-[42%] flex-col justify-center bg-bellevue-black/45 px-5 backdrop-blur-[2px] md:top-20 md:px-6 lg:hidden"
                 aria-hidden
               >
                 <SustainabilityList />
@@ -82,7 +82,7 @@ export function ChaletAmenitiesSection({
                 className="relative hidden shrink-0 lg:block lg:w-[22.8%]"
                 style={{ backgroundColor: accentColor }}
               >
-                <div className="absolute inset-x-0 top-0 flex h-[calc(100cqw*0.54*4/5-5rem)] flex-col justify-center overflow-hidden bg-bellevue-black/70 px-7 xl:h-[calc(100cqw*0.54*4/5-6rem)] xl:px-8">
+                <div className="absolute inset-x-0 top-0 flex h-[calc(100cqw*0.54*4/5-5rem)] flex-col justify-center overflow-hidden bg-bellevue-black/45 px-7 backdrop-blur-[2px] xl:h-[calc(100cqw*0.54*4/5-6rem)] xl:px-8">
                   <SustainabilityList />
                 </div>
               </div>

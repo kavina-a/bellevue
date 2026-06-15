@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, MapPin, Lightbulb } from "lucide-react"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { PageCover } from "@/components/page-cover"
@@ -17,6 +17,7 @@ const ease = [0.22, 1, 0.36, 1] as const
 
 const featured = getFeaturedAttractions()
 const moreExperiences = nearbyAttractions.filter((a) => !a.featured)
+const featuredCount = featured.length
 
 function scrollToExperience(slug: string) {
   document.getElementById(slug)?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -123,10 +124,34 @@ function SignatureExperience({
             <h2 className="mt-3 font-serif text-3xl leading-tight text-bellevue-black md:text-4xl">
               {attraction.title}
             </h2>
+
+            {attraction.distance && (
+              <div className="mt-4 flex items-center gap-2">
+                <MapPin className="h-3.5 w-3.5 shrink-0 text-bellevue-gold" strokeWidth={1.25} />
+                <span className="font-sans text-[11px] font-light italic tracking-wide text-bellevue-black/45">
+                  Distance from the hotel: {attraction.distance}
+                </span>
+              </div>
+            )}
+
             <div className="mt-6 h-px w-14 bg-bellevue-gold/50" />
-            <p className="mt-8 font-sans text-[0.95rem] leading-[1.95] text-bellevue-black/70">
+            <p className="mt-8 text-justify font-sans text-[0.95rem] leading-[1.95] text-bellevue-black/70">
               {attraction.description}
             </p>
+
+            {attraction.additionalInfo && (
+              <div className="mt-8 border-t border-bellevue-black/8 pt-8">
+                <div className="mb-3 flex items-center gap-2">
+                  <Lightbulb className="h-3.5 w-3.5 shrink-0 text-bellevue-gold" strokeWidth={1.25} />
+                  <span className="font-sans text-[9px] tracking-[0.35em] uppercase text-bellevue-gold">
+                    Good to know
+                  </span>
+                </div>
+                <p className="font-sans text-[0.82rem] leading-[1.85] text-bellevue-black/50">
+                  {attraction.additionalInfo}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </motion.div>
@@ -134,38 +159,6 @@ function SignatureExperience({
   )
 }
 
-// ─── More experiences — cards with image + text unified ───────────────────────
-function MoreExperienceCard({ attraction, index }: { attraction: NearbyAttraction; index: number }) {
-  return (
-    <motion.article
-      id={attraction.slug}
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.85, delay: (index % 3) * 0.06, ease }}
-      className="scroll-mt-28 flex h-full flex-col overflow-hidden bg-white shadow-[0_8px_40px_-20px_rgba(26,26,26,0.12)]"
-    >
-      <div className="relative aspect-[16/10] shrink-0 overflow-hidden">
-        <Image
-          src={attraction.image}
-          alt={attraction.title}
-          fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition-transform duration-700 hover:scale-[1.03]"
-        />
-      </div>
-      <div className="flex flex-1 flex-col p-6 md:p-8">
-        <span className="font-sans text-[9px] tracking-[0.35em] uppercase text-bellevue-gold">
-          {attraction.category}
-        </span>
-        <h3 className="mt-2 font-serif text-xl text-bellevue-black md:text-2xl">{attraction.title}</h3>
-        <p className="mt-4 flex-1 font-sans text-sm leading-[1.85] text-bellevue-black/65">
-          {attraction.description}
-        </p>
-      </div>
-    </motion.article>
-  )
-}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function ExperiencesPage() {
@@ -205,25 +198,15 @@ export default function ExperiencesPage() {
         ))}
       </section>
 
-      {/* Remaining experiences — grid cards */}
-      <section className="px-6 py-20 md:py-28 lg:px-12">
-        <div className="mx-auto max-w-[1400px]">
-          <span className="font-sans text-[10px] tracking-[0.45em] uppercase text-bellevue-gold">
-            More to discover
-          </span>
-          <h2 className="mt-4 font-serif text-3xl text-bellevue-black md:text-4xl">
-            Further afield
-          </h2>
-          <p className="mt-4 max-w-xl font-sans text-sm leading-relaxed text-bellevue-black/55">
-            Lakes, temples, waterfalls, and forest walks — each within reach of your chalet.
-          </p>
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-            {moreExperiences.map((attraction, index) => (
-              <MoreExperienceCard key={attraction.slug} attraction={attraction} index={index} />
-            ))}
-          </div>
-        </div>
+      {/* Remaining experiences — same signature panel format */}
+      <section className="bg-bellevue-cream">
+        {moreExperiences.map((attraction, index) => (
+          <SignatureExperience
+            key={attraction.slug}
+            attraction={attraction}
+            index={featuredCount + index}
+          />
+        ))}
       </section>
 
       <section className="border-t border-bellevue-black/8 bg-bellevue-dark-forest px-6 py-20 md:py-28 lg:px-12">
