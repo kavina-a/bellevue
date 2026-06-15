@@ -8,7 +8,6 @@ import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { PageCover } from "@/components/page-cover"
 import { getChaletHero } from "@/lib/chalet-photos"
-import { belleza } from "@/lib/fonts"
 import { ArrowRight, Mail, MapPin, Star } from "lucide-react"
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -493,9 +492,10 @@ export default function AboutPage() {
         src="/Photos/Exterior and Views/DSC06062-Edit.jpg"
         alt="Bellevue Chalets, Ambewela highlands"
         align="left"
+        imageScale
         titleBg="bg-[#eceae6]"
         imageClassName="object-cover object-[40%_40%]"
-        titleClassName={`${belleza.className} font-normal text-[clamp(2rem,5.5vw,4.25rem)] leading-[1.05] text-bellevue-black`}
+        titleClassName="font-serif font-normal text-[clamp(1.6rem,4.4vw,3.4rem)] leading-[1.05] text-bellevue-black"
         title={
           <>
             Welcome to

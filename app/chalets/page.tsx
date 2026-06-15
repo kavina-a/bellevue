@@ -1,57 +1,34 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
+import { PageCover } from "@/components/page-cover"
 import { ChaletCard } from "@/components/chalets/chalet-card"
+import { getChaletHero } from "@/lib/chalet-photos"
 import { chalets } from "@/lib/chalets"
-
-const ease = [0.22, 1, 0.36, 1] as const
 
 export default function ChaletsPage() {
   const [first, second, third] = chalets
 
   return (
     <main className="min-h-screen bg-bellevue-cream">
-      <SiteNavigation variant="solid" />
+      <SiteNavigation variant="hero" />
 
-      {/* Intro */}
-      <section className="px-6 pt-32 pb-12 md:pt-40 md:pb-16 lg:px-12">
-        <div className="mx-auto max-w-6xl text-center">
-          <motion.span
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease }}
-            className="font-sans text-[11px] tracking-[0.4em] uppercase text-bellevue-gold"
-          >
-            Accommodation
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.1, ease }}
-            className="mt-6 font-serif text-3xl leading-[1.2] text-bellevue-black md:text-[2.6rem]"
-          >
-            Our chalets are individually positioned and thoughtfully crafted with
-            distinctive high-sloped architecture, offering spectacular views of
-            Ambewela&apos;s rolling hills and pristine natural surroundings.
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.2, ease }}
-            className="mx-auto mt-7 max-w-2xl font-sans text-[15px] font-light leading-[1.85] text-bellevue-black/65"
-          >
-            Designed to blend luxury with nature, each chalet features warm wooden
-            interiors, complete privacy and uninterrupted views of the lush greenery
-            beyond. Guests can relax to the soothing sounds of flowing waters while
-            enjoying panoramic hill-country vistas from their bedroom, complemented by
-            en-suite bathrooms and modern comforts.
-          </motion.p>
-        </div>
-      </section>
+      <PageCover
+        src={getChaletHero("mirador").src}
+        alt="Chalet Mirador, Bellevue Chalets"
+        eyebrow="Accommodation"
+        imageScale
+        title={
+          <>
+            Three sanctuaries.
+            <br />
+            <span className="italic text-bellevue-forest">One unforgettable retreat.</span>
+          </>
+        }
+        description="Individually positioned chalets with distinctive high-sloped architecture, warm wooden interiors, and spectacular views of Ambewela's rolling hills."
+      />
 
-      {/* Chalets */}
       <section className="px-6 pb-24 md:pb-32 lg:px-12">
         <div className="mx-auto max-w-[1400px]">
           <div className="grid gap-8 md:grid-cols-2 lg:gap-10">

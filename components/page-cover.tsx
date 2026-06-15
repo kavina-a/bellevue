@@ -6,6 +6,9 @@ import Image from "next/image"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
+export const PAGE_COVER_IMAGE_HEIGHT =
+  "h-[68vh] min-h-[306px] max-h-[663px]" as const
+
 type PageCoverProps = {
   src: string
   alt: string
@@ -16,6 +19,7 @@ type PageCoverProps = {
   titleBg?: string
   imageClassName?: string
   imageScale?: boolean
+  imageContainerClassName?: string
   titleClassName?: string
 }
 
@@ -29,7 +33,8 @@ export function PageCover({
   titleBg = "bg-bellevue-cream",
   imageClassName = "object-cover",
   imageScale = false,
-  titleClassName = "font-serif text-[clamp(2rem,5.5vw,4.5rem)] leading-[1.08] text-bellevue-black",
+  imageContainerClassName = PAGE_COVER_IMAGE_HEIGHT,
+  titleClassName = "font-serif text-[clamp(1.6rem,4.4vw,3.6rem)] leading-[1.08] text-bellevue-black",
 }: PageCoverProps) {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
@@ -41,7 +46,7 @@ export function PageCover({
 
   return (
     <section ref={ref} className="relative">
-      <div className="relative h-[80vh] min-h-[360px] max-h-[780px] overflow-hidden">
+      <div className={`relative overflow-hidden ${imageContainerClassName}`}>
         <motion.div
           style={{ y: imgY }}
           className={`absolute inset-0 ${imageScale ? "scale-110" : ""}`}
@@ -65,7 +70,7 @@ export function PageCover({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.05, ease }}
-            className="font-sans text-[10px] tracking-[0.4em] uppercase text-bellevue-taupe"
+            className="font-sans text-[8px] tracking-[0.4em] uppercase text-bellevue-taupe"
           >
             {eyebrow}
           </motion.span>
@@ -83,7 +88,7 @@ export function PageCover({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.25, ease }}
-            className={`mt-5 max-w-2xl font-sans text-base font-light leading-relaxed text-bellevue-black/65 ${
+            className={`mt-5 max-w-2xl font-sans text-[0.8rem] font-light leading-relaxed text-bellevue-black/65 ${
               align === "center" ? "mx-auto" : ""
             }`}
           >

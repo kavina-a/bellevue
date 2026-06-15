@@ -3,6 +3,9 @@
 import { motion } from "framer-motion"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
+import { PageCover } from "@/components/page-cover"
+
+const LEGAL_COVER_IMAGE = "/Photos/Exterior and Views/DJI_20250113073722_0909_D-Edit.jpg"
 
 const sections = [
   {
@@ -35,45 +38,25 @@ const sections = [
   },
 ]
 
+const lastUpdated = new Date().toLocaleDateString("en-GB", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+})
+
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-bellevue-cream">
-      <SiteNavigation variant="solid" />
+      <SiteNavigation variant="hero" />
 
-      <section className="px-6 pt-32 pb-8 md:pt-40 md:pb-12 lg:px-12">
-        <div className="mx-auto max-w-3xl">
-          <motion.span
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="font-sans text-xs tracking-[0.35em] uppercase text-bellevue-gold"
-          >
-            Legal
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.08 }}
-            className="mt-5 font-serif text-4xl leading-[1.12] text-bellevue-black md:text-5xl"
-          >
-            Privacy Policy
-          </motion.h1>
-          <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-8 h-px w-12 origin-left bg-bellevue-gold/60"
-          />
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.25 }}
-            className="mt-6 font-sans text-sm text-bellevue-black/50"
-          >
-            Last updated: {new Date().toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })}
-          </motion.p>
-        </div>
-      </section>
+      <PageCover
+        src={LEGAL_COVER_IMAGE}
+        alt="Bellevue Chalets, Ambewela"
+        eyebrow="Legal"
+        imageScale
+        title="Privacy Policy"
+        description={`Last updated: ${lastUpdated}`}
+      />
 
       <section className="px-6 py-16 md:py-24 lg:px-12">
         <div className="mx-auto max-w-3xl space-y-12">

@@ -1,10 +1,4 @@
-import { Belleza, Cormorant_Garamond, Inter } from 'next/font/google'
-
-export const belleza = Belleza({
-  subsets: ['latin'],
-  weight: '400',
-  display: 'swap',
-})
+import { Cormorant_Garamond, Inter } from 'next/font/google'
 
 export const cormorant = Cormorant_Garamond({
   subsets: ['latin'],

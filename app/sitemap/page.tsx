@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
+import { PageCover } from "@/components/page-cover"
 
 const sitemapSections = [
   {
@@ -61,34 +62,16 @@ const sitemapSections = [
 export default function SitemapPage() {
   return (
     <main className="min-h-screen bg-bellevue-cream">
-      <SiteNavigation variant="solid" />
+      <SiteNavigation variant="hero" />
 
-      <section className="px-6 pt-32 pb-8 md:pt-40 md:pb-12 lg:px-12">
-        <div className="mx-auto max-w-4xl">
-          <motion.span
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="font-sans text-xs tracking-[0.35em] uppercase text-bellevue-gold"
-          >
-            Navigation
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.08 }}
-            className="mt-5 font-serif text-4xl leading-[1.12] text-bellevue-black md:text-5xl"
-          >
-            Sitemap
-          </motion.h1>
-          <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-8 h-px w-12 origin-left bg-bellevue-gold/60"
-          />
-        </div>
-      </section>
+      <PageCover
+        src="/Photos/Exterior and Views/DJI_20250113073722_0909_D-Edit.jpg"
+        alt="Bellevue Chalets, Ambewela"
+        eyebrow="Navigation"
+        imageScale
+        title="Sitemap"
+        description="Every page across Bellevue Chalets — chalets, experiences, offers, and guest information."
+      />
 
       <section className="px-6 py-16 md:py-24 lg:px-12">
         <div className="mx-auto max-w-4xl">

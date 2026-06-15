@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react"
 import { motion } from "framer-motion"
-import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { PageCover } from "@/components/page-cover"
@@ -14,8 +13,6 @@ import {
   getGalleryPhotosForFilter,
   type GalleryFilterSlug,
 } from "@/lib/gallery-photos"
-
-const ease = [0.22, 1, 0.36, 1] as const
 
 export default function GalleryPage() {
   const [activeFilter, setActiveFilter] = useState<GalleryFilterSlug>("all")
@@ -29,44 +26,26 @@ export default function GalleryPage() {
   const filterTitle = getGalleryFilterTitle(activeFilter)
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-bellevue-cream">
       <SiteNavigation variant="hero" />
 
       <PageCover
-        src="/Photos/Exterior and Views/DJI_20250113073722_0909_D-Edit.jpg"
+        src="/Photos/Exterior and Views/DSC06107-Edit.jpg"
         alt="Bellevue Chalets at dusk, Ambewela"
-        title="Gallery"
-        titleBg="bg-white"
-        imageClassName="object-cover"
+        imageScale
+        title={
+          <>
+            GALLERY
+            <br />
+          </>
+        }
+        description="A curated collection of moments from Bellevue — the chalets, the landscape, and the quiet details that make every stay unforgettable."
       />
 
-      {/* Breadcrumb + intro */}
-      <div className="border-b border-bellevue-black/8 bg-white px-6 py-8 text-center md:py-10 lg:px-12">
-        <nav
-          aria-label="Breadcrumb"
-          className="font-sans text-[10px] tracking-[0.3em] uppercase text-bellevue-black/45"
-        >
-          <Link href="/" className="transition-colors hover:text-bellevue-gold">
-            Home
-          </Link>
-          <span className="mx-2 text-bellevue-gold">•</span>
-          <span className="text-bellevue-black/70">Gallery</span>
-        </nav>
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease }}
-          className="mx-auto mt-6 max-w-2xl font-serif text-base leading-relaxed text-bellevue-black/70 md:text-lg"
-        >
-          Poised to take advantage of vast views of mountains, tea country, and
-          cornflower-blue highland skies.
-        </motion.p>
-      </div>
-
-      {/* Category filter */}
+      {/* ── Category filter ── */}
       <nav
         aria-label="Gallery categories"
-        className="border-b border-bellevue-black/8 bg-white px-6 lg:px-12"
+        className="border-b border-bellevue-black/8 bg-bellevue-cream px-6 lg:px-12"
       >
         <div className="mx-auto flex max-w-[1400px] justify-center gap-2 overflow-x-auto py-6 [scrollbar-width:none] md:gap-6 [&::-webkit-scrollbar]:hidden">
           {galleryFilters.map((filter) => {
@@ -101,8 +80,8 @@ export default function GalleryPage() {
         </div>
       </nav>
 
-      {/* Bento gallery */}
-      <section className="bg-white px-6 py-10 md:py-14 lg:px-12 lg:py-16">
+      {/* ── Bento gallery ── */}
+      <section className="bg-bellevue-cream px-6 py-10 md:py-14 lg:px-12 lg:py-16">
         <div className="mx-auto max-w-[1400px]">
           <GalleryBentoGrid
             photos={photos}
