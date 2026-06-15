@@ -3,10 +3,40 @@
 import { useCallback, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import Image from "next/image"
-import { ArrowLeft, ArrowRight } from "lucide-react"
 import type { ChaletPhoto } from "@/lib/chalet-photos"
 
 const ease = [0.22, 1, 0.36, 1] as const
+
+function GalleryArrow({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg
+      width="32"
+      height="10"
+      viewBox="0 0 32 10"
+      fill="none"
+      aria-hidden
+      className="text-white/75"
+    >
+      {direction === "left" ? (
+        <path
+          d="M30 5H2M2 5L7 1M2 5L7 9"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ) : (
+        <path
+          d="M2 5H30M30 5L25 1M30 5L25 9"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+    </svg>
+  )
+}
 
 type ChaletGallerySliderProps = {
   images: ChaletPhoto[]
@@ -37,7 +67,7 @@ export function ChaletGallerySlider({
       <button
         type="button"
         onClick={() => onImageClick?.(index)}
-        className="group relative block aspect-[16/9] w-full overflow-hidden md:aspect-[21/9]"
+        className="group relative block aspect-[16/8.1] w-full overflow-hidden md:aspect-[21/8.1]"
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
@@ -61,27 +91,28 @@ export function ChaletGallerySlider({
       </button>
 
       {total > 1 && (
-        <>
+        <div className="mt-8 flex items-center justify-center gap-10">
           <button
             type="button"
             onClick={goPrev}
             aria-label="Previous photo"
-            className="absolute left-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center bg-white/90 text-bellevue-black shadow-sm transition-colors hover:bg-white md:left-6 md:h-11 md:w-11"
+            className="transition-colors hover:[&_svg]:text-white"
           >
-            <ArrowLeft className="h-4 w-4" strokeWidth={1.25} />
+            <GalleryArrow direction="left" />
           </button>
+          <span className="font-sans text-sm text-white/75">
+            <span className="font-semibold text-white">{index + 1}</span>
+            <span> / {total}</span>
+          </span>
           <button
             type="button"
             onClick={goNext}
             aria-label="Next photo"
-            className="absolute right-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center bg-white/90 text-bellevue-black shadow-sm transition-colors hover:bg-white md:right-6 md:h-11 md:w-11"
+            className="transition-colors hover:[&_svg]:text-white"
           >
-            <ArrowRight className="h-4 w-4" strokeWidth={1.25} />
+            <GalleryArrow direction="right" />
           </button>
-          <span className="absolute bottom-4 right-4 z-10 bg-bellevue-black/50 px-3 py-1 font-sans text-[10px] tracking-[0.2em] text-white/90 md:bottom-6 md:right-6">
-            {index + 1} / {total}
-          </span>
-        </>
+        </div>
       )}
     </div>
   )

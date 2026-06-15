@@ -23,6 +23,11 @@ export type Chalet = {
   bedType: string
   sleepsLabel: string
 
+  /** Green accent panel — base hex (see CHALET_ACCENT_ADJUST to darken/lighten) */
+  accentColor: string
+  /** Optional per-chalet tweak; overrides CHALET_ACCENT_ADJUST when set */
+  accentColorAdjust?: number
+
   /** Listing / "more rooms" card */
   cardFeatures: ChaletFeature[]
   cardDescription: string
@@ -48,10 +53,47 @@ export const sustainabilityFeatures: string[] = [
   "0% Noise, 100% Nature.",
 ]
 
+/** Base hex for chalet green box panels. */
+export const CHALET_ACCENT_BASE = "#F3F6EF"
+
+/**
+ * Global lightness tweak — applied to every chalet box unless a chalet sets its own
+ * `accentColorAdjust`.
+ *
+ *   0  = exact `accentColor`
+ *  -10 = slightly darker  (mix 10% black)
+ *  -20 = noticeably darker
+ *  -30 = much darker
+ *  +10 = slightly lighter (mix 10% white)
+ *  +20 = noticeably lighter
+ */
+export const CHALET_ACCENT_ADJUST = -5
+
+/** Dark green for chalet CTA buttons and the Room Highlights section. */
+export const CHALET_BUTTON_COLOR = "#2c3930"
+
+/** Beige accent for Room Highlights icons and subheading text. */
+export const CHALET_HIGHLIGHT_BEIGE = "#F0EBCE"
+
+/** Resolves the final panel colour from base hex + darkness/lightness tweak. */
+export function getChaletAccentColor(
+  chalet: Pick<Chalet, "accentColor"> & { accentColorAdjust?: number },
+): string {
+  const base = chalet.accentColor
+  const adjust = chalet.accentColorAdjust ?? CHALET_ACCENT_ADJUST
+
+  if (adjust === 0) return base
+  if (adjust < 0) {
+    return `color-mix(in srgb, ${base} ${100 + adjust}%, black)`
+  }
+  return `color-mix(in srgb, ${base} ${100 - adjust}%, white)`
+}
+
 const coveData: Chalet = {
   slug: "cove",
   name: "Chalet Cove",
   tagline: "Intimate Retreat",
+  accentColor: "#F3F6EF",
   roomSizeSqm: 28,
   maxGuests: 2,
   bedType: "Queen",
@@ -92,6 +134,7 @@ const miradorData: Chalet = {
   slug: "mirador",
   name: "Chalet Mirador",
   tagline: "Beautiful View",
+  accentColor: "#F3F6EF",
   roomSizeSqm: 45,
   maxGuests: 4,
   bedType: "Two Doubles",
@@ -135,6 +178,7 @@ const grandeurData: Chalet = {
   slug: "grandeur",
   name: "Chalet Grandeur",
   tagline: "Spacious Luxury",
+  accentColor: "#F3F6EF",
   roomSizeSqm: 70,
   maxGuests: 5,
   bedType: "Queen + Double + Attic sleeping area",

@@ -41,11 +41,13 @@ function SustainabilityList() {
 type ChaletAmenitiesSectionProps = {
   amenityImage: ChaletPhoto
   amenities: string[]
+  accentColor: string
 }
 
 export function ChaletAmenitiesSection({
   amenityImage,
   amenities,
+  accentColor,
 }: ChaletAmenitiesSectionProps) {
   return (
     <section className="overflow-visible bg-bellevue-cream px-6 py-16 pb-20 md:py-24 md:pb-28 lg:px-12">
@@ -76,13 +78,19 @@ export function ChaletAmenitiesSection({
             <div className="relative z-10 mt-8 flex flex-col lg:absolute lg:inset-x-0 lg:top-20 lg:mt-0 lg:flex-row lg:items-stretch xl:top-24">
               <div className="hidden shrink-0 lg:block lg:w-[31.2%]" aria-hidden />
 
-              <div className="relative hidden shrink-0 bg-[#e8efe5] lg:block lg:w-[22.8%]">
+              <div
+                className="relative hidden shrink-0 lg:block lg:w-[22.8%]"
+                style={{ backgroundColor: accentColor }}
+              >
                 <div className="absolute inset-x-0 top-0 flex h-[calc(100cqw*0.54*4/5-5rem)] flex-col justify-center overflow-hidden bg-bellevue-black/70 px-7 xl:h-[calc(100cqw*0.54*4/5-6rem)] xl:px-8">
                   <SustainabilityList />
                 </div>
               </div>
 
-              <div className="flex-1 bg-[#e8efe5] px-8 py-10 md:px-10 md:py-12 lg:px-12 lg:py-14 xl:px-14 xl:py-16">
+              <div
+                className="flex-1 px-8 py-10 md:px-10 md:py-12 lg:px-12 lg:py-14 xl:px-14 xl:py-16"
+                style={{ backgroundColor: accentColor }}
+              >
                 <h2 className="font-serif text-2xl tracking-[0.08em] text-bellevue-black md:text-3xl">
                   IN-CHALET AMENITIES
                 </h2>

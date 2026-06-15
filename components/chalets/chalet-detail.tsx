@@ -19,7 +19,7 @@ import { ChaletCard } from "@/components/chalets/chalet-card"
 import { ChaletGallerySlider } from "@/components/chalets/chalet-gallery-slider"
 import { GalleryLightbox } from "@/components/gallery/gallery-lightbox"
 import { getChaletAmenitiesImage } from "@/lib/chalet-photos"
-import type { Chalet } from "@/lib/chalets"
+import { getChaletAccentColor, CHALET_BUTTON_COLOR, CHALET_HIGHLIGHT_BEIGE, type Chalet } from "@/lib/chalets"
 import { hotelOffers } from "@/lib/hotel-offers"
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -54,6 +54,7 @@ type ChaletDetailProps = {
 export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [offerIndex, setOfferIndex] = useState(0)
+  const accentColor = getChaletAccentColor(chalet)
 
   const images = chalet.images
   const collage = [images[1] ?? images[0], images[2] ?? images[0], images[3] ?? images[0]]
@@ -120,7 +121,10 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
         <FadeIn className="mx-auto max-w-[1400px]">
           <div className="relative">
             {/* Green band — shorter than collage so images spill below */}
-            <div className="absolute inset-x-0 top-8 z-0 h-[400px] bg-[#e8efe5] sm:top-10 sm:h-[425px] md:top-10 md:h-[450px] lg:top-12 lg:h-[475px]" />
+            <div
+              className="absolute inset-x-0 top-8 z-0 h-[400px] sm:top-10 sm:h-[425px] md:top-10 md:h-[450px] lg:top-12 lg:h-[475px]"
+              style={{ backgroundColor: accentColor }}
+            />
 
             <div className="relative z-10 grid gap-10 px-6 sm:px-8 md:px-10 lg:grid-cols-[1.35fr_1fr] lg:items-center lg:gap-14 lg:px-14 xl:gap-20">
               {/* Collage — pushed down, bottom extends past green */}
@@ -167,10 +171,10 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
                 </p>
                 <Link
                   href="/#book"
-                  className="group/cta mt-10 inline-flex flex-col items-start font-sans text-[11px] tracking-[0.25em] uppercase text-bellevue-black transition-colors hover:text-bellevue-gold"
+                  className="mt-10 inline-flex items-center px-6 py-3.5 font-sans text-[11px] tracking-[0.25em] uppercase text-white transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: CHALET_BUTTON_COLOR }}
                 >
                   Check Availability
-                  <span className="mt-2 h-[2px] w-8 bg-bellevue-forest/70 transition-all duration-500 ease-out group-hover/cta:w-full group-hover/cta:bg-bellevue-gold" />
                 </Link>
               </div>
             </div>
@@ -179,14 +183,20 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
       </section>
 
       {/* ── Room highlights ── */}
-      <section className="bg-white px-6 py-16 md:py-24 lg:px-12">
+      <section
+        className="px-6 py-16 md:py-24 lg:px-12"
+        style={{ backgroundColor: CHALET_BUTTON_COLOR }}
+      >
         <div className="mx-auto max-w-[1400px]">
-          <div className="grid items-center gap-10 border-b border-bellevue-black/10 pb-14 lg:grid-cols-[1fr_1.6fr]">
+          <div className="grid items-center gap-10 border-b border-white/15 pb-14 lg:grid-cols-[1fr_1.6fr]">
             <FadeIn>
-              <h2 className="font-serif text-2xl tracking-[0.06em] text-bellevue-black md:text-3xl">
+              <h2 className="font-serif text-2xl tracking-[0.06em] text-white md:text-3xl">
                 ROOM HIGHLIGHTS
               </h2>
-              <p className="mt-3 font-sans text-sm font-light text-bellevue-black/55">
+              <p
+                className="mt-3 font-sans text-sm font-light"
+                style={{ color: CHALET_HIGHLIGHT_BEIGE }}
+              >
                 {chalet.sleepsLabel}
               </p>
             </FadeIn>
@@ -197,18 +207,19 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
                   <div
                     key={h.label}
                     className={`flex flex-col items-center gap-3 px-2 text-center md:flex-row md:gap-4 md:text-left ${
-                      i > 0 ? "md:border-l md:border-bellevue-black/10 md:pl-6" : ""
+                      i > 0 ? "md:border-l md:border-white/15 md:pl-6" : ""
                     }`}
                   >
                     <h.icon
-                      className="h-7 w-7 shrink-0 text-bellevue-gold md:h-8 md:w-8"
+                      className="h-7 w-7 shrink-0 md:h-8 md:w-8"
+                      style={{ color: CHALET_HIGHLIGHT_BEIGE }}
                       strokeWidth={1}
                     />
                     <div>
-                      <p className="font-serif text-base text-bellevue-black md:text-lg">
+                      <p className="font-serif text-base text-white md:text-lg">
                         {h.value}
                       </p>
-                      <p className="mt-0.5 font-sans text-[10px] tracking-[0.15em] uppercase text-bellevue-taupe">
+                      <p className="mt-0.5 font-sans text-[10px] tracking-[0.15em] uppercase text-white/60">
                         {h.label}
                       </p>
                     </div>
@@ -219,10 +230,10 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
           </div>
 
           <FadeIn className="mx-auto mt-14 max-w-3xl text-center">
-            <h3 className="font-serif text-2xl leading-snug text-bellevue-black md:text-[1.9rem]">
+            <h3 className="font-serif text-2xl leading-snug text-white md:text-[1.9rem]">
               {chalet.highlightsHeading}
             </h3>
-            <p className="mt-6 font-sans text-[15px] font-light leading-[1.9] text-bellevue-black/60">
+            <p className="mt-6 font-sans text-[15px] font-light leading-[1.9] text-white/75">
               {chalet.highlightsBody}
             </p>
           </FadeIn>
@@ -230,7 +241,10 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
       </section>
 
       {/* ── Gallery slider — all chalet photos in a fixed frame ── */}
-      <section className="px-6 pb-16 md:pb-24 lg:px-12">
+      <section
+        className="px-6 pb-16 pt-0 md:pb-24 lg:px-12"
+        style={{ backgroundColor: CHALET_BUTTON_COLOR }}
+      >
         <FadeIn className="mx-auto max-w-[1400px]">
           <ChaletGallerySlider
             key={chalet.slug}
@@ -243,6 +257,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
       <ChaletAmenitiesSection
         amenityImage={getChaletAmenitiesImage(chalet.slug)}
         amenities={chalet.amenities}
+        accentColor={accentColor}
       />
 
       {/* ── More rooms ── */}
@@ -305,10 +320,10 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
                 </p>
                 <Link
                   href={offer.ctaHref}
-                  className="mt-8 inline-flex items-center font-sans text-[11px] tracking-[0.25em] uppercase text-bellevue-black transition-colors hover:text-bellevue-gold"
+                  className="mt-8 inline-flex items-center px-6 py-3.5 font-sans text-[11px] tracking-[0.25em] uppercase text-white transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: CHALET_BUTTON_COLOR }}
                 >
                   Learn More
-                  <span className="ml-3 h-px w-10 bg-bellevue-gold/60" />
                 </Link>
               </div>
             </div>

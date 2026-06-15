@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Bath, House, MountainSnow, Trees, DoorOpen, Users, Mountain } from "lucide-react"
-import type { Chalet, ChaletFeatureIcon } from "@/lib/chalets"
+import { getChaletAccentColor, CHALET_BUTTON_COLOR, type Chalet, type ChaletFeatureIcon } from "@/lib/chalets"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -43,6 +43,7 @@ type ChaletCardProps = {
 
 export function ChaletCard({ chalet, priority = false }: ChaletCardProps) {
   const hero = chalet.images[0]
+  const accentColor = getChaletAccentColor(chalet)
 
   return (
     <motion.div
@@ -79,12 +80,18 @@ export function ChaletCard({ chalet, priority = false }: ChaletCardProps) {
 
         {/* Green strip — starts 12% down so the image floats above it at the top-right */}
         <div className="relative w-[6%] shrink-0 self-stretch md:w-[5.5%]">
-          <div className="absolute inset-x-0 bottom-0 top-[12%] bg-[#e8efe5]" />
+          <div
+            className="absolute inset-x-0 bottom-0 top-[12%]"
+            style={{ backgroundColor: accentColor }}
+          />
         </div>
       </div>
 
       {/* Features — green panel continues below the image */}
-      <div className="flex items-center bg-[#e8efe5] px-6 py-5 md:px-8">
+      <div
+        className="flex items-center px-6 py-5 md:px-8"
+        style={{ backgroundColor: accentColor }}
+      >
         {chalet.cardFeatures.map((feature, i) => (
           <Fragment key={`${feature.labelLine1}-${feature.labelLine2}`}>
             {i > 0 && (
@@ -108,21 +115,20 @@ export function ChaletCard({ chalet, priority = false }: ChaletCardProps) {
         <p className="font-sans text-[15px] font-light leading-[1.8] text-bellevue-black/65">
           {chalet.cardDescription}
         </p>
-        <div className="mt-7 flex items-center gap-4">
+        <div className="mt-7 flex flex-wrap items-center gap-3">
           <Link
             href={`/chalets/${chalet.slug}`}
-            className="relative inline-flex items-center font-sans text-[11px] tracking-[0.25em] uppercase text-bellevue-black transition-colors hover:text-bellevue-gold"
+            className="inline-flex items-center px-5 py-3 font-sans text-[11px] tracking-[0.25em] uppercase text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: CHALET_BUTTON_COLOR }}
           >
             Explore
-            <span className="absolute -bottom-1.5 left-0 h-[2px] w-full bg-bellevue-forest/70" />
           </Link>
-          <span className="h-4 w-px bg-bellevue-black/20" />
           <Link
             href="/#book"
-            className="relative inline-flex items-center font-sans text-[11px] tracking-[0.25em] uppercase text-bellevue-black transition-colors hover:text-bellevue-gold"
+            className="inline-flex items-center px-5 py-3 font-sans text-[11px] tracking-[0.25em] uppercase text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: CHALET_BUTTON_COLOR }}
           >
             Check Availability
-            <span className="absolute -bottom-1.5 left-0 h-[2px] w-full bg-bellevue-forest/70" />
           </Link>
         </div>
       </div>
