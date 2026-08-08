@@ -21,12 +21,15 @@ export default function ChaletsPage() {
         imageScale
         title={
           <>
-            Three sanctuaries.
-            <br />
-            <span className="italic text-bellevue-forest">One unforgettable retreat.</span>
+Private Luxury Chalet Experiences            <br />
           </>
         }
-        description="Individually positioned chalets with distinctive high-sloped architecture, warm wooden interiors, and spectacular views of Ambewela's rolling hills."
+        description="Designed to blend luxury with nature, each chalet features warm wooden interiors, complete
+privacy and uninterrupted views of the lush greenery beyond. Guests can relax to the
+soothing sounds of flowing waters while enjoying panoramic hill-country vistas from their
+bedroom, complemented by en-suite bathrooms and modern comforts.
+
+"
       />
 
       <section className="px-6 pb-24 md:pb-32 lg:px-12">

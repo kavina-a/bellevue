@@ -29,7 +29,7 @@ function ExperienceIndex() {
     <section className="border-b border-bellevue-black/8 bg-bellevue-cream px-6 py-14 md:py-16 lg:px-12">
       <div className="mx-auto max-w-[1400px]">
         <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-bellevue-gold">
-          {nearbyAttractions.length} experiences near Bellevue
+        POPULAR NEARBY ATTRACTIONS
         </p>
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 lg:gap-4">
           {nearbyAttractions.map((item, i) => (
@@ -166,18 +166,12 @@ export default function ExperiencesPage() {
     <main className="min-h-screen bg-bellevue-cream">
       <SiteNavigation variant="hero" />
       <PageCover
-        src={featured[1].image}
-        alt="Horton Plains National Park"
+        src="/Photos/Exterior and Views/kotiyo.jpg"
+        alt="Leopards in the forest near Ambewela"
         eyebrow="Nearby Attractions"
-        imageScale
-        title={
-          <>
-            The highlands,
-            <br />
-            <span className="italic text-bellevue-forest">yours to explore</span>
-          </>
-        }
-        description="Cloud forests, dairy country, heritage railways, and sacred temples — each experience paired with the landscapes that define Ambewela."
+        imageClassName="object-cover object-[center_50%]"
+        title="Discover Nearby Wonders"
+        description="Ideally located in the heart of Ambewela, Bellevue Chalets by Pushella offers easy access to some of Sri Lanka’s most breathtaking natural, cultural, and scenic attractions. Discover the beauty of the upcountry at your own pace."
       />
       <ExperienceIndex />
 
@@ -189,7 +183,7 @@ export default function ExperiencesPage() {
               Signature experiences
             </span>
             <h2 className="mt-4 font-serif text-3xl text-bellevue-black md:text-4xl">
-              Unmissable from Ambewela
+              Discover the beauty of the upcountry
             </h2>
           </div>
         </div>

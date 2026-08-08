@@ -3,7 +3,7 @@ export type NearbyAttraction = {
   title: string
   image: string
   description: string
-  category: "Nature & Wildlife" | "Heritage & Culture" | "Local Life" | "Scenic Views"
+  category: "Nature & Wildlife" | "Heritage & Culture" | "Local Life" | "Scenic Landscapes"
   featured: boolean
   distance?: string
   additionalInfo?: string
@@ -19,11 +19,11 @@ export const nearbyAttractions: NearbyAttraction[] = [
     image: photo("Ambewela Farm .jpg"),
     category: "Local Life",
     featured: true,
-    distance: "6.1 km — approximately 12 minutes",
+    distance: "6.1 km, approximately 12 minutes.",
     description:
-      "Step into the \"Little New Zealand\" of Sri Lanka. Ambewela Farm offers a serene escape with its rolling green pastures, mist-covered hills, and pure mountain air. Witness the charm of dairy farming, interact with gentle cows, and enjoy fresh dairy products straight from the source. It\u2019s a perfect blend of nature and tranquility, ideal for families and nature lovers.",
+      "Located in Sri Lanka's picturesque central highlands, is a popular tourist destination known for its fresh milk, dairy products, and stunning scenery. Visitors can explore the farm, get up close with cows, goats, and even witness the massive stud bulls. The farm is also a great spot for educational purposes, offering a firsthand look at systemized farming practices. Enjoy the cool climate and lush surroundings, making it an ideal location for nature lovers, families, and those interested in local farming.",
     additionalInfo:
-      "Be environmentally conscious with waste disposal and wear comfortable footwear. Early morning visits offer the most atmospheric experience as mist still clings to the pastures.",
+      "Be environmentally conscious with waste disposal, wear comfortable footwear.",
   },
   {
     slug: "horton-plains",
@@ -31,11 +31,11 @@ export const nearbyAttractions: NearbyAttraction[] = [
     image: photo("Horton Plains National Park.jpg"),
     category: "Nature & Wildlife",
     featured: true,
-    distance: "12 km — approximately 25 minutes",
+    distance: "12 km, approximately 25 minutes.",
     description:
-      "A UNESCO World Heritage site, Horton Plains is a breathtaking highland plateau. Trek through windswept grasslands and dense cloud forests to reach the dramatic \"World\u2019s End\" cliff, offering a sheer drop and stunning panoramic views. Discover the enchanting Baker\u2019s Falls and the unique biodiversity that makes this park a must-visit for adventurers and photographers.",
+      "A UNESCO World Heritage site, Horton Plains is a popular destination for tourists. Known for its stunning views, including the famous World's End cliff, the park offers scenic trekking routes, rich wildlife, and diverse plant species. A must-visit for nature lovers and adventure seekers.",
     additionalInfo:
-      "Begin your visit early — the cliff views clear before the mist returns around mid-morning. Pack a camera, carry snacks, and dispose of all waste responsibly. The park can be cool and windy; a light layer is advised.",
+      "Be environmentally conscious when disposing of waste, pack a camera, and begin your visit early. Snacks and meals can be packed and arranged upon request.",
   },
   {
     slug: "pattipola-railway-station",
@@ -43,23 +43,11 @@ export const nearbyAttractions: NearbyAttraction[] = [
     image: photo("Pattipola Railway Station.jpg"),
     category: "Heritage & Culture",
     featured: true,
-    distance: "6.5 km — approximately 15 minutes",
+    distance: "6.5 km, approximately 15 minutes.",
     description:
-      "Experience the charm of the highest railway station in Sri Lanka. Situated at an elevation of 1,897 meters, Pattipola is a gateway to the misty highlands. The station\u2019s colonial-style architecture and the scenic train journey through lush tea estates and tunnels provide a nostalgic and picturesque experience that captures the essence of Sri Lanka\u2019s hill country.",
+      "Nestled at an impressive altitude of 1,898.1 metres above sea level, Pattipola Railway Station holds the title of the highest railway station in Sri Lanka. This quaint and historic station lies along the scenic Main Line, connecting Colombo to Badulla, and offers visitors a truly breathtaking view of the misty highlands. With its colonial-era charm and quiet atmosphere, it's the perfect stop for those who appreciate both engineering heritage and natural beauty.",
     additionalInfo:
-      "Early mornings offer the best chance to see the iconic upcountry train winding through the hills with golden light cutting through the mist — ideal for photography. Our team can assist with train schedules and tickets upon request.",
-  },
-  {
-    slug: "lake-gregory",
-    title: "Lake Gregory",
-    image: photo("Lake Gregory.jpeg"),
-    category: "Scenic Views",
-    featured: false,
-    distance: "22 km — approximately 45 minutes",
-    description:
-      "Lake Gregory in Nuwara Eliya is a serene man-made lake surrounded by gentle hills and colonial-era charm. Boating, lakeside walks, and picnics beneath cool highland skies make it a leisurely afternoon escape — especially when the mist rolls in across the water.",
-    additionalInfo:
-      "Pedal boats and rowboats are available for hire. The lakeside promenade is best enjoyed in the late afternoon when the light softens over the surrounding hills.",
+      "Early mornings offer the best chance to see the iconic upcountry train winding its way through the hills with golden sunlight cutting through the mist—ideal for photos.",
   },
   {
     slug: "jagro-strawberry-farm",
@@ -67,23 +55,34 @@ export const nearbyAttractions: NearbyAttraction[] = [
     image: photo("Jagro Strawberry Farm.jpeg"),
     category: "Local Life",
     featured: false,
-    distance: "20 km — approximately 40 minutes",
+    distance: "3.3 km, approximately 7 minutes.",
     description:
-      "Jagro Strawberry Farm invites visitors into the heart of Nuwara Eliya\u2019s strawberry country. Walk the rows, pick your own fruit in season, and taste the region\u2019s famous fresh strawberries — a sweet, hands-on taste of highland agriculture.",
-    additionalInfo:
-      "Strawberry season peaks between December and April. Freshly picked fruit and strawberry-based products are available to purchase on-site. A delightful stop for families with young children.",
+      "Located amidst the serene beauty of the upcountry, Jagro Strawberry Farm offers visitors the opportunity to pick fresh, sweet strawberries directly from the fields. The farm is a perfect blend of nature and agriculture, where you can not only enjoy the beauty of the rolling hills but also taste the freshest strawberries in the region. Ideal for families, couples, and nature enthusiasts, it provides an enjoyable and educational experience in the heart of Ambewela.",
+    additionalInfo: "Follow farm guidelines while picking and exploring.",
   },
   {
-    slug: "kandela-forest-park",
-    title: "Kandela Educational Forest Park",
-    image: photo("Kandela Educational Forest Park.webp"),
-    category: "Nature & Wildlife",
+    slug: "ambewela-wind-power-station",
+    title: "Ambewela Wind Power Station",
+    image: photo("Ambewela Wind Power Station.jpg"),
+    category: "Scenic Landscapes",
     featured: false,
-    distance: "14 km — approximately 28 minutes",
+    distance: "2.8 km, approximately 6 minutes.",
     description:
-      "Kandela Educational Forest Park offers shaded trails through native woodland — ideal for a quiet walk among ferns, birdsong, and filtered highland light. An educational and restorative outing for guests who wish to connect with the forest at an unhurried pace.",
+      "Situated in the highlands of Ambewela, the Ambewela Wind Power Station is a notable renewable energy facility in Sri Lanka. Operated by Ace Wind Power, a subsidiary of Aitken Spence, the station comprises 12 wind turbines, each with a capacity of 250 kW, totaling an installed capacity of 3 MW . The turbines are strategically positioned to harness the region's consistent wind patterns, contributing to the country's renewable energy efforts.",
     additionalInfo:
-      "Wear sturdy shoes and carry insect repellent. The trails are well-marked but can be slippery after rain. Guided walks are occasionally available — enquire with our concierge.",
+      "Pack a camera to capture the impressive turbines and the stunning landscapes – it's a renowned photo spot.",
+  },
+  {
+    slug: "lake-gregory",
+    title: "Lake Gregory",
+    image: photo("Lake Gregory.jpeg"),
+    category: "Scenic Landscapes",
+    featured: false,
+    distance: "14.7 km, approximately 30 minutes.",
+    description:
+      "Nestled in the scenic town of Nuwara Eliya, Gregory Lake offers a serene escape with its beautiful surroundings. As Sri Lanka's highest lake, sitting at an elevation of 1,874 meters, it was originally built in 1873. The lake is perfect for boating, cycling, or simply enjoying a peaceful walk along its shores. With stunning views of the hills and cool, crisp air, it's an ideal spot for families, couples, and nature lovers. The lake also offers recreational activities like paddle boating and jet skiing, making it a popular destination for tourists seeking both relaxation and adventure.",
+    additionalInfo:
+      "Wear comfortable clothing and footwear, bring a jacket for cooler weather, a hat for sun protection, and appropriate wear for activities like jet skiing; allocate time for various activities around the lake.",
   },
   {
     slug: "ambewela-station",
@@ -91,35 +90,23 @@ export const nearbyAttractions: NearbyAttraction[] = [
     image: photo("Ambewela Station.jpg"),
     category: "Heritage & Culture",
     featured: false,
-    distance: "2.5 km — approximately 6 minutes",
+    distance: "3.1 km, approximately 7 minutes.",
     description:
-      "Ambewela Station sits along the scenic Main Line railway, surrounded by pastureland and misty hills. A stop here captures the romance of Sri Lankan hill-country rail travel — wooden benches, mountain air, and views that unfold with every passing train.",
+      "Ambewela Station is a charming train stop along Sri Lanka's scenic Main Line. Set amidst rolling green hills and dairy farms, the station offers travellers an authentic upcountry railway experience. Many guests choose to visit Bellevue Chalets by Pushella via this station due to its close proximity. The surrounding area is perfect for photography, enjoying the misty highlands, and witnessing the trains winding through lush landscapes.",
     additionalInfo:
-      "The train passes through in the early morning and late afternoon — check the schedule with our team for exact timings. A short walk from the station leads to scenic viewpoints over the surrounding farmland.",
+      "Early mornings provide the best lighting for photos, and bring a light jacket as it can be chilly in the highlands.",
   },
   {
-    slug: "ambewela-wind-power-station",
-    title: "Ambewela Wind Power Station",
-    image: photo("Ambewela Wind Power Station.jpg"),
-    category: "Scenic Views",
+    slug: "kandela-forest-park",
+    title: "Kandela Educational Forest Park",
+    image: photo("Kandela Educational Forest Park.webp"),
+    category: "Nature & Wildlife",
     featured: false,
-    distance: "4 km — approximately 10 minutes",
+    distance: "5.1 km, approximately 11 minutes.",
     description:
-      "The Ambewela Wind Power Station crowns open highland ridges where turbines turn above sweeping green valleys. The drive and viewpoints offer dramatic panoramas — a striking contrast of modern engineering and timeless mountain landscape.",
+      "Kandela Educational Forest Park is a fascinating forest reserve ideal for nature enthusiasts and families. It showcases the region's native flora and fauna, offering walking trails, educational displays, and opportunities for birdwatching. Visitors can learn about local ecosystems and conservation efforts while enjoying the serenity of the forest.",
     additionalInfo:
-      "The ridge roads can be narrow and windy; take care when driving. Sunset visits are particularly spectacular as the light catches the turbine blades against the open sky.",
-  },
-  {
-    slug: "lovers-leap-waterfall",
-    title: "Lovers\u2019 Leap Waterfall",
-    image: photo("Lovers\u2019 Leap Waterfall.jpg"),
-    category: "Scenic Views",
-    featured: false,
-    distance: "24 km — approximately 48 minutes",
-    description:
-      "Lovers\u2019 Leap Waterfall cascades near Nuwara Eliya, named for a local legend of devotion and loss. The falls are at their most powerful after rain, sending mist across tea-clad slopes — a poetic pause on any highland itinerary.",
-    additionalInfo:
-      "The path to the falls can be steep and slippery; wear closed shoes with good grip. The falls are most impressive during or just after the rainy season. Allow at least an hour for the full walk.",
+      "Wear sturdy footwear for walking trails, carry water, and avoid disturbing wildlife.",
   },
   {
     slug: "seetha-amman-temple",
@@ -127,11 +114,23 @@ export const nearbyAttractions: NearbyAttraction[] = [
     image: photo("Seetha Amman Temple.webp"),
     category: "Heritage & Culture",
     featured: false,
-    distance: "18 km — approximately 35 minutes",
+    distance: "16 km, approximately 34 minutes.",
     description:
-      "Seetha Amman Temple in Seetha Eliya is revered in the Ramayana tradition as a place linked to Sita\u2019s captivity. Set beside a stream in lush forest, the colourful shrine draws pilgrims and curious travellers alike — a window into Sri Lanka\u2019s living mythology.",
+      "Located in the village of Seetha Eliya, Seetha Amman Temple is a revered Hindu temple linked to the Ramayana epic. Built around a natural spring, the temple features colourful architecture, intricate carvings, and a tranquil atmosphere. It attracts both devotees and tourists seeking cultural and historical experiences in the upcountry.",
     additionalInfo:
-      "Dress modestly when visiting — covered shoulders and knees are respectful and expected. Remove footwear before entering the main shrine. The temple is most atmospheric in the early morning when fewer visitors are present.",
+      "Dress modestly, remove footwear before entering the temple, and respect local customs during your visit.",
+  },
+  {
+    slug: "lovers-leap-waterfall",
+    title: "Lovers' Leap Waterfall",
+    image: photo("Lovers\u2019 Leap Waterfall.jpg"),
+    category: "Scenic Landscapes",
+    featured: false,
+    distance: "17 km, approximately 38 minutes.",
+    description:
+      "Lovers' Leap Waterfall is a stunning natural attraction near Nuwara Eliya, where water dramatically plunges from a high cliff into the valley below. Surrounded by lush greenery, the site creates a picturesque and serene environment perfect for photography and nature walks. According to local legend, the waterfall is named after a tragic love story, adding a romantic and mystical charm to the experience. Visitors can enjoy the sight and sound of cascading water while exploring the surrounding trails.",
+    additionalInfo:
+      "Wear comfortable shoes for walking, bring a camera, and be cautious near the cliff edges for safety.",
   },
 ]
 
