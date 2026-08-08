@@ -10,6 +10,7 @@ import { getChaletImages, getChaletHero } from "@/lib/chalet-photos"
 import { ChaletImageCarousel } from "@/components/chalet-image-carousel"
 import { NearbyExperiencesSection } from "@/components/experiences/nearby-experiences-section"
 import { SiteFooter } from "@/components/site-footer"
+import { faqItems } from "@/lib/faq"
 import { Play, Pause, Volume2, VolumeX, ArrowRight, ArrowLeft, Quote, Plus, ArrowUp, Mail, Phone, MapPin, Star } from "lucide-react"
 
 const GOOGLE_REVIEWS_URL = "https://www.google.com/travel/search?g2lb=4965990,72471280,72560029,72573224,72647020,72686036,72803964,72882230,73064764,121529349,121608705&hl=en-LK&gl=lk&cs=1&ssta=1&q=bellevue+chalets+by+pushella&ts=CAEaRwopEicyJTB4M2FlMzg3ZTE4ZGYzN2I4MzoweDQxNzk4OWFkZDdkZThlMTMSGhIUCgcI6g8QBhgMEgcI6g8QBhgNGAEyAhAA&qs=CAEyE0Nnb0lrNXo2dnQyMTRyeEJFQUU4AkIJCROO3tetiXlBQgkJE47e162JeUE&ap=ugEHcmV2aWV3cw&ictx=111"
@@ -1288,53 +1289,78 @@ function ContactSection() {
   )
 }
 
-// FAQ Section
-const faqItems = [
-  {
-    question: "What are the check-in and check-out times?",
-    answer:
-      "Check-in is from 2:00 PM onwards and check-out is by 12:00 PM. Early check-in and early check-out may be available depending on occupancy — please contact us in advance.",
-  },
-  {
-    question: "What meal plans are available?",
-    answer:
-      "Meals are available based on your selected meal plan, with à la carte dining options and outdoor breakfast with a view available on request. All dishes are prepared with fresh, locally sourced ingredients.",
-  },
-  {
-    question: "What is the children policy?",
-    answer:
-      "Children aged 0–6 years stay free of charge. Children aged 7–12 incur an additional fee. Guests aged 13 and above are considered adults. Additional beds are not provided; children share existing bedding.",
-  },
-  {
-    question: "How do I get to Bellevue Chalets?",
-    answer:
-      "Bellevue Chalets is located in Ambewela, Nuwara Eliya — approximately 1,800m above sea level in Sri Lanka's central highlands. Detailed directions and arrival instructions are shared in your booking confirmation email.",
-  },
-  {
-    question: "Are pets allowed?",
-    answer:
-      "To preserve the tranquil atmosphere and comfort of all guests, pets are not permitted at Bellevue Chalets. Please contact us if you have special circumstances you'd like to discuss.",
-  },
-]
-
+// FAQ Section — 8 questions split across both columns
 function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const midpoint = Math.ceil(faqItems.length / 2)
+  const leftFaqs = faqItems.slice(0, midpoint)
+  const rightFaqs = faqItems.slice(midpoint)
+
+  const renderFaqColumn = (items: typeof faqItems, indexOffset: number) =>
+    items.map((item, localIndex) => {
+      const index = indexOffset + localIndex
+      const isOpen = openIndex === index
+      return (
+        <div key={item.question} className="border-t border-bellevue-forest/20 last:border-b">
+          <button
+            type="button"
+            onClick={() => setOpenIndex(isOpen ? null : index)}
+            className="group flex w-full items-center justify-between gap-6 py-6 text-left"
+            aria-expanded={isOpen}
+          >
+            <span className="font-sans text-base text-bellevue-black transition-colors group-hover:text-bellevue-gold md:text-lg">
+              {item.question}
+            </span>
+            <Plus
+              className={`h-5 w-5 shrink-0 text-bellevue-forest transition-transform duration-300 ${
+                isOpen ? "rotate-45" : ""
+              }`}
+              strokeWidth={1.5}
+            />
+          </button>
+          <AnimatePresence initial={false}>
+            {isOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="overflow-hidden"
+              >
+                <p className="max-w-2xl pb-6 font-sans text-sm leading-relaxed text-bellevue-black/65 md:text-base">
+                  {item.answer}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )
+    })
 
   return (
     <section className="relative bg-white py-24 md:py-32 lg:py-40" id="faq">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+      <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="mb-12 md:mb-16"
+        >
+          <span className="font-sans text-xs tracking-[0.4em] uppercase text-bellevue-taupe">FAQ</span>
+          <h2 className="mt-6 font-serif text-4xl leading-[1.1] text-bellevue-forest md:text-5xl lg:text-6xl">
+            Answers to<br />your questions
+          </h2>
+        </motion.div>
+
+        <div className="grid items-start gap-0 lg:grid-cols-2 lg:gap-16 xl:gap-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
             viewport={{ once: true }}
-            className="lg:col-span-5"
           >
-            <span className="font-sans text-xs tracking-[0.4em] uppercase text-bellevue-taupe">FAQ</span>
-            <h2 className="mt-6 font-serif text-4xl md:text-5xl lg:text-6xl text-bellevue-forest leading-[1.1]">
-              Answers to<br />your questions
-            </h2>
+            {renderFaqColumn(leftFaqs, 0)}
           </motion.div>
 
           <motion.div
@@ -1342,46 +1368,8 @@ function FAQSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
             viewport={{ once: true }}
-            className="lg:col-span-7"
           >
-            {faqItems.map((item, index) => {
-              const isOpen = openIndex === index
-              return (
-                <div key={item.question} className="border-t border-bellevue-forest/20 last:border-b">
-                  <button
-                    type="button"
-                    onClick={() => setOpenIndex(isOpen ? null : index)}
-                    className="w-full flex items-center justify-between gap-6 py-6 text-left group"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="font-sans text-base md:text-lg text-bellevue-black group-hover:text-bellevue-gold transition-colors">
-                      {item.question}
-                    </span>
-                    <Plus
-                      className={`w-5 h-5 text-bellevue-forest shrink-0 transition-transform duration-300 ${
-                        isOpen ? "rotate-45" : ""
-                      }`}
-                      strokeWidth={1.5}
-                    />
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <p className="pb-6 font-sans text-sm md:text-base text-bellevue-black/65 leading-relaxed max-w-2xl">
-                          {item.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )
-            })}
+            {renderFaqColumn(rightFaqs, midpoint)}
           </motion.div>
         </div>
       </div>

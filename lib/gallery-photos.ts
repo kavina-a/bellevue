@@ -97,6 +97,39 @@ export function getAllGalleryPhotos(): GalleryPhoto[] {
   return gallerySections.flatMap((s) => s.images)
 }
 
+/** Unique photos across every section (keeps first occurrence). */
+function getUniqueGalleryPhotos(): GalleryPhoto[] {
+  const seen = new Set<string>()
+  const unique: GalleryPhoto[] = []
+  for (const photo of getAllGalleryPhotos()) {
+    if (seen.has(photo.src)) continue
+    seen.add(photo.src)
+    unique.push(photo)
+  }
+  return unique
+}
+
+/**
+ * Deterministic Fisher–Yates shuffle — same jumble every load (no hydration flicker).
+ * Only used for the All filter; category filters keep designer order.
+ */
+function jumblePhotos(photos: GalleryPhoto[], seed = 42): GalleryPhoto[] {
+  const arr = [...photos]
+  let s = seed
+  const next = () => {
+    s = (s * 1664525 + 1013904223) >>> 0
+    return s / 0x100000000
+  }
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(next() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
+/** Precomputed jumbled All wall — every unique photo, mixed across sections. */
+const jumbledAllPhotos = jumblePhotos(getUniqueGalleryPhotos())
+
 export type GalleryFilterSlug = "all" | "chalets-interiors" | "scenery-views" | "dining-experience"
 
 export const galleryFilters: { slug: GalleryFilterSlug; title: string }[] = [
@@ -113,7 +146,7 @@ function sectionImages(slug: string): GalleryPhoto[] {
 export function getGalleryPhotosForFilter(filter: GalleryFilterSlug): GalleryPhoto[] {
   switch (filter) {
     case "all":
-      return getAllGalleryPhotos()
+      return jumbledAllPhotos
     case "chalets-interiors":
       return sectionImages("chalets-interiors")
     case "scenery-views":
@@ -121,7 +154,7 @@ export function getGalleryPhotosForFilter(filter: GalleryFilterSlug): GalleryPho
     case "dining-experience":
       return sectionImages("dining-experience")
     default:
-      return getAllGalleryPhotos()
+      return jumbledAllPhotos
   }
 }
 

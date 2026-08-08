@@ -32,32 +32,43 @@ function Intro() {
               <span className="italic text-bellevue-forest">Hidden Paradise</span>
             </h2>
 
-            {/* Pull stat */}
-            <div className="mt-14 flex gap-10 border-t border-bellevue-black/8 pt-10 md:gap-14">
-              {[
-                {
-                  key: "reviews",
-                  node: (
-                    <div className="flex gap-0.5" aria-hidden>
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-5 w-5 fill-bellevue-gold text-bellevue-gold md:h-6 md:w-6"
-                          strokeWidth={0}
-                        />
-                      ))}
-                    </div>
-                  ),
-                  label: "Guest Reviews",
-                },
-                { key: "elevation", node: <p className="font-serif text-3xl text-bellevue-black md:text-4xl">1,800m</p>, label: "Above Sea Level" },
-                { key: "peace", node: <p className="font-serif text-3xl text-bellevue-black md:text-4xl">∞</p>, label: "Peace of Mind" },
-              ].map(({ key, node, label }) => (
-                <div key={key}>
-                  {node}
-                  <p className="mt-1 font-sans text-[9px] tracking-[0.3em] uppercase text-bellevue-black/40">{label}</p>
+            {/* Pull stats — one aligned row */}
+            <div className="mt-14 flex items-end gap-10 border-t border-bellevue-black/8 pt-10 md:gap-14">
+              <div className="flex min-w-0 flex-col">
+                <div className="flex h-10 items-end gap-1.5 md:h-12">
+                  <span className="font-serif text-3xl leading-none text-bellevue-black md:text-4xl">
+                    5
+                  </span>
+                  <Star
+                    className="mb-0.5 h-6 w-6 fill-bellevue-gold text-bellevue-gold md:mb-1 md:h-7 md:w-7"
+                    strokeWidth={0}
+                    aria-hidden
+                  />
                 </div>
-              ))}
+                <p className="mt-2 font-sans text-[9px] tracking-[0.3em] uppercase text-bellevue-black/40">
+                  Guest Reviews
+                </p>
+              </div>
+              <div className="flex min-w-0 flex-col">
+                <div className="flex h-10 items-end md:h-12">
+                  <p className="font-serif text-3xl leading-none text-bellevue-black md:text-4xl">
+                    1,800m
+                  </p>
+                </div>
+                <p className="mt-2 font-sans text-[9px] tracking-[0.3em] uppercase text-bellevue-black/40">
+                  Above Sea Level
+                </p>
+              </div>
+              <div className="flex min-w-0 flex-col">
+                <div className="flex h-10 items-end md:h-12">
+                  <p className="font-serif text-3xl leading-none text-bellevue-black md:text-4xl">
+                    ∞
+                  </p>
+                </div>
+                <p className="mt-2 font-sans text-[9px] tracking-[0.3em] uppercase text-bellevue-black/40">
+                  Peace of Mind
+                </p>
+              </div>
             </div>
           </motion.div>
 
