@@ -7,7 +7,6 @@ import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { PageCover } from "@/components/page-cover"
-import { getChaletHero } from "@/lib/chalet-photos"
 import { ArrowRight, Mail, MapPin, Star } from "lucide-react"
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -173,7 +172,7 @@ function Purpose() {
         aria-hidden
       >
         <Image
-          src="/Photos/Exterior and Views/DJI_20250113065432_0854_D-Edit.jpg"
+          src="/Photos/Exterior and Views/DSC06107-Edit.jpg"
           alt=""
           fill
           className="object-cover"
@@ -256,9 +255,9 @@ function Purpose() {
 // ─── Dining filmstrip ─────────────────────────────────────────────────────────
 function DiningStrip() {
   const photos = [
-    { src: "/Photos/IMG_5363.jpg", alt: "Bellevue Chalets grounds", offset: "md:translate-y-6" },
-    { src: "/Photos/FullSizeRender.jpg", alt: "Bellevue Chalets retreat", offset: "" },
-    { src: "/Photos/DSC06167-Edit.jpg", alt: "Bellevue Chalets in the highlands", offset: "md:-translate-y-6" },
+    { src: "/Photos/Exterior and Views/IMG_5363.jpg", alt: "Bellevue Chalets grounds", offset: "md:translate-y-6" },
+    { src: "/Photos/Exterior and Views/birdeyeshot.jpg", alt: "Bellevue Chalets aerial view", offset: "" },
+    { src: "/Photos/Exterior and Views/DSC06167-Edit.jpg", alt: "Bellevue Chalets in the highlands", offset: "md:-translate-y-6" },
   ]
 
   return (
@@ -371,22 +370,22 @@ const discoverLinks = [
     href: "/chalets",
     label: "Our Chalets",
     title: "Three private sanctuaries",
-    image: getChaletHero("mirador").src,
-    alt: "Chalet Mirador, Bellevue Chalets",
+    image: "/Photos/Grandeur/DSC05808-Edit%20copy.jpg",
+    alt: "Chalet Grandeur, Bellevue Chalets",
   },
   {
     href: "/experiences",
     label: "Experiences",
     title: "The highlands, up close",
-    image: "/Photos/Nearby%20Attractions/Horton%20Plains%20National%20Park.jpg",
-    alt: "Horton Plains National Park",
+    image: "/Photos/Exterior and Views/kotiyo.jpg",
+    alt: "Leopard sighting near Bellevue Chalets",
   },
   {
     href: "/gallery",
     label: "Gallery",
     title: "A visual journey",
-    image: "/Photos/Exterior and Views/DSC06107-Edit.jpg",
-    alt: "Scenic highland vista at Bellevue",
+    image: "/Photos/Exterior and Views/DJI_20250113073722_0909_D-Edit.jpg",
+    alt: "Bellevue Chalets at dusk, Ambewela",
   },
 ]
 

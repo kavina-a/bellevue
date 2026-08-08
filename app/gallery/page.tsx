@@ -30,8 +30,8 @@ export default function GalleryPage() {
       <SiteNavigation variant="hero" />
 
       <PageCover
-        src="/Photos/Exterior and Views/DSC06107-Edit.jpg"
-        alt="Bellevue Chalets at dusk, Ambewela"
+        src="/Photos/Exterior and Views/IMG_5363.jpg"
+        alt="Bellevue Chalets grounds, Ambewela"
         imageScale
         title={
           <>

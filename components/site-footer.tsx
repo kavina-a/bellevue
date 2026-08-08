@@ -60,14 +60,14 @@ export function SiteFooter() {
       />
 
       <div className="grid lg:grid-cols-[4fr_8fr]">
-        {/* Left — aerial image, zoomed in on the chalets */}
-        <div className="relative min-h-[300px] overflow-hidden sm:min-h-[340px] lg:min-h-[380px]">
+        {/* Left — full aerial photo, shown uncropped (container matches the photo's own aspect ratio) */}
+        <div className="relative aspect-[2792/3722] overflow-hidden lg:aspect-auto lg:h-full lg:min-h-[420px]">
           <Image
             src="/Photos/Exterior and Views/birdeyeshot.jpg"
             alt="Bellevue Chalets aerial view, Ambewela"
             fill
             sizes="(max-width: 1024px) 100vw, 33vw"
-            className="origin-bottom scale-[1.45] object-cover object-bottom sm:scale-[1.5] lg:scale-[1.55]"
+            className="object-cover object-center lg:object-contain"
           />
           {/* Light at bottom so houses stay visible; darker only at top for logo */}
           <div className="absolute inset-0 bg-gradient-to-b from-bellevue-black/55 via-bellevue-black/10 to-bellevue-black/25" />

@@ -68,6 +68,7 @@ export function ChaletImageCarousel({ images, isActive, priority = false }: Chal
                 fill
                 sizes="(max-width: 1024px) 100vw, 66vw"
                 className="object-cover"
+                style={{ objectPosition: image.focal }}
                 priority={priority && index === 0}
               />
             </motion.div>

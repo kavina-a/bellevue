@@ -4,8 +4,10 @@ import { SiteNavigation } from "@/components/site-navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { PageCover } from "@/components/page-cover"
 import { ChaletCard } from "@/components/chalets/chalet-card"
-import { getChaletHero } from "@/lib/chalet-photos"
 import { chalets } from "@/lib/chalets"
+
+/** Change this value to adjust which part of the cover photo stays visible. */
+const CHALETS_COVER_FOCAL = "object-[center_50%]"
 
 export default function ChaletsPage() {
   const [first, second, third] = chalets
@@ -15,9 +17,10 @@ export default function ChaletsPage() {
       <SiteNavigation variant="hero" />
 
       <PageCover
-        src={getChaletHero("mirador").src}
-        alt="Chalet Mirador, Bellevue Chalets"
+        src="/Photos/Exterior and Views/DJI_20250113074154_0924_D-Edit.jpg"
+        alt="Bellevue Chalets, aerial view of the property"
         eyebrow="Accommodation"
+        imageClassName={`object-cover ${CHALETS_COVER_FOCAL}`}
         imageScale
         title={
           <>

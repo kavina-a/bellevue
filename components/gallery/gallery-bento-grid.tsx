@@ -49,6 +49,7 @@ function BentoMosaic({
               fill
               sizes="(max-width: 768px) 50vw, 33vw"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              style={{ objectPosition: photo.focal }}
             />
             <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/[0.06] transition-colors duration-300 group-hover:ring-black/15" />
             <div className="absolute inset-0 bg-bellevue-black/0 transition-colors duration-300 group-hover:bg-bellevue-black/20" />

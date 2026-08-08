@@ -18,7 +18,7 @@ import { ChaletAmenitiesSection } from "@/components/chalets/chalet-amenities-se
 import { ChaletCard } from "@/components/chalets/chalet-card"
 import { ChaletGallerySlider } from "@/components/chalets/chalet-gallery-slider"
 import { GalleryLightbox } from "@/components/gallery/gallery-lightbox"
-import { getChaletAmenitiesImage } from "@/lib/chalet-photos"
+import { getChaletAmenitiesImage, getChaletCollage } from "@/lib/chalet-photos"
 import { getChaletAccentColor, CHALET_BUTTON_COLOR, CHALET_HIGHLIGHT_BEIGE, type Chalet } from "@/lib/chalets"
 import { hotelOffers } from "@/lib/hotel-offers"
 
@@ -57,7 +57,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
   const accentColor = getChaletAccentColor(chalet)
 
   const images = chalet.images
-  const collage = [images[1] ?? images[0], images[2] ?? images[0], images[3] ?? images[0]]
+  const collage = getChaletCollage(chalet.slug)
 
   const offer = hotelOffers[offerIndex]
   const offerImage = images[(offerIndex + 1) % images.length] ?? images[0]
@@ -84,6 +84,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
           priority
           sizes="100vw"
           className="object-cover"
+          style={{ objectPosition: images[0].focal }}
         />
         <div className="absolute inset-0 bg-bellevue-black/40" />
         <motion.div
@@ -141,6 +142,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
                       fill
                       sizes="(max-width: 1024px) 55vw, 32vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      style={{ objectPosition: collage[0].focal }}
                     />
                   </button>
                   {collage.slice(1).map((img, i) => (
@@ -156,6 +158,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
                         fill
                         sizes="(max-width: 1024px) 40vw, 22vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        style={{ objectPosition: img.focal }}
                       />
                     </button>
                   ))}

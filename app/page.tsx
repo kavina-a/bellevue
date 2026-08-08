@@ -192,11 +192,11 @@ function AboutSection() {
               className="relative aspect-[3/4] overflow-hidden"
             >
               <Image
-                src="/DJI_20250113073722_0909_D-Edit.jpg"
-                alt="Bellevue Chalets at dusk, Ambewela"
+                src="/Photos/Exterior and Views/IMG_5363.jpg"
+                alt="Bellevue Chalets grounds, Ambewela"
                 fill
                 sizes="(max-width: 1024px) 100vw, 42vw"
-                className="object-cover"
+                className="object-cover object-center"
               />
             </motion.div>
             {/* Vertical text decoration */}
@@ -825,6 +825,7 @@ function OffersSection() {
                 fill
                 sizes="(max-width: 1024px) 100vw, 58vw"
                 className="object-cover"
+                style={{ objectPosition: getChaletHero("grandeur").focal }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-bellevue-black/25 via-transparent to-transparent pointer-events-none" />
             </motion.div>

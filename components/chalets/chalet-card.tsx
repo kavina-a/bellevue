@@ -64,6 +64,7 @@ export function ChaletCard({ chalet, priority = false }: ChaletCardProps) {
               priority={priority}
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+              style={{ objectPosition: hero.focal }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-bellevue-black/70 via-bellevue-black/10 to-transparent" />
             <div className="absolute bottom-0 left-0 p-6 md:p-8">

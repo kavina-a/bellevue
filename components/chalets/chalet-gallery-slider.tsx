@@ -85,6 +85,7 @@ export function ChaletGallerySlider({
               sizes="100vw"
               priority={index === 0}
               className="object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02]"
+              style={{ objectPosition: current.focal }}
             />
           </motion.div>
         </AnimatePresence>
