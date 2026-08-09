@@ -79,7 +79,13 @@ function VideoHeroSection() {
             poster="/DJI_20250113073722_0909_D-Edit.jpg"
             onError={() => setVideoFailed(true)}
           >
-            <source src="/landing-page.mp4" type="video/mp4" />
+            <source
+              src={
+                process.env.NEXT_PUBLIC_HERO_VIDEO_URL ??
+                "/landing-page.mp4"
+              }
+              type="video/mp4"
+            />
           </video>
         ) : (
           <Image

@@ -10,7 +10,7 @@ __v0_jsx-dev-runtime.ts
 .env*.local
 .env
 
-# Large hero video — keep locally for dev; host in object storage (S3/R2/etc.) for production
+# Large hero video — kept local for offline dev; production uses NEXT_PUBLIC_HERO_VIDEO_URL (Vercel Blob)
 public/landing-page.MOV
 public/landing-page.mp4
 public/landing-page.*
@@ -19,3 +19,5 @@ public/landing-page.*
 node_modules
 .next/
 .DS_Store
+.vercel
+.env*
