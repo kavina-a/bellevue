@@ -1,18 +1,18 @@
 import Image from "next/image"
 import {
-  GlassWater,
-  Leaf,
-  Lightbulb,
-  Recycle,
-  Sparkles,
+  Coffee,
+  Handshake,
+  Salad,
+  Trees,
+  Waves,
 } from "lucide-react"
 import { motion } from "framer-motion"
-import { sustainabilityFeatures } from "@/lib/chalets"
+import { sustainabilityFeatures, type AmenityItem } from "@/lib/chalets"
 import type { ChaletPhoto } from "@/lib/chalet-photos"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const sustainabilityIcons = [Lightbulb, GlassWater, Leaf, Recycle, Sparkles]
+const sustainabilityIcons = [Handshake, Coffee, Salad, Waves, Trees]
 
 function SustainabilityList() {
   return (
@@ -40,7 +40,7 @@ function SustainabilityList() {
 
 type ChaletAmenitiesSectionProps = {
   amenityImage: ChaletPhoto
-  amenities: string[]
+  amenities: AmenityItem[]
   accentColor: string
 }
 
@@ -97,11 +97,23 @@ export function ChaletAmenitiesSection({
                 <ul className="mt-8 space-y-3.5">
                   {amenities.map((item) => (
                     <li
-                      key={item}
-                      className="flex items-start gap-3 font-sans text-sm font-light leading-relaxed text-bellevue-black/75"
+                      key={item.label}
+                      className="font-sans text-sm font-light leading-relaxed text-bellevue-black/75"
                     >
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-bellevue-black/50" />
-                      {item}
+                      <div className="flex items-start gap-3">
+                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-bellevue-black/50" />
+                        {item.label}
+                      </div>
+                      {item.children && item.children.length > 0 && (
+                        <ul className="mt-2.5 space-y-2 pl-7">
+                          {item.children.map((child) => (
+                            <li key={child} className="flex items-start gap-2.5 text-bellevue-black/65">
+                              <span className="mt-2 h-px w-2.5 shrink-0 bg-bellevue-black/35" />
+                              {child}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </li>
                   ))}
                 </ul>

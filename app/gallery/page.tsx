@@ -39,7 +39,7 @@ export default function GalleryPage() {
             <br />
           </>
         }
-        description="A curated collection of moments from Bellevue — the chalets, the landscape, and the quiet details that make every stay unforgettable."
+        description="A curated collection of moments from Bellevue Chalets, reflecting the architecture, landscapes, interiors, and experiences that define every stay"
       />
 
       {/* ── Category filter ── */}

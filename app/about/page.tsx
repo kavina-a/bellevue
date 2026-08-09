@@ -199,7 +199,7 @@ function Purpose() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease }}
-          className="font-sans text-[10px] tracking-[0.45em] uppercase text-bellevue-gold"
+          className="font-sans text-[1.15rem] tracking-[.45em] uppercase text-bellevue-gold"
         >
           Our Purpose
         </motion.span>
@@ -209,7 +209,7 @@ function Purpose() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.9, delay: 0.18, ease }}
-          className="mx-auto mt-8 max-w-2xl space-y-6 font-sans text-[0.95rem] leading-[1.95] text-white/60"
+          className="mx-auto mt-8 max-w-2xl space-y-6 font-sans text-[1.05rem] leading-[1.95] text-white/60"
         >
           <p>
             At Bellevue Chalets, our purpose is to provide private chalet experiences defined by
@@ -229,10 +229,10 @@ function Purpose() {
           transition={{ duration: 0.9, delay: 0.3, ease }}
           className="mt-16 border-t border-white/10 pt-14"
         >
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-bellevue-gold/80">
+          <p className="font-sans text-[1.15rem] tracking-[0.4em] uppercase text-bellevue-gold/80">
             Message from the Managing Director
           </p>
-          <div className="mt-8 space-y-6 font-serif text-xl leading-[1.75] text-white/90 md:text-2xl">
+          <div className="mx-auto mt-8 max-w-2xl space-y-6 font-sans text-[1.05rem] leading-[1.95] text-white/60">
             <p>
               I believe modern life has become increasingly fast-paced, leaving little time for
               rest and true disconnection — something that is deeply important, yet often
@@ -245,15 +245,24 @@ function Purpose() {
           </div>
           <div className="mt-10 flex flex-col items-center gap-2">
             <div className="h-px w-10 bg-bellevue-gold/40" />
-            <div className="relative mt-6 h-16 w-44 md:h-[4.5rem] md:w-52">
+            {/* Signature — transparent PNG, writes on over time */}
+            <motion.div
+              initial={{ clipPath: "inset(0 100% 0 0)" }}
+              whileInView={{ clipPath: "inset(0 0% 0 0)" }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 2.4, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="relative mt-6 h-14 w-52 md:h-16 md:w-64"
+            >
               <Image
                 src="/signature/managing-director.png"
-                alt=""
+                alt="Managing Director signature"
                 fill
-                className="object-contain object-center"
+                sizes="256px"
+                className="object-contain object-right"
+                priority={false}
               />
-            </div>
-            <p className="mt-4 font-sans text-[9px] tracking-[0.35em] uppercase text-white/35">
+            </motion.div>
+            <p className="mt-3 font-sans text-[9px] tracking-[0.35em] uppercase text-white/35">
               Managing Director
             </p>
           </div>
@@ -380,21 +389,21 @@ const discoverLinks = [
   {
     href: "/chalets",
     label: "Our Chalets",
-    title: "Three private sanctuaries",
+    title: "Luxury Private Chalet Experiences",
     image: "/Photos/Grandeur/DSC05808-Edit%20copy.jpg",
     alt: "Chalet Grandeur, Bellevue Chalets",
   },
   {
     href: "/experiences",
     label: "Experiences",
-    title: "The highlands, up close",
+    title: "Discover Nearby Wonders",
     image: "/Photos/Exterior and Views/kotiyo.jpg",
     alt: "Leopard sighting near Bellevue Chalets",
   },
   {
     href: "/gallery",
     label: "Gallery",
-    title: "A visual journey",
+    title: "A Visual Journey",
     image: "/Photos/Exterior and Views/DJI_20250113073722_0909_D-Edit.jpg",
     alt: "Bellevue Chalets at dusk, Ambewela",
   },

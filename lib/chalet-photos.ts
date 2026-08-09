@@ -25,6 +25,12 @@ function photo(slug: ChaletSlug, filename: string, alt: string, focal?: string):
   }
 }
 
+/** Shared amenity / toiletries photo used in each chalet's slider set. */
+const amenityToiletriesPhoto: ChaletPhoto = {
+  src: "/Photos/Amenities/toiletries.jpg",
+  alt: "Bellevue Chalets — in-chalet amenities and toiletries",
+}
+
 /**
  * Full ordered photo set per chalet — position 0 is the hero/main photo used
  * on the chalet card, chalets index, and the top of the chalet detail page.
@@ -40,17 +46,12 @@ export const chaletPhotos: Record<ChaletSlug, ChaletPhoto[]> = {
     photo("cove", "DSC05650-Edit.jpg", "Chalet Cove — highland view"),
     photo("cove", "DSC05471-Edit copy.jpg", "Chalet Cove — exterior"),
     photo("cove", "DSC05754-Edit.jpg", "Chalet Cove — detail"),
-    // NOTE: designer's list includes an amenity/bathroom photo here that
-    // hasn't been delivered yet ("Amenity photo take bro"). Add it as the
-    // 6th photo in this array once it's ready.
+    amenityToiletriesPhoto, // one before last
     photo("cove", "DSC05781-Edit copy.jpg", "Chalet Cove — evening view"),
   ],
   mirador: [
-    // NOTE: designer's main/hero photo for Mirador is marked "GEN AI" with
-    // no source file delivered yet. Using the first gallery photo as a
-    // temporary hero — replace with the AI-generated image once ready.
-    photo("mirador", "DSC05521-Edit.jpg", "Chalet Mirador — main view"),
-    photo("mirador", "DSC05501-Edit.jpg", "Chalet Mirador — exterior"),
+    photo("mirador", "DSC05501-Edit-v2.jpg", "Chalet Mirador — twin bedroom"),
+    photo("mirador", "DSC05521-Edit-v2.jpg", "Chalet Mirador — loft bedroom"),
     photo("mirador", "DSC05637 copy.jpg", "Chalet Mirador — interior"),
     photo("mirador", "DSC05717.jpg", "Chalet Mirador — living space"),
     photo("mirador", "DSC05656-Edit.jpg", "Chalet Mirador — detail"),
@@ -59,9 +60,7 @@ export const chaletPhotos: Record<ChaletSlug, ChaletPhoto[]> = {
     photo("mirador", "DSC05543-Edit.jpg", "Chalet Mirador — interior detail"),
     photo("mirador", "DSC05650-Edit.jpg", "Chalet Mirador — highland view"),
     photo("mirador", "DSC05640-Edit copy 2.jpg", "Chalet Mirador — evening view"),
-    // NOTE: designer's list includes an amenity/bathroom photo here that
-    // hasn't been delivered yet ("Amenity photo take bro"). Add it as the
-    // last photo in this array once it's ready.
+    amenityToiletriesPhoto, // last
   ],
   grandeur: [
     photo("grandeur", "DSC05808-Edit copy.jpg", "Chalet Grandeur — main view"),
@@ -75,9 +74,7 @@ export const chaletPhotos: Record<ChaletSlug, ChaletPhoto[]> = {
     photo("grandeur", "DSC06217-Edit.jpg", "Chalet Grandeur — exterior"),
     photo("grandeur", "DSC05880-Edit copy.jpg", "Chalet Grandeur — deck"),
     photo("grandeur", "DSC05650-Edit.jpg", "Chalet Grandeur — highland view"),
-    // NOTE: designer's list includes an amenity/bathroom photo here that
-    // hasn't been delivered yet ("Amenity photo take bro"). Add it here
-    // once it's ready.
+    amenityToiletriesPhoto, // two before last
     photo("grandeur", "DSC05887-Edit.jpg", "Chalet Grandeur — evening view"),
     photo("grandeur", "DSC06034-Edit copy.jpg", "Chalet Grandeur — attic"),
   ],
@@ -89,9 +86,10 @@ export const chaletPhotos: Record<ChaletSlug, ChaletPhoto[]> = {
  */
 export const chaletCollagePhotos: Record<ChaletSlug, ChaletPhoto[]> = {
   cove: [
-    photo("cove", "TEA COFFEE.jpg", "Chalet Cove — tea and coffee service"),
-    photo("cove", "DSC05738-Edit.jpg", "Chalet Cove — interior"),
     { src: "/Photos/Outdoor Dining & Meals/gardenbf.jpg", alt: "Chalet Cove — garden breakfast" },
+    photo("cove", "DSC05738-Edit.jpg", "Chalet Cove — interior"),
+    photo("cove", "TEA COFFEE.jpg", "Chalet Cove — tea and coffee service"),
+
   ],
   mirador: [
     photo("mirador", "DSC05565-Edit.jpg", "Chalet Mirador — bedroom"),

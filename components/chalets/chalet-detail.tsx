@@ -59,6 +59,19 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
   const images = chalet.images
   const collage = getChaletCollage(chalet.slug)
 
+  // Gallery photos + any collage-only images (e.g. gardenbf, TEA COFFEE)
+  // so expanding always opens the exact picture that was clicked.
+  const lightboxPhotos = (() => {
+    const seen = new Set(images.map((img) => img.src))
+    const extras = collage.filter((img) => !seen.has(img.src))
+    return extras.length ? [...images, ...extras] : images
+  })()
+
+  const openLightboxFor = (src: string) => {
+    const index = lightboxPhotos.findIndex((img) => img.src === src)
+    if (index >= 0) setLightboxIndex(index)
+  }
+
   const offer = hotelOffers[offerIndex]
   const offerImage = images[(offerIndex + 1) % images.length] ?? images[0]
   const nextOffer = () => setOfferIndex((i) => (i + 1) % hotelOffers.length)
@@ -133,7 +146,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
                 <div className="grid h-[380px] grid-cols-2 grid-rows-2 gap-2 sm:h-[440px] md:h-[500px] md:gap-3 lg:h-[540px]">
                   <button
                     type="button"
-                    onClick={() => setLightboxIndex(1)}
+                    onClick={() => openLightboxFor(collage[0].src)}
                     className="group relative row-span-2 overflow-hidden bg-white"
                   >
                     <Image
@@ -145,11 +158,11 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
                       style={{ objectPosition: collage[0].focal }}
                     />
                   </button>
-                  {collage.slice(1).map((img, i) => (
+                  {collage.slice(1).map((img) => (
                     <button
-                      key={i}
+                      key={img.src}
                       type="button"
-                      onClick={() => setLightboxIndex(i + 2)}
+                      onClick={() => openLightboxFor(img.src)}
                       className="group relative overflow-hidden bg-white"
                     >
                       <Image
@@ -236,9 +249,14 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
             <h3 className="font-serif text-2xl leading-snug text-white md:text-[1.9rem]">
               {chalet.highlightsHeading}
             </h3>
-            <p className="mt-6 font-sans text-[15px] font-light leading-[1.9] text-white/75">
-              {chalet.highlightsBody}
-            </p>
+            <div className="mt-6 space-y-5 font-sans text-[15px] font-light leading-[1.9] text-white/75">
+              {(Array.isArray(chalet.highlightsBody)
+                ? chalet.highlightsBody
+                : [chalet.highlightsBody]
+              ).map((paragraph) => (
+                <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+              ))}
+            </div>
           </FadeIn>
         </div>
       </section>
@@ -359,7 +377,7 @@ export function ChaletDetail({ chalet, otherChalets }: ChaletDetailProps) {
       <SiteFooter />
 
       <GalleryLightbox
-        photos={images}
+        photos={lightboxPhotos}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNavigate={setLightboxIndex}

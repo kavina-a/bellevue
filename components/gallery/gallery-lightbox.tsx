@@ -74,9 +74,9 @@ export function GalleryLightbox({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="min-w-0">
-              {sectionTitle && (
+              {(current.category ?? sectionTitle) && (
                 <p className="font-sans text-[9px] tracking-[0.35em] uppercase text-bellevue-gold">
-                  {sectionTitle}
+                  {current.category ?? sectionTitle}
                 </p>
               )}
               <p className="mt-1 font-sans text-[11px] tabular-nums tracking-[0.2em] text-white/50">
@@ -142,7 +142,9 @@ export function GalleryLightbox({
             className="shrink-0 border-t border-white/10 px-6 py-5 text-center md:px-12"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="font-serif text-base text-white/90 md:text-lg">{current.alt}</p>
+            <p className="font-serif text-base text-white/90 md:text-lg">
+              {current.category ?? current.alt}
+            </p>
           </div>
         </motion.div>
       )}

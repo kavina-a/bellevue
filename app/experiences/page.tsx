@@ -1,6 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useRef } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, MapPin, Lightbulb } from "lucide-react"
@@ -23,25 +24,35 @@ function scrollToExperience(slug: string) {
   document.getElementById(slug)?.scrollIntoView({ behavior: "smooth", block: "start" })
 }
 
+/** Soft entrance — never fully hides content (safe to replay on scroll). */
+const reveal = {
+  hidden: { opacity: 0.2, y: 28 },
+  visible: (delay: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, delay, ease },
+  }),
+}
+
 // ─── Visual index — all experiences at a glance ─────────────────────────────
 function ExperienceIndex() {
   return (
     <section className="border-b border-bellevue-black/8 bg-bellevue-cream px-6 py-14 md:py-16 lg:px-12">
       <div className="mx-auto max-w-[1400px]">
         <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-bellevue-gold">
-        POPULAR NEARBY ATTRACTIONS
+          POPULAR NEARBY ATTRACTIONS
         </p>
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 lg:gap-4">
           {nearbyAttractions.map((item, i) => (
             <motion.button
               key={item.slug}
               type="button"
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.04, ease }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.65, delay: i * 0.04, ease }}
               onClick={() => scrollToExperience(item.slug)}
-              className="group text-left"
+              className="group relative text-left"
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-bellevue-black/5">
                 <Image
@@ -49,9 +60,19 @@ function ExperienceIndex() {
                   alt={item.title}
                   fill
                   sizes="(max-width: 640px) 45vw, 20vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-bellevue-black/75 via-bellevue-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-bellevue-black/78 via-bellevue-black/15 to-transparent transition-opacity duration-500 group-hover:from-bellevue-black/85" />
+
+                <span
+                  aria-hidden
+                  className="absolute left-2 top-2 h-2.5 w-2.5 border-l border-t border-bellevue-gold/0 transition-all duration-500 group-hover:border-bellevue-gold/70"
+                />
+                <span
+                  aria-hidden
+                  className="absolute right-2 top-2 h-2.5 w-2.5 border-r border-t border-bellevue-gold/0 transition-all duration-500 group-hover:border-bellevue-gold/70"
+                />
+
                 <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
                   <span className="font-sans text-[8px] tracking-[0.2em] uppercase text-bellevue-gold md:text-[9px]">
                     {item.category}
@@ -59,6 +80,10 @@ function ExperienceIndex() {
                   <p className="mt-1 font-serif text-xs leading-tight text-white md:text-sm">
                     {item.title}
                   </p>
+                  <span
+                    aria-hidden
+                    className="mt-2 block h-px w-0 bg-bellevue-gold/80 transition-all duration-500 ease-out group-hover:w-8"
+                  />
                 </div>
               </div>
             </motion.button>
@@ -79,68 +104,144 @@ function SignatureExperience({
 }) {
   const isEven = index % 2 === 0
   const num = String(index + 1).padStart(2, "0")
+  const articleRef = useRef<HTMLElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: articleRef,
+    offset: ["start end", "end start"],
+  })
+
+  // Soft parallax only — never clips or hides the image
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"])
 
   return (
     <article
+      ref={articleRef}
       id={attraction.slug}
       className="scroll-mt-28 border-b border-bellevue-black/8 last:border-b-0"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.95, ease }}
-        className="mx-auto max-w-[1400px]"
-      >
+      <div className="mx-auto max-w-[1400px]">
         <div
           className={`grid lg:grid-cols-12 lg:gap-0 ${
             isEven ? "" : "lg:[direction:rtl]"
           }`}
         >
-          {/* Image — large, always paired with text */}
+          {/* Image — always visible; soft ken-burns + parallax */}
           <div className={`lg:col-span-7 ${isEven ? "" : "lg:[direction:ltr]"}`}>
-            <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[520px] lg:h-full">
-              <Image
-                src={attraction.image}
-                alt={attraction.title}
-                fill
-                sizes="(max-width: 1024px) 100vw, 58vw"
-                className="object-cover"
-                priority={index === 0}
+            <div className="relative aspect-[4/3] overflow-hidden bg-bellevue-black/5 lg:aspect-auto lg:min-h-[520px] lg:h-full">
+              <motion.div
+                style={{ y: imageY }}
+                className="absolute inset-[-10%] will-change-transform"
+              >
+                <motion.div
+                  initial={{ scale: 1.08, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 1.25, ease }}
+                  className="relative h-full w-full"
+                >
+                  <Image
+                    src={attraction.image}
+                    alt={attraction.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                    className="object-cover"
+                    priority={index === 0}
+                  />
+                </motion.div>
+              </motion.div>
+
+              {/* Hairline gold frame — decorative, never blocks the photo */}
+              <motion.div
+                aria-hidden
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 1, delay: 0.45, ease }}
+                className="pointer-events-none absolute inset-3 hidden border border-bellevue-gold/40 lg:block"
               />
             </div>
           </div>
 
-          {/* Content — same row, cream panel */}
-          <div
-            className={`flex flex-col justify-center bg-white px-6 py-12 md:px-12 md:py-16 lg:col-span-5 lg:px-14 lg:py-20 ${
+          {/* Content — staggered fade/slide; replays gently without vanishing */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.3 }}
+            className={`relative flex flex-col justify-center bg-white px-6 py-12 md:px-12 md:py-16 lg:col-span-5 lg:px-14 lg:py-20 ${
               isEven ? "" : "lg:[direction:ltr]"
             }`}
           >
-            <span className="font-serif text-5xl text-bellevue-black/8 md:text-6xl">{num}</span>
-            <span className="mt-4 font-sans text-[10px] tracking-[0.35em] uppercase text-bellevue-gold">
+            <motion.span
+              aria-hidden
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 1, ease }}
+              style={{ originY: 0 }}
+              className="absolute left-0 top-12 bottom-12 hidden w-px bg-gradient-to-b from-bellevue-gold/60 via-bellevue-gold/15 to-transparent lg:block"
+            />
+
+            <motion.span
+              custom={0.05}
+              variants={reveal}
+              className="font-serif text-5xl text-bellevue-black/8 md:text-6xl"
+            >
+              {num}
+            </motion.span>
+
+            <motion.span
+              custom={0.14}
+              variants={reveal}
+              className="mt-4 font-sans text-[10px] tracking-[0.35em] uppercase text-bellevue-gold"
+            >
               {attraction.category}
-            </span>
-            <h2 className="mt-3 font-serif text-3xl leading-tight text-bellevue-black md:text-4xl">
+            </motion.span>
+
+            <motion.h2
+              custom={0.22}
+              variants={reveal}
+              className="mt-3 font-serif text-3xl leading-tight text-bellevue-black md:text-4xl"
+            >
               {attraction.title}
-            </h2>
+            </motion.h2>
 
             {attraction.distance && (
-              <div className="mt-4 flex items-center gap-2">
+              <motion.div
+                custom={0.3}
+                variants={reveal}
+                className="mt-4 flex items-center gap-2"
+              >
                 <MapPin className="h-3.5 w-3.5 shrink-0 text-bellevue-gold" strokeWidth={1.25} />
                 <span className="font-sans text-[11px] font-light italic tracking-wide text-bellevue-black/45">
                   Distance from the hotel: {attraction.distance}
                 </span>
-              </div>
+              </motion.div>
             )}
 
-            <div className="mt-6 h-px w-14 bg-bellevue-gold/50" />
-            <p className="mt-8 text-justify font-sans text-[0.95rem] leading-[1.95] text-bellevue-black/70">
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 0.7, delay: 0.38, ease }}
+              style={{ originX: 0 }}
+              className="mt-6 h-px w-14 bg-bellevue-gold/50"
+            />
+
+            <motion.p
+              custom={0.45}
+              variants={reveal}
+              className="mt-8 text-justify font-sans text-[0.95rem] leading-[1.95] text-bellevue-black/70"
+            >
               {attraction.description}
-            </p>
+            </motion.p>
 
             {attraction.additionalInfo && (
-              <div className="mt-8 border-t border-bellevue-black/8 pt-8">
+              <motion.div
+                custom={0.55}
+                variants={reveal}
+                className="mt-8 border-t border-bellevue-black/8 pt-8"
+              >
                 <div className="mb-3 flex items-center gap-2">
                   <Lightbulb className="h-3.5 w-3.5 shrink-0 text-bellevue-gold" strokeWidth={1.25} />
                   <span className="font-sans text-[9px] tracking-[0.35em] uppercase text-bellevue-gold">
@@ -150,15 +251,14 @@ function SignatureExperience({
                 <p className="font-sans text-[0.82rem] leading-[1.85] text-bellevue-black/50">
                   {attraction.additionalInfo}
                 </p>
-              </div>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
     </article>
   )
 }
-
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function ExperiencesPage() {
@@ -175,24 +275,28 @@ export default function ExperiencesPage() {
       />
       <ExperienceIndex />
 
-      {/* Signature trio — full image + content panels */}
       <section className="bg-bellevue-cream">
         <div className="border-b border-bellevue-black/8 bg-bellevue-cream px-6 py-12 md:py-16 lg:px-12">
-          <div className="mx-auto max-w-[1400px]">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.8, ease }}
+            className="mx-auto max-w-[1400px]"
+          >
             <span className="font-sans text-[10px] tracking-[0.45em] uppercase text-bellevue-gold">
               Signature experiences
             </span>
             <h2 className="mt-4 font-serif text-3xl text-bellevue-black md:text-4xl">
               Discover the beauty of the upcountry
             </h2>
-          </div>
+          </motion.div>
         </div>
         {featured.map((attraction, index) => (
           <SignatureExperience key={attraction.slug} attraction={attraction} index={index} />
         ))}
       </section>
 
-      {/* Remaining experiences — same signature panel format */}
       <section className="bg-bellevue-cream">
         {moreExperiences.map((attraction, index) => (
           <SignatureExperience
@@ -205,9 +309,9 @@ export default function ExperiencesPage() {
 
       <section className="border-t border-bellevue-black/8 bg-bellevue-dark-forest px-6 py-20 md:py-28 lg:px-12">
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.85, ease }}
           className="mx-auto max-w-2xl text-center"
         >

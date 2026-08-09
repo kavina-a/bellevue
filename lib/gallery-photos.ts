@@ -7,6 +7,12 @@ export type GalleryPhoto = {
    * Change per-photo, e.g. "center 30%", to shift the visible crop.
    */
   focal?: string
+  /**
+   * The gallery category this photo belongs to (e.g. "Chalets & Interiors").
+   * Shown as the title in the lightbox instead of the descriptive alt text.
+   * Optional — other callers of GalleryLightbox (e.g. chalet pages) don't set this.
+   */
+  category?: string
 }
 
 export type GallerySection = {
@@ -43,8 +49,8 @@ export const gallerySections: GallerySection[] = [
       photo("Grandeur", "DSC05650-Edit.jpg", "Bellevue Chalets — highland view"),
       photo("Grandeur", "DSC06034-Edit copy.jpg", "Chalet Grandeur — attic"),
       photo("Grandeur", "DSC06243-Edit.jpg", "Chalet Grandeur — living space"),
-      photo("Mirador", "DSC05501-Edit.jpg", "Chalet Mirador — exterior"),
-      photo("Mirador", "DSC05521-Edit.jpg", "Chalet Mirador — main view"),
+      photo("Mirador", "DSC05501-Edit-v2.jpg", "Chalet Mirador — twin bedroom"),
+      photo("Mirador", "DSC05521-Edit-v2.jpg", "Chalet Mirador — loft bedroom"),
       photo("Mirador", "DSC05543-Edit.jpg", "Chalet Mirador — interior detail"),
       photo("Mirador", "DSC05588-Edit.jpg", "Chalet Mirador — interior"),
       photo("Mirador", "DSC05637 copy.jpg", "Chalet Mirador — interior"),
@@ -92,6 +98,13 @@ export const gallerySections: GallerySection[] = [
     ],
   },
 ]
+
+// Tag every photo with its section's category title, so the lightbox can
+// show "Chalets & Interiors" / "Scenery & Views" / "Dining Experience" as
+// the title, even when browsing the mixed "All" view.
+for (const section of gallerySections) {
+  section.images = section.images.map((image) => ({ ...image, category: section.title }))
+}
 
 export function getAllGalleryPhotos(): GalleryPhoto[] {
   return gallerySections.flatMap((s) => s.images)
