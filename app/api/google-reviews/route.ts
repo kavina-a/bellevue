@@ -6,14 +6,24 @@ const FALLBACK: GoogleReviewsData = {
   reviewCount: 190,
 }
 
-export const revalidate = 86400
+function json(data: GoogleReviewsData, cacheSeconds: number) {
+  return NextResponse.json(data, {
+    headers: {
+      "Cache-Control":
+        cacheSeconds > 0
+          ? `public, s-maxage=${cacheSeconds}, stale-while-revalidate=${cacheSeconds}`
+          : "no-store",
+    },
+  })
+}
 
 export async function GET() {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY
   const placeId = process.env.GOOGLE_PLACE_ID ?? GOOGLE_PLACE_ID
 
   if (!apiKey) {
-    return NextResponse.json(FALLBACK)
+    console.warn("[google-reviews] GOOGLE_PLACES_API_KEY is missing — using fallback")
+    return json(FALLBACK, 0)
   }
 
   try {
@@ -22,21 +32,26 @@ export async function GET() {
     url.searchParams.set("fields", "rating,user_ratings_total")
     url.searchParams.set("key", apiKey)
 
-    const response = await fetch(url.toString(), {
-      next: { revalidate: 86400 },
-    })
+    const response = await fetch(url.toString(), { cache: "no-store" })
 
     if (!response.ok) {
-      return NextResponse.json(FALLBACK)
+      console.warn("[google-reviews] HTTP error", response.status)
+      return json(FALLBACK, 0)
     }
 
     const payload = (await response.json()) as {
       status: string
+      error_message?: string
       result?: { rating?: number; user_ratings_total?: number }
     }
 
     if (payload.status !== "OK" || !payload.result) {
-      return NextResponse.json(FALLBACK)
+      console.warn(
+        "[google-reviews] Places API error:",
+        payload.status,
+        payload.error_message ?? ""
+      )
+      return json(FALLBACK, 0)
     }
 
     const data: GoogleReviewsData = {
@@ -44,8 +59,10 @@ export async function GET() {
       reviewCount: payload.result.user_ratings_total ?? FALLBACK.reviewCount,
     }
 
-    return NextResponse.json(data)
-  } catch {
-    return NextResponse.json(FALLBACK)
+    // Cache successful live data for 1 hour
+    return json(data, 3600)
+  } catch (error) {
+    console.warn("[google-reviews] Fetch failed:", error)
+    return json(FALLBACK, 0)
   }
 }

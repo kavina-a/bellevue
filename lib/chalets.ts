@@ -139,7 +139,7 @@ const coveData: Chalet = {
 const miradorData: Chalet = {
   slug: "mirador",
   name: "Chalet Mirador",
-  tagline: "Beautiful View",
+  tagline: "Honeymooners' Choice",
   accentColor: "#F3F6EF",
   roomSizeSqm: 45,
   maxGuests: 4,

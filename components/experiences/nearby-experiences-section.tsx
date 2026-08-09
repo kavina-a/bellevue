@@ -63,7 +63,7 @@ export function NearbyExperiencesSection() {
               transition={{ duration: 0.7, ease: luxuryEase }}
               className="block text-center font-sans text-xs tracking-[0.45em] uppercase text-bellevue-gold lg:text-left"
             >
-              Experiences
+              Nearby Attractions
             </motion.span>
 
             <motion.h2
@@ -73,9 +73,7 @@ export function NearbyExperiencesSection() {
               transition={{ duration: 0.9, delay: 0.08, ease: luxuryEase }}
               className="mt-6 text-center font-serif text-3xl uppercase leading-[1.15] tracking-[0.04em] text-bellevue-black md:text-4xl lg:text-left lg:text-[2.75rem]"
             >
-              Encounter the highlands&apos;
-              <br />
-              heartbeat, up close
+              Discover Nearby Wonders
             </motion.h2>
 
             <motion.p
@@ -85,9 +83,8 @@ export function NearbyExperiencesSection() {
               transition={{ duration: 0.8, delay: 0.18, ease: luxuryEase }}
               className="mx-auto mt-8 max-w-xl text-center font-sans text-base leading-[1.85] text-bellevue-black/60 lg:mx-0 lg:text-left"
             >
-              Beyond the chalet doors, Ambewela opens onto dairy farms, cloud forests,
-              ancient temples, and railway lines that climb into the mist — experiences
-              composed for guests who wish to truly inhabit the highlands.
+              Beyond the chalet doors, Bellevue Chalets offers easy access to some of Sri
+              Lanka&apos;s most breathtaking natural, cultural, and scenic attractions.
             </motion.p>
           </motion.div>
 
@@ -102,7 +99,8 @@ export function NearbyExperiencesSection() {
               href="/experiences"
               className="inline-flex items-center gap-3 border border-bellevue-black/20 px-7 py-3.5 font-sans text-[11px] tracking-[0.3em] uppercase text-bellevue-black transition-all duration-500 hover:border-bellevue-black hover:bg-bellevue-black hover:text-white"
             >
-              View all experiences
+              View all Nearby Attractions
+
             </Link>
           </motion.div>
         </div>

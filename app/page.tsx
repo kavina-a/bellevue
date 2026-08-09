@@ -1,17 +1,33 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import dynamic from "next/dynamic"
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion"
-import { easeOutCubic, type GoogleReviewsData } from "@/lib/review-count"
+import { type GoogleReviewsData } from "@/lib/review-count"
 import Image from "next/image"
 import Link from "next/link"
 import { SiteNavigation } from "@/components/site-navigation"
-import { getChaletImages, getChaletHero } from "@/lib/chalet-photos"
+import { getChaletImages } from "@/lib/chalet-photos"
 import { ChaletImageCarousel } from "@/components/chalet-image-carousel"
 import { NearbyExperiencesSection } from "@/components/experiences/nearby-experiences-section"
 import { SiteFooter } from "@/components/site-footer"
 import { faqItems } from "@/lib/faq"
+import { CONTACT } from "@/lib/location"
 import { Play, Pause, Volume2, VolumeX, ArrowRight, ArrowLeft, Quote, Plus, ArrowUp, Mail, Phone, MapPin, Star } from "lucide-react"
+
+const ElegantMap = dynamic(
+  () => import("@/components/contact/elegant-map").then((m) => m.ElegantMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-full min-h-[320px] items-center justify-center border border-white/10 bg-[#0e1210]">
+        <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-white/35">
+          Loading map
+        </p>
+      </div>
+    ),
+  }
+)
 
 const GOOGLE_REVIEWS_URL = "https://www.google.com/travel/search?g2lb=4965990,72471280,72560029,72573224,72647020,72686036,72803964,72882230,73064764,121529349,121608705&hl=en-LK&gl=lk&cs=1&ssta=1&q=bellevue+chalets+by+pushella&ts=CAEaRwopEicyJTB4M2FlMzg3ZTE4ZGYzN2I4MzoweDQxNzk4OWFkZDdkZThlMTMSGhIUCgcI6g8QBhgMEgcI6g8QBhgNGAEyAhAA&qs=CAEyE0Nnb0lrNXo2dnQyMTRyeEJFQUU4AkIJCROO3tetiXlBQgkJE47e162JeUE&ap=ugEHcmV2aWV3cw&ictx=111"
 
@@ -107,9 +123,9 @@ function VideoHeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="font-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white max-w-2xl leading-tight"
+          className="font-serif whitespace-nowrap text-[clamp(1.5rem,4.5vw,4.5rem)] text-white leading-tight"
         >
-          Escape to Extraordinary
+          Escape to Nature's Finest
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 30 }}
@@ -223,7 +239,7 @@ function AboutSection() {
               viewport={{ once: true }}
               className="absolute -bottom-8 -right-8 bg-bellevue-cream p-6 hidden md:block"
             >
-              <p className="font-serif text-5xl text-bellevue-forest">03</p>
+              <p className="font-serif text-5xl text-bellevue-forest">Luxury</p>
               <p className="mt-1 font-sans text-[10px] tracking-[0.3em] uppercase text-bellevue-black/60">
                 Private Chalets
               </p>
@@ -271,7 +287,16 @@ function AboutSection() {
               className="mt-10 font-sans text-lg text-bellevue-black/70 leading-relaxed"
             >
               Welcome to Bellevue Chalets by Pushella, a peaceful retreat nestled in the misty mountains of
-              Ambewela. Experience a one-of-a-kind luxury chalet stay with warm wooden accents, surrounded
+              Ambewela. 
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="mt-6 font-sans text-base text-bellevue-black/60 leading-relaxed"
+            >
+              Experience a one-of-a-kind luxury chalet stay with warm wooden accents, surrounded
               by lush greenery and the soothing presence of flowing waters.
             </motion.p>
             <motion.p
@@ -322,8 +347,8 @@ function QuoteDivider() {
     <section ref={ref} className="relative h-[80vh] overflow-hidden">
       <motion.div style={{ y: bgY }} className="absolute inset-0 scale-125">
         <Image
-          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop"
-          alt="Misty highlands"
+          src="/Photos/Exterior and Views/DSC06107-Edit.jpg"
+          alt="Bellevue Chalets, Ambewela highlands"
           fill
           className="object-cover"
         />
@@ -337,10 +362,10 @@ function QuoteDivider() {
         <span className="font-sans text-xs tracking-[0.5em] uppercase text-bellevue-gold">Philosophy</span>
         <div className="mt-6 mb-8 w-px h-12 bg-bellevue-gold/60" />
         <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white leading-[1.2] max-w-4xl italic">
-          {"\u201CWhere stillness becomes a luxury, and nature is the host.\u201D"}
+          {"\u201CDisconnect from the pace of everyday life. Reconnect with nature and tranquillity.\u201D"}
         </h3>
         <p className="mt-10 font-sans text-xs tracking-[0.4em] uppercase text-white/60">
-          — Bellevue Chalets, Ambewela
+          Bellevue Chalets by Pushella, Ambewela
         </p>
       </motion.div>
     </section>
@@ -392,7 +417,7 @@ const chaletDetails = [
   {
     name: "Chalet Mirador",
     slug: "mirador" as const,
-    tagline: "Beautiful View",
+    tagline: "Honeymooners' Choice",
     description: "A private two-storey wooden retreat with breathtaking views of the surrounding forestry. Spacious and crafted for comfort, perfect for couples or families of up to four adults.",
     guests: "2-4 Adults",
   },
@@ -468,8 +493,7 @@ function ChaletsSection() {
             </h2>
           </div>
           <p className="max-w-md font-sans text-white/50 leading-relaxed font-light">
-            Each residence is its own world — distinctly composed for couples, families, or
-            those seeking solitude in the highlands.
+          Warm wooden interiors and uninterrupted views of lush greenery, designed for comfort and relaxation in the hills
           </p>
         </motion.div>
 
@@ -713,7 +737,7 @@ function ChaletsSection() {
   )
 }
 
-// Offers Section — editorial invitation, not promotional
+// Offers Section
 function OffersSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
@@ -722,12 +746,6 @@ function OffersSection() {
   })
   const imageY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"])
   const textY = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"])
-
-  const stayTypes = [
-    "Weekend retreat",
-    "Honeymoon sojourn",
-    "Extended highland stays",
-  ]
 
   return (
     <section ref={sectionRef} className="relative bg-bellevue-cream overflow-hidden" id="offers">
@@ -750,9 +768,7 @@ function OffersSection() {
               viewport={{ once: true }}
               className="mt-6 font-serif text-4xl md:text-5xl lg:text-[3.25rem] text-bellevue-black leading-[1.12]"
             >
-              An invitation
-              <br />
-              <span className="italic text-bellevue-forest">to linger</span>
+              <span className="text-bellevue-forest">More Reasons to Escape</span>
             </motion.h2>
 
             <motion.div
@@ -770,38 +786,14 @@ function OffersSection() {
               viewport={{ once: true }}
               className="mt-10 font-sans text-lg text-bellevue-black/70 leading-[1.85]"
             >
-              For those who wish to stay a little longer, we compose unhurried packages —
-              private dining, forest mornings, and the quiet luxury of time well spent among
-              the highlands.
+              Enjoy more from your stay with our special offers, thoughtfully designed to make
+              your stay at Bellevue Chalets even more memorable.
             </motion.p>
-
-            <motion.ul
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.45 }}
-              viewport={{ once: true }}
-              className="mt-10 space-y-4 border-t border-bellevue-black/8 pt-10"
-              aria-label="Curated stay types"
-            >
-              {stayTypes.map((stay, index) => (
-                <motion.li
-                  key={stay}
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 + index * 0.08 }}
-                  viewport={{ once: true }}
-                  className="flex items-center gap-5 font-sans text-sm tracking-[0.12em] uppercase text-bellevue-black/55"
-                >
-                  <span className="w-8 h-px bg-bellevue-gold/50 shrink-0" aria-hidden />
-                  {stay}
-                </motion.li>
-              ))}
-            </motion.ul>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.65 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
               viewport={{ once: true }}
               className="mt-12"
             >
@@ -827,12 +819,11 @@ function OffersSection() {
               className="relative aspect-[4/3] lg:aspect-[16/11] overflow-hidden"
             >
               <Image
-                src={getChaletHero("grandeur").src}
-                alt="Chalet Grandeur living room with panoramic forest views, Ambewela"
+                src="/Photos/Exterior and Views/DJI_20250113073722_0909_D-Edit.jpg"
+                alt="Bellevue Chalets at dusk, Ambewela"
                 fill
                 sizes="(max-width: 1024px) 100vw, 58vw"
                 className="object-cover"
-                style={{ objectPosition: getChaletHero("grandeur").focal }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-bellevue-black/25 via-transparent to-transparent pointer-events-none" />
             </motion.div>
@@ -845,21 +836,12 @@ function OffersSection() {
               className="absolute -bottom-6 -left-4 md:-left-8 bg-bellevue-cream px-6 py-5 hidden sm:block shadow-[0_12px_40px_-16px_rgba(26,26,26,0.2)]"
             >
               <p className="font-sans text-[10px] tracking-[0.35em] uppercase text-bellevue-gold">
-                Chalet Grandeur
+                Exclusive Offers
               </p>
               <p className="mt-1.5 font-serif text-lg text-bellevue-black italic">
-                Where the forest meets the room
+                Your misty escape awaits.
               </p>
             </motion.div>
-
-            <div className="absolute -right-3 top-1/4 hidden xl:block" aria-hidden>
-              <span
-                className="font-sans text-[10px] tracking-[0.5em] uppercase text-bellevue-black/30"
-                style={{ writingMode: "vertical-rl" }}
-              >
-                Composed stays
-              </span>
-            </div>
           </motion.div>
         </div>
       </div>
@@ -1085,51 +1067,23 @@ function MarqueeRow({
   )
 }
 
-// Animated Google rating pill — fetches live count and counts up on scroll
+// Google rating pill — shows live rating + review count from Places API
 function GoogleRatingPill() {
-  const pillRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(pillRef, { once: true, margin: "-80px" })
   const [reviews, setReviews] = useState<GoogleReviewsData>({ rating: 4.9, reviewCount: 190 })
-  const [displayCount, setDisplayCount] = useState(0)
-  const [hasFetched, setHasFetched] = useState(false)
-
-  const reviewCount = reviews.reviewCount
 
   useEffect(() => {
-    fetch("/api/google-reviews")
+    fetch("/api/google-reviews", { cache: "no-store" })
       .then((res) => res.json())
       .then((data: GoogleReviewsData) => {
-        setReviews(data)
-        setHasFetched(true)
+        if (typeof data?.reviewCount === "number" && typeof data?.rating === "number") {
+          setReviews(data)
+        }
       })
-      .catch(() => setHasFetched(true))
+      .catch(() => {})
   }, [])
 
-  useEffect(() => {
-    if (!isInView) return
-
-    setDisplayCount(0)
-    const duration = 1800
-    const start = performance.now()
-    let frameId: number
-
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1)
-      setDisplayCount(Math.round(easeOutCubic(progress) * reviewCount))
-      if (progress < 1) {
-        frameId = requestAnimationFrame(tick)
-      }
-    }
-
-    frameId = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frameId)
-  }, [isInView, reviewCount])
-
   return (
-    <div
-      ref={pillRef}
-      className="inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 bg-bellevue-black px-6 py-3.5 md:px-7 md:py-4 rounded-full shadow-[0_8px_32px_-12px_rgba(26,26,26,0.45)] ring-1 ring-white/10"
-    >
+    <div className="inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 bg-bellevue-black px-6 py-3.5 md:px-7 md:py-4 rounded-full shadow-[0_8px_32px_-12px_rgba(26,26,26,0.45)] ring-1 ring-white/10">
       <div className="flex items-center gap-2.5">
         <div className="flex items-center gap-0.5">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -1141,22 +1095,16 @@ function GoogleRatingPill() {
           ))}
         </div>
         <span className="font-sans text-sm md:text-base font-medium text-white tabular-nums">
-          {reviews.rating.toFixed(1)}
+          {reviews.rating}
         </span>
       </div>
 
       <span className="hidden sm:block w-px h-5 bg-white/20" aria-hidden />
 
       <div className="flex items-baseline gap-1.5">
-        <motion.span
-          key={hasFetched ? "live" : "loading"}
-          initial={{ scale: 0.92, opacity: 0.6 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="font-sans text-2xl md:text-3xl font-semibold text-bellevue-gold tabular-nums tracking-tight drop-shadow-[0_0_12px_rgba(184,149,110,0.35)]"
-        >
-          {displayCount}
-        </motion.span>
+        <span className="font-sans text-2xl md:text-3xl font-semibold text-bellevue-gold tabular-nums tracking-tight drop-shadow-[0_0_12px_rgba(184,149,110,0.35)]">
+          {reviews.reviewCount}
+        </span>
         <span className="font-sans text-xs md:text-sm text-white/55 uppercase tracking-[0.15em]">
           reviews
         </span>
@@ -1191,9 +1139,8 @@ function TestimonialsSection() {
           <div className="mt-2 w-12 h-0.5 bg-bellevue-gold" />
 
           <h2 className="mt-6 font-serif text-3xl md:text-4xl lg:text-5xl text-bellevue-black leading-tight max-w-3xl">
-            Words of praise from our guests
+            Words from Our Guests
             <br className="hidden md:block" />
-            <span className="italic text-bellevue-black/70"> about their stay.</span>
           </h2>
         </motion.div>
 
@@ -1236,40 +1183,60 @@ function ContactSection() {
   return (
     <section className="bg-bellevue-black py-24 md:py-32" id="contact">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+        <div className="grid items-stretch gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <span className="font-sans text-xs tracking-[0.3em] uppercase text-bellevue-gold">Get in Touch</span>
+            <span className="font-sans text-xs tracking-[0.3em] uppercase text-bellevue-gold">
+              Contact Us
+            </span>
             <h2 className="mt-4 font-serif text-3xl md:text-4xl lg:text-5xl text-white">
-              Begin Your Journey
+              Ready For Your Escape?
             </h2>
-            <p className="mt-8 font-sans text-lg text-white/70 leading-relaxed">
-              Our dedicated team is here to craft your perfect highland escape. Reach out to discuss your 
-              requirements and let us create an unforgettable experience at Bellevue Chalets.
+            <p className="mt-8 font-sans text-lg leading-relaxed text-white/70">
+              Our dedicated team is here to craft your perfect highland escape. Get in touch to
+              share your requirements, and we&apos;ll help you choose the most suitable chalet for
+              a truly unforgettable stay at Bellevue Chalets.
             </p>
 
-            <div className="mt-12 space-y-6">
+            <div className="mt-12 space-y-7">
+              <div>
+                <p className="font-sans text-xs tracking-[0.2em] uppercase text-white/50">
+                  Call or WhatsApp
+                </p>
+                <a
+                  href={`tel:${CONTACT.phoneTel}`}
+                  className="mt-1 block font-sans text-white transition-colors hover:text-bellevue-gold"
+                >
+                  {CONTACT.phoneDisplay}
+                </a>
+                <a
+                  href={CONTACT.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-block font-sans text-sm text-white/55 transition-colors hover:text-bellevue-gold"
+                >
+                  Message on WhatsApp
+                </a>
+              </div>
               <div>
                 <p className="font-sans text-xs tracking-[0.2em] uppercase text-white/50">Email</p>
-                <a href="mailto:reservations@bellevuechalets.com" className="mt-1 block font-sans text-white hover:text-bellevue-gold transition-colors">
-                  reservations@bellevuechalets.com
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  className="mt-1 block font-sans text-white transition-colors hover:text-bellevue-gold"
+                >
+                  {CONTACT.email}
                 </a>
               </div>
               <div>
-                <p className="font-sans text-xs tracking-[0.2em] uppercase text-white/50">Phone</p>
-                <a href="tel:+94771234567" className="mt-1 block font-sans text-white hover:text-bellevue-gold transition-colors">
-                  +94 77 123 4567
-                </a>
-              </div>
-              <div>
-                <p className="font-sans text-xs tracking-[0.2em] uppercase text-white/50">Location</p>
+                <p className="font-sans text-xs tracking-[0.2em] uppercase text-white/50">
+                  Location
+                </p>
                 <p className="mt-1 font-sans text-white/80">
-                  Ambewela, Nuwara Eliya<br />
-                  Sri Lanka
+                  Ambewela, Nuwara Eliya, Sri Lanka
                 </p>
               </div>
             </div>
@@ -1280,14 +1247,9 @@ function ContactSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="relative aspect-[4/3] lg:aspect-auto"
+            className="relative h-[420px] w-full self-stretch lg:h-full lg:min-h-[480px]"
           >
-            <Image
-              src="https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=800&auto=format&fit=crop"
-              alt="Mountain vista"
-              fill
-              className="object-cover"
-            />
+            <ElegantMap />
           </motion.div>
         </div>
       </div>

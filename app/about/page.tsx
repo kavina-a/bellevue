@@ -258,7 +258,7 @@ function Purpose() {
                 alt="Managing Director signature"
                 fill
                 sizes="256px"
-                className="object-contain object-right"
+                className="object-contain object-center"
                 priority={false}
               />
             </motion.div>
